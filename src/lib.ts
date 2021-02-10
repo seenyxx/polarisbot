@@ -66,9 +66,9 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<S
 export function noGif(message: Message) {
   if (!message) return
 
-  let containsGif = message.content.match(/(tenor\.|giphy\.)\w+/)
+  let containsGif = message.content.match('https://tenor.com/view/sailor-moon-suit-old-man-peace-sign-sailor-scout-anime-gif-14298094')
   if (containsGif) {
-    message.channel.send(`${message.author.tag} sent a gif in chat`)
+    message.channel.send(`${message.author.tag} sent the no no gif in chat`)
     message.delete().catch(console.error)
   }
 }
