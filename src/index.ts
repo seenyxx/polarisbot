@@ -1,5 +1,6 @@
 import { Client } from 'discord.js'
 import { readdir, readFileSync } from 'fs'
+import { createServer } from 'http'
 import { noAnnoyingTTS, noEmojiSpam, noGif, noTextSpam } from './lib'
 import { Command, Commands, Config } from './types'
 
@@ -63,3 +64,13 @@ readdir(`${__dirname}/commands/`, (err, files) => {
 
 
 client.login(config.token)
+
+const server = createServer((req, res) => {
+  res.statusCode = 200
+  res.setHeader('Content-Type', 'text/plain')
+  res.end(client.user?.tag)
+})
+
+server.listen(80, '127.0.0.1', () => {
+  console.log(`Server running at http://127.0.0.1:80/`);
+});
