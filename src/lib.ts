@@ -1,5 +1,4 @@
 import { Message } from "discord.js";
-import emojiRegex from 'emoji-regex'
 import { request } from "http";
 
 
