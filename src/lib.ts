@@ -73,57 +73,5 @@ export function noGif(message: Message) {
   }
 }
 
-export function noTextSpam(message: Message) {  
-  if (!message) return
 
-  if (message.tts == true) return
-
-  if (message.content.length > 1000) {
-    message.channel.send(`**${message.author.tag}** Please do not send excessively long messages`).then(() => {
-      message.delete({
-        reason: 'Spam'
-      }).catch(console.error)
-    }).catch(console.error)
-  }
-}
-
-export function noEmojiSpam(message: Message) {
-  if (!message) return
-
-  let emojiCount = message.content.match(emojiRegex())?.length
-  if (message.tts == true) return
-
-
-  if (!emojiCount) return
-
-  if (emojiCount > 10) {
-    message.channel.send(`**${message.author.tag}** Please do not send messages with a lot of emojis`).then(() => {
-      message.delete({
-        reason: 'Spam'
-      }).catch(console.error)
-    }).catch(console.error)
-  }
-}
-
-export function noAnnoyingTTS(message: Message) {
-  if (!message) return
-  
-  if (message.content.length > 150) {
-    message.channel.send(`**${message.author.tag}** Please do not send excessively long TTS messages`).then(() => {
-      message.delete({
-        reason: 'Too long for TTS'
-      }).catch(console.error)
-    }).catch(console.error)
-  }
-
-  let emojiCount = message.content.match(emojiRegex())?.length
-
-  if (emojiCount) {
-    message.channel.send(`**${message.author.tag}** Please do put emojis in your TTS messages`).then(() => {
-      message.delete({
-        reason: 'Too many emojis for TTS'
-      }).catch(console.error)
-    }).catch(console.error)
-  }
-}
 

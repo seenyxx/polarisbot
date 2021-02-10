@@ -1,7 +1,7 @@
 import { Client } from 'discord.js'
 import { readdir, readFileSync } from 'fs'
 import { createServer } from 'http'
-import { noAnnoyingTTS, noEmojiSpam, noGif, noTextSpam } from './lib'
+import { noGif } from './lib'
 import { Command, Commands, Config } from './types'
 
 function parseConfiguration() : Config {
@@ -23,12 +23,7 @@ client.on('message', message => {
 
   // Get rid of gifs from /tenor or /giphy
   noGif(message)
-  // Set character limit to 1000 in message
-  noTextSpam(message)
-  // Get rid of those pesky emoji spammers
-  noEmojiSpam(message)
-  // Get rid of annoying TTS messages and sets TTS character limit to 150
-  noAnnoyingTTS(message)
+
 
   if (message.content.indexOf(config.prefix) !== 0) return
 
