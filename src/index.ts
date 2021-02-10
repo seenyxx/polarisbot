@@ -65,12 +65,12 @@ readdir(`${__dirname}/commands/`, (err, files) => {
 
 client.login(config.token)
 
-// const server = createServer((req, res) => {
-//   res.statusCode = 200
-//   res.setHeader('Content-Type', 'text/plain')
-//   res.end(client.user?.tag)
-// })
+const server = createServer((req, res) => {
+  res.statusCode = 200
+  res.setHeader('Content-Type', 'text/plain')
+  res.end(client.user?.tag)
+})
 
-// server.listen(80, '127.0.0.1', () => {
-//   console.log(`Server running at http://127.0.0.1:80/`);
-// });
+server.listen(parseInt(process.env.PORT ? process.env.PORT : '3000'), '0.0.0.0', () => {
+  console.log(`Server running at http://127.0.0.1:80/`)
+})
