@@ -8,7 +8,8 @@ export type runCommand = (client: Client, message: Message, args: Array<string>)
 
 export interface Config {
   prefix: string,
-  token: string
+  token: string,
+  addr: string
 }
 
 export interface Commands {

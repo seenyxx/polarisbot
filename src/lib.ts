@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
-import { request } from "http";
+import { get, request } from "http";
+import { Config } from "./types";
 
 
 // Command for both bans and kicks
@@ -73,4 +74,25 @@ export function noGif(message: Message) {
 }
 
 
+export function pingServer(config: Config) {
+  function interval() {
+    get(config.addr, (resp) => {
+    let data = ''
+    
+    resp.on('data', (chunk) => {
+      data += chunk
+    });
+      
+    resp.on('end', () => {
+      
+    });
+    
+    }).on("error", (err) => {
+      console.log("Error: " + err.message)
+    });
+  }
+  interval()
+  
 
+  setInterval(interval, 180000)
+}

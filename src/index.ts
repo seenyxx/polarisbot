@@ -63,7 +63,7 @@ client.login(config.token)
 const server = createServer((req, res) => {
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/plain')
-  res.end(client.user?.tag)
+  res.end('ONLINE')
 })
 
 server.listen(parseInt(process.env.PORT ? process.env.PORT : '3000'), '0.0.0.0', () => {
