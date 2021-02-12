@@ -74,25 +74,3 @@ export function noGif(message: Message) {
 }
 
 
-export function pingServer(config: Config) {
-  function interval() {
-    get(config.addr, (resp) => {
-    let data = ''
-    
-    resp.on('data', (chunk) => {
-      data += chunk
-    });
-      
-    resp.on('end', () => {
-      
-    });
-    
-    }).on("error", (err) => {
-      console.log("Error: " + err.message)
-    });
-  }
-  interval()
-  
-
-  setInterval(interval, 180000)
-}
