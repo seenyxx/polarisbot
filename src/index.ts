@@ -5,13 +5,8 @@ import { noGif } from './lib'
 import { Command, Commands, Config } from './types'
 
 function parseConfiguration() : Config {
-  if (!process.env.PREFIX) process.exit(1)
-  if (!process.env.TOKEN) process.exit(1)
-
-  return {
-    prefix: process.env.PREFIX,
-    token: process.env.TOKEN
-  }
+  let unparsedJSON = readFileSync(`${__dirname}/../config.json`).toString()
+  return JSON.parse(unparsedJSON)
 }
 
 // Parse configuration file
