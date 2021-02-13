@@ -1,7 +1,7 @@
 import { Client } from 'discord.js'
 import { readdir, readFileSync } from 'fs'
 import { createServer } from 'http'
-import { noGif } from './lib'
+import { noGif, onVoiceStateUpdate } from './lib'
 import { Command, Commands, Config } from './types'
 
 function parseConfiguration() : Config {
@@ -39,6 +39,7 @@ client.on('message', message => {
   cmd.run(client, message, args)
 })
 
+client.on('voiceStateUpdate', onVoiceStateUpdate)
 
 
 const commands: Commands  = {}

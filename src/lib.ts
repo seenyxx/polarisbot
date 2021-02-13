@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, VoiceState } from "discord.js";
 import { get, request } from "http";
 import { Config } from "./types";
 
@@ -74,3 +74,64 @@ export function noGif(message: Message) {
 }
 
 
+// On voiceStateUpdate
+let voiceGenName = 'Create'
+let voiceGeneratedName = 'Room'
+let currentVoiceCount = 0
+
+export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState) {
+  let oldMemberChannelName = oldMember.channel?.name.trim()
+  let newMemberChannelName = newMember.channel?.name.trim()
+
+  let newMemberCategory = newMember.channel?.parent
+
+  if (newMemberChannelName && newMemberChannelName?.search(voiceGenName) > -1) {
+
+    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount += 1}`, { type: 'voice', userLimit: 5 }).then(channel => {
+      if (newMemberCategory)
+        channel.setParent(newMemberCategory).catch(console.error)
+
+      newMember.setChannel(channel).catch(console.error)
+      
+    }).catch(console.error)
+
+    resortVoiceChannels(oldMember, newMember)
+  }
+
+
+  if (oldMemberChannelName && !newMember.channel && oldMemberChannelName?.search(voiceGeneratedName) > -1 ) {
+
+    if (oldMember.channel && oldMember.channel.members.array().length > 0) {
+      oldMember.channel.delete()
+      currentVoiceCount -= 1
+      return
+    }
+
+    resortVoiceChannels(oldMember, newMember)
+  }
+
+} 
+
+function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
+  let oldMemberCategory = oldMember.channel?.parent
+  let newMemberCategory = newMember.channel?.parent
+  
+  let newMemberCategoryRooms = newMemberCategory?.children.filter(c => {
+    return c.type == 'voice' && c.name.search(voiceGeneratedName) > -1 
+  })
+  let oldMemberCategoryRooms = oldMemberCategory?.children.filter(c => {
+    return c.type == 'voice' && c.name.search(voiceGeneratedName) > -1 
+  })
+
+  if (newMemberCategory && newMemberCategoryRooms) {
+    newMemberCategoryRooms.array().forEach(c => {
+      c.setName(`🔊 Room ${c.position}`)
+    })
+  }
+
+  if (oldMemberCategory && oldMemberCategoryRooms) {
+    oldMemberCategoryRooms.array().forEach(c => {
+      c.setName(`🔊 Room ${c.position}`)
+    })
+  }
+}
