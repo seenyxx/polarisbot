@@ -85,6 +85,17 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
 
   let newMemberCategory = newMember.channel?.parent
 
+
+  if (oldMemberChannelName && oldMemberChannelName?.search(voiceGeneratedName) > -1 ) {
+    if (oldMember.channel && oldMember.channel.members.array().length == 0) {
+      oldMember.channel.delete().catch(console.error)
+      currentVoiceCount -= 1
+      resortVoiceChannels(oldMember, newMember)
+      return
+    }
+    
+  }
+
   if (newMemberChannelName && newMemberChannelName?.search(voiceGenName) > -1) {
 
     oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount += 1}`, { type: 'voice', userLimit: 5 }).then(channel => {
@@ -98,24 +109,16 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
     resortVoiceChannels(oldMember, newMember)
   }
 
-
-  if (oldMemberChannelName && !newMember.channel && oldMemberChannelName?.search(voiceGeneratedName) > -1 ) {
-
-    if (oldMember.channel && oldMember.channel.members.array().length > 0) {
-      oldMember.channel.delete()
-      currentVoiceCount -= 1
-      return
-    }
-
-    resortVoiceChannels(oldMember, newMember)
-  }
-
 } 
+
+
 
 function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
   let oldMemberCategory = oldMember.channel?.parent
   let newMemberCategory = newMember.channel?.parent
-  
+  let offset = 1
+
+
   let newMemberCategoryRooms = newMemberCategory?.children.filter(c => {
     return c.type == 'voice' && c.name.search(voiceGeneratedName) > -1 
   })
@@ -125,13 +128,13 @@ function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
 
   if (newMemberCategory && newMemberCategoryRooms) {
     newMemberCategoryRooms.array().forEach(c => {
-      c.setName(`🔊 Room ${c.position}`)
+      c.setName(`🔊 Room ${c.position - offset}`).catch(console.error)
     })
   }
 
   if (oldMemberCategory && oldMemberCategoryRooms) {
     oldMemberCategoryRooms.array().forEach(c => {
-      c.setName(`🔊 Room ${c.position}`)
+      c.setName(`🔊 Room ${c.position - offset}`).catch(console.error)
     })
   }
 }
