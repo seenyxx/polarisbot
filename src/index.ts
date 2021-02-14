@@ -17,8 +17,12 @@ const client = new Client()
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}`)
 
-  client.user?.setActivity('i!help', {
-    type: 'CUSTOM_STATUS',
+  client.user?.setPresence({
+    status: 'online',
+    activity: {
+      name: `${config.prefix}help`,
+      type: 'LISTENING'
+    }
   })
 })
 
