@@ -80,7 +80,7 @@ export function noGif(message: Message) {
 let voiceGenName = 'Create'
 let voiceGeneratedName = 'Room'
 let currentVoiceCount = 0
-let voiceRoomLimit = 5
+let voiceRoomLimit = 8
 let voiceRoomNamingOffset = 0
 
 export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState) {
