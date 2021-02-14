@@ -84,6 +84,9 @@ let voiceRoomLimit = 8
 let voiceRoomNamingOffset = 0
 
 export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState) {
+  if (!currentVoiceCount[oldMember.guild.id]) currentVoiceCount[oldMember.guild.id] = 0
+  if (currentVoiceCount[oldMember.guild.id] < 0) currentVoiceCount[oldMember.guild.id] = 0
+
   let oldMemberChannelName = oldMember.channel?.name.trim()
   let newMemberChannelName = newMember.channel?.name.trim()
 
@@ -96,15 +99,16 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
     if (oldMember.channel && oldMember.channel.members.array().length == 0) {
 
       // Delete the old channel
-      oldMember.channel.delete().catch(console.error)
+      oldMember.channel.delete().then(c => {
+        // Rename the voice channels to their order
 
-      // Update the channel
+        resortVoiceChannels(oldMember, newMember)
+
+        // Update the channel
+        currentVoiceCount[oldMember.guild.id] -= 1
+      }).catch(console.error)
 
       
-      currentVoiceCount[oldMember.guild.id] -= 1
-
-      // Rename the voice channels to their order
-      resortVoiceChannels(oldMember, newMember)
     }
   }
 
@@ -112,19 +116,22 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
   if (newMemberChannelName && newMemberChannelName?.search(voiceGenName) > -1) {
 
     // Create a room for them
-    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount[newMember.guild.id] += 1}`, { type: 'voice', userLimit: voiceRoomLimit }).then(channel => {
+    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount[oldMember.guild.id] += 1}`, { type: 'voice', userLimit: voiceRoomLimit }).then(channel => {
       
       // If the category of the generation channel exists then append the room to that category
       if (newMemberCategory)
         channel.setParent(newMemberCategory).catch(console.error)
 
       // Move the member to the room
-      newMember.setChannel(channel).catch(console.error)
+      newMember.setChannel(channel).then(() => {
+
+        // Rename the voice channels to their order
+        
+        resortVoiceChannels(oldMember, newMember)
+      }).catch(console.error)
       
     }).catch(console.error)
 
-    // Rename the voice channels to their order
-    resortVoiceChannels(oldMember, newMember)
   }
 
 } 
