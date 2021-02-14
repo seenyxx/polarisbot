@@ -1,3 +1,38 @@
-{
-  
-}
+[
+  {
+    "name": "ban",
+    "value": "A ban command.\n`<prefix>ban <User> <Reason>`"
+  },
+  {
+    "name": "kick",
+    "value": "A kick command.\n`<prefix>kick <User> <Reason>`"
+  },
+  {
+    "name": "invite",
+    "value": "A command to invite this bot.\n`<prefix>invite`"
+  },
+  {
+    "name": "ping",
+    "value": "A command to check the latency between the bot server and your server.\n`<prefix>ping`"
+  },
+  {
+    "name": "help",
+    "value": "A command that brings up this dialogue.\n`<prefix>help`"
+  },
+  {
+    "name": "ascii",
+    "value": "A command that converts text to ascii.\n`<prefix>ascii <Text>`"
+  },
+  {
+    "name": "ascii-cyan",
+    "value": "A command that converts text to cyan colored ascii.\n`<prefix>ascii-cyan <Text>`"
+  },
+  {
+    "name": "ascii-gold",
+    "value": "A command that converts text to gold colored ascii.\n`<prefix>ascii-gold <Text>`"
+  },
+  {
+    "name": "prune-roles",
+    "value": "A command that deletes all the roles with the name `new role`.\n`<prefix>prune-roles`"
+  }
+]
