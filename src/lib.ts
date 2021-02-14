@@ -78,6 +78,8 @@ export function noGif(message: Message) {
 let voiceGenName = 'Create'
 let voiceGeneratedName = 'Room'
 let currentVoiceCount = 0
+let voiceRoomLimit = 5
+let voiceRoomNamingOffset = 0
 
 export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState) {
   let oldMemberChannelName = oldMember.channel?.name.trim()
@@ -98,7 +100,7 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
 
   if (newMemberChannelName && newMemberChannelName?.search(voiceGenName) > -1) {
 
-    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount += 1}`, { type: 'voice', userLimit: 5 }).then(channel => {
+    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount += 1}`, { type: 'voice', userLimit: voiceRoomLimit }).then(channel => {
       if (newMemberCategory)
         channel.setParent(newMemberCategory).catch(console.error)
 
@@ -116,7 +118,6 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
 function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
   let oldMemberCategory = oldMember.channel?.parent
   let newMemberCategory = newMember.channel?.parent
-  let offset = 1
 
 
   let newMemberCategoryRooms = newMemberCategory?.children.filter(c => {
@@ -128,13 +129,13 @@ function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
 
   if (newMemberCategory && newMemberCategoryRooms) {
     newMemberCategoryRooms.array().forEach(c => {
-      c.setName(`🔊 Room ${c.position - offset}`).catch(console.error)
+      c.setName(`🔊 Room ${c.position - voiceRoomNamingOffset}`).catch(console.error)
     })
   }
 
   if (oldMemberCategory && oldMemberCategoryRooms) {
     oldMemberCategoryRooms.array().forEach(c => {
-      c.setName(`🔊 Room ${c.position - offset}`).catch(console.error)
+      c.setName(`🔊 Room ${c.position - voiceRoomNamingOffset}`).catch(console.error)
     })
   }
 }
