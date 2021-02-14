@@ -14,3 +14,7 @@ export interface Config {
 export interface Commands {
   [key: string]: Command
 }
+
+export interface voiceCount {
+  [key: string]: number
+}

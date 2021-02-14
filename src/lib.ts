@@ -1,6 +1,6 @@
 import { Message, VoiceState } from "discord.js";
 import { get, request } from "http";
-import { Config } from "./types";
+import { Config, voiceCount } from "./types";
 
 
 // Command for both bans and kicks
@@ -79,7 +79,7 @@ export function noGif(message: Message) {
 // Variables for the command
 let voiceGenName = 'Create'
 let voiceGeneratedName = 'Room'
-let currentVoiceCount = 0
+let currentVoiceCount: voiceCount = {}
 let voiceRoomLimit = 8
 let voiceRoomNamingOffset = 0
 
@@ -101,7 +101,7 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
       // Update the channel
 
       
-      currentVoiceCount -= 1
+      currentVoiceCount[oldMember.guild.id] -= 1
 
       // Rename the voice channels to their order
       resortVoiceChannels(oldMember, newMember)
@@ -112,7 +112,7 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
   if (newMemberChannelName && newMemberChannelName?.search(voiceGenName) > -1) {
 
     // Create a room for them
-    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount += 1}`, { type: 'voice', userLimit: voiceRoomLimit }).then(channel => {
+    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount[newMember.guild.id] += 1}`, { type: 'voice', userLimit: voiceRoomLimit }).then(channel => {
       
       // If the category of the generation channel exists then append the room to that category
       if (newMemberCategory)
