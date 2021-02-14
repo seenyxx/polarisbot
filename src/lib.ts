@@ -147,6 +147,7 @@ function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
     newMemberCategoryRooms.array().forEach(c => {
       c.setName(`🔊 Room ${c.position - voiceRoomNamingOffset}`).catch(console.error)
     })
+    return
   }
 
   if (oldMemberCategory && oldMemberCategoryRooms) {
