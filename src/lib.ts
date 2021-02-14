@@ -93,7 +93,6 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
       oldMember.channel.delete().catch(console.error)
       currentVoiceCount -= 1
       resortVoiceChannels(oldMember, newMember)
-      return
     }
     
   }
