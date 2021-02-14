@@ -18,3 +18,10 @@ export interface Commands {
 export interface voiceCount {
   [key: string]: number
 }
+
+export interface helpConfig {
+  [key: string]: {
+    name: string,
+    desc: string
+  }
+}
