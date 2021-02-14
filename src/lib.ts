@@ -75,6 +75,8 @@ export function noGif(message: Message) {
 
 
 // On voiceStateUpdate
+
+// Variables for the command
 let voiceGenName = 'Create'
 let voiceGeneratedName = 'Room'
 let currentVoiceCount = 0
@@ -87,26 +89,41 @@ export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState)
 
   let newMemberCategory = newMember.channel?.parent
 
-
+  // If the old channel the member was in was a room
   if (oldMemberChannelName && oldMemberChannelName?.search(voiceGeneratedName) > -1 ) {
+    
+    // If there is no one currently in the member's previous room
     if (oldMember.channel && oldMember.channel.members.array().length == 0) {
+
+      // Delete the old channel
       oldMember.channel.delete().catch(console.error)
+
+      // Update the channel
+
+      
       currentVoiceCount -= 1
+
+      // Rename the voice channels to their order
       resortVoiceChannels(oldMember, newMember)
     }
-    
   }
 
+  // If the new channel the member is in is a generator
   if (newMemberChannelName && newMemberChannelName?.search(voiceGenName) > -1) {
 
+    // Create a room for them
     oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount += 1}`, { type: 'voice', userLimit: voiceRoomLimit }).then(channel => {
+      
+      // If the category of the generation channel exists then append the room to that category
       if (newMemberCategory)
         channel.setParent(newMemberCategory).catch(console.error)
 
+      // Move the member to the room
       newMember.setChannel(channel).catch(console.error)
       
     }).catch(console.error)
 
+    // Rename the voice channels to their order
     resortVoiceChannels(oldMember, newMember)
   }
 
