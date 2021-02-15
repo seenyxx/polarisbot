@@ -35,8 +35,8 @@ client.on('message', message => {
 
   if (message.content.indexOf(config.prefix) !== 0) return
 
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-  const command = args.shift()?.toLowerCase();
+  const args = message.content.slice(config.prefix.length).trim().split(/ +/g)  
+  const command = args.shift()?.toLowerCase()  
 
 
   if (!command) return
@@ -55,20 +55,24 @@ const commands: Commands  = {}
 // Command Loader
 
 readdir(`${__dirname}/commands/`, (err, files) => {
-  if (err) return console.error(err);
+  if (err) return console.error(err)  
+
   files.forEach(file => {
-    if (!file.endsWith('.js')) return;
-    let props: Command = require(`${__dirname}/commands/${file}`);
-    let commandName = file.split('.')[0];
-    console.log(`Loading command ${commandName}`);
+    if (!file.endsWith('.js')) return  
+
+    let props: Command = require(`${__dirname}/commands/${file}`)  
+    let commandName = file.split('.')[0]  
+
+    console.log(`Loading command ${commandName}`)  
 
     commands[commandName] = props
-  });
-});
+  })  
+})  
 
 
 client.login(config.token)
 
+// Server for the UptimeRobot to connect to
 const server = createServer((req, res) => {
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/plain')
