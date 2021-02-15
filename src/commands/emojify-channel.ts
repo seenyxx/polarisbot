@@ -13,7 +13,11 @@ export function run(client: Client, message: Message, args: Array<string>) {
 
   if (!args[0].trim().match(ereg)) return message.channel.send(errorMessage('Invalid emoji'))
 
-  if (channel.name.match(ereg)) return message.channel.send(errorMessage('This channel is already emojified'))
+  if (channel.name.match(ereg)) {
+    let newName = channel.name.replace(ereg, args[0])
+    message.channel.send(simpleEmbed('green', 'Emojify Channel', 'Finished changing the channel'))
+    return
+  }
 
   channel.setName(`${args[0]}︱${channel.name}`).catch(e => message.channel.send(errorMessage('This channel is already emojified')))
   message.channel.send(simpleEmbed('green', 'Emojify Channel', 'Finished emojifying channel'))
