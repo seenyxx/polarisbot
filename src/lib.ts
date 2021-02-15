@@ -48,7 +48,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<S
       mentionMember?.kick(punishReason)
       .then(() => {
         message.channel?.send(`**${mentionMember?.user.tag}** was kicked by ${message.member?.user.tag}\nReason: \`${punishReason}\``)
-      }).catch(console.error)
+      }).catch(errorMessage)
     }
     else {
       mentionMember?.ban({
@@ -56,7 +56,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<S
       })
       .then(() => {
         message.channel?.send(`**${mentionMember?.user.tag}** was banned by ${message.member?.user.tag}\nReason: \`${punishReason}\``)
-      }).catch(console.error)
+      }).catch(errorMessage)
     }
   })
 }
@@ -69,7 +69,7 @@ export function noGif(message: Message) {
   let containsGif = message.content.match('https://tenor.com/view/sailor-moon-suit-old-man-peace-sign-sailor-scout-anime-gif-14298094')
   if (containsGif) {
     message.channel.send(`${message.author.tag} sent the no no gif in chat`)
-    message.delete().catch(console.error)
+    message.delete().catch(errorMessage)
   }
 }
 
@@ -206,4 +206,8 @@ export function simpleEmbed(presetColor: presetColor, title: string, desc: strin
     .setDescription(desc)
 
   return embed
+}
+
+export function errorMessage(e: any) {
+  simpleEmbed('red','Error:',`\`\`\`${e}\`\`\``)
 }
