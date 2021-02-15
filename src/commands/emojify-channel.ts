@@ -15,6 +15,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
 
   if (channel.name.match(ereg)) {
     let newName = channel.name.replace(ereg, args[0])
+    channel.setName(newName)
     message.channel.send(simpleEmbed('green', 'Emojify Channel', 'Finished changing the channel'))
     return
   }
