@@ -4,7 +4,7 @@ import { Config, presetColor, voiceCount } from "./types"
 
 
 // Command for both bans and kicks
-export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<String>) {
+export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<string>) {
   args.shift()
 
   if(!message.member?.hasPermission('KICK_MEMBERS') && mode == 'KICK') {
@@ -48,7 +48,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<S
       mentionMember?.kick(punishReason)
       .then(() => {
         message.channel?.send(`**${mentionMember?.user.tag}** was kicked by ${message.member?.user.tag}\nReason: \`${punishReason}\``)
-      }).catch(errorMessage)
+      }).catch(e => message.channel.send(errorMessage(e)))
     }
     else {
       mentionMember?.ban({
@@ -56,7 +56,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<S
       })
       .then(() => {
         message.channel?.send(`**${mentionMember?.user.tag}** was banned by ${message.member?.user.tag}\nReason: \`${punishReason}\``)
-      }).catch(errorMessage)
+      }).catch(e => message.channel.send(errorMessage(e)))
     }
   })
 }
@@ -69,7 +69,7 @@ export function noGif(message: Message) {
   let containsGif = message.content.match('https://tenor.com/view/sailor-moon-suit-old-man-peace-sign-sailor-scout-anime-gif-14298094')
   if (containsGif) {
     message.channel.send(`${message.author.tag} sent the no no gif in chat`)
-    message.delete().catch(errorMessage)
+    message.delete().catch(e => message.channel.send(errorMessage(e)))
   }
 }
 
@@ -209,5 +209,5 @@ export function simpleEmbed(presetColor: presetColor, title: string, desc: strin
 }
 
 export function errorMessage(e: any) {
-  simpleEmbed('red','Error:',`\`\`\`${e}\`\`\``)
+  return simpleEmbed('red','Error:',`\`\`\`${e}\`\`\``)
 }

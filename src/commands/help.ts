@@ -3,7 +3,7 @@ import { readFileSync } from "fs";
 import { simpleEmbed } from "../lib";
 import { helpConfig } from "../types";
 
-export function run(client: Client, message: Message, args: Array<String>) {
+export function run(client: Client, message: Message, args: Array<string>) {
   let help = JSON.parse(readFileSync(`${__dirname}/../../help.json`).toString()) as helpConfig
 
   const helpEmbed = simpleEmbed('blue', '**Help**', '')

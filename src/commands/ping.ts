@@ -1,6 +1,6 @@
 import { Client, Message } from "discord.js";
 import { simpleEmbed } from "../lib";
 
-export function run(client: Client, message: Message, args: Array<String>) {
+export function run(client: Client, message: Message, args: Array<string>) {
   message.channel?.send(simpleEmbed('blue', 'Ping', `💬 \`${Date.now() - message.createdTimestamp}ms\`\n 🌐 \`${client.ws.ping}ms\``))
 }

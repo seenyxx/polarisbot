@@ -1,7 +1,7 @@
 import { Client, Message } from "discord.js";
 import figlet from "figlet";
 
-export function run(client: Client, message: Message, args: Array<String>) {
+export function run(client: Client, message: Message, args: Array<string>) {
 
   let text = args.join(' ')
   

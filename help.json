@@ -38,5 +38,9 @@
   {
     "name": "uptime",
     "value": "A command that tells you the amount of time the bot has been up.\n`<prefix>uptime`"
+  },
+  {
+    "name": "emojify-channel",
+    "value": "A command that adds an emoji to the channel name, be warned you can only use emojify on a channel between 5 minute intervals.\n`<prefix>emojify-channel <UnicodeEmoji>`"
   }
 ]

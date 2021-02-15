@@ -10,7 +10,7 @@ async function loopRoles(message: Message) {
   })
 }
 
-export function run(client: Client, message: Message, args: Array<String>) {
+export function run(client: Client, message: Message, args: Array<string>) {
   if (!message.member?.hasPermission('MANAGE_ROLES')) return message.channel.send('You do not have permission to do that')
   
 
