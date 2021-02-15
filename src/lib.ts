@@ -1,6 +1,6 @@
-import { Message, VoiceState } from "discord.js" 
+import { ColorResolvable, Message, MessageEmbed, VoiceState } from "discord.js" 
 import { get, request } from "http" 
-import { Config, voiceCount } from "./types" 
+import { Config, presetColor, voiceCount } from "./types" 
 
 
 // Command for both bans and kicks
@@ -164,6 +164,8 @@ function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
   }
 }
 
+// Function for parsing displayTime
+
 export function parseDisplayUptime(uptime: number) {
   let secs = Math.floor(uptime)
 
@@ -180,4 +182,28 @@ export function parseDisplayUptime(uptime: number) {
   secs -= mins * 60 
   
   return [`${days}:${hours}:${mins}:${secs}`, `${days}d ${hours}h ${mins}m ${secs}s`]
+}
+
+export function simpleEmbed(presetColor: presetColor, title: string, desc: string) {
+  let presetColorHex: ColorResolvable = '#000000'
+  switch(presetColor) {
+    case 'red':
+      presetColorHex = '#e71837'
+      break
+    case 'blue':
+      presetColorHex = '#0099ff'
+      break
+    case 'green': 
+      presetColorHex = '#00FF7F'
+      break
+    case 'gold':
+      presetColorHex = '#fcba03'
+      break
+  }
+  let embed = new MessageEmbed()
+    .setColor(presetColorHex)
+    .setTitle(title)
+    .setDescription(desc)
+
+  return embed
 }

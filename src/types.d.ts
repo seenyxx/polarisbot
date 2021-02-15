@@ -25,3 +25,5 @@ export interface commandProps {
   name: string,
   value: string,
 }
+
+export type presetColor = 'red' | 'green' | 'blue' | 'gold'
