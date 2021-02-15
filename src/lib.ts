@@ -1,6 +1,6 @@
-import { Message, VoiceState } from "discord.js";
-import { get, request } from "http";
-import { Config, voiceCount } from "./types";
+import { Message, VoiceState } from "discord.js" 
+import { get, request } from "http" 
+import { Config, voiceCount } from "./types" 
 
 
 // Command for both bans and kicks
@@ -20,7 +20,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<S
   let mentionMember = message.mentions.members?.first()
 
   if(!mentionMember) {
-    return message.channel.send(`Mention member which you want to ${mode == 'BAN' ? 'ban' : 'kick'}`);
+    return message.channel.send(`Mention member which you want to ${mode == 'BAN' ? 'ban' : 'kick'}`) 
   }
 
 
@@ -164,3 +164,20 @@ function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
   }
 }
 
+export function parseDisplayUptime(uptime: number) {
+  let secs = Math.floor(uptime)
+
+  let days = Math.floor(secs / (3600*24)) 
+
+  secs -= days * 3600 * 24 
+
+  let hours = Math.floor(secs / 3600) 
+  
+  secs -= hours * 3600 
+
+  let mins = Math.floor(secs / 60) 
+
+  secs -= mins * 60 
+  
+  return [`${days}:${hours}:${mins}:${secs}`, `${days}d ${hours}h ${mins}m ${secs}s`]
+}

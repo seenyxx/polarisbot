@@ -34,5 +34,9 @@
   {
     "name": "prune-roles",
     "value": "A command that deletes all the roles with the name `new role`.\n`<prefix>prune-roles`"
+  },
+  {
+    "name": "uptime",
+    "value": "A command that tells you the amount of time the bot has been up.\n`<prefix>uptime`"
   }
 ]
