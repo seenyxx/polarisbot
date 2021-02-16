@@ -1,18 +1,27 @@
 import { Client } from 'discord.js'
-import { readdir, readFileSync } from 'fs'
+import { existsSync, readdir, readFileSync, rm, rmSync } from 'fs'
 import { createServer } from 'http'
+import { BotCache } from './cache';
 import { noGif, onVoiceStateUpdate } from './lib'
 import { Command, Commands, Config } from './types'
+import db from 'quick.db'
+
 
 function parseConfiguration() : Config {
-  let unparsedJSON = readFileSync(`${__dirname}/../config.json`).toString()
+  let unparsedJSON = readFileSync(process.env.NODE_ENV === 'production' ? `${__dirname}/../config.json`: `${__dirname}/../config-dev.json`).toString()
   return JSON.parse(unparsedJSON)
 }
 
+
+console.log(process.env.NODE_ENV)
 // Parse configuration file
 const config = parseConfiguration()
 
 const client = new Client()
+const botCache = new BotCache()
+
+botCache.set('helpConfig', JSON.parse(readFileSync(`${__dirname}/../help.json`).toString()))
+botCache.set('config', config)
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}`)
@@ -24,6 +33,10 @@ client.on('ready', () => {
       type: 'LISTENING'
     }
   })
+
+  // Reset cooldowns
+
+  db.delete('cooldowns')
 })
 
 client.on('message', message => {

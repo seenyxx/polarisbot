@@ -1,8 +1,12 @@
 import { Client, Message, MessageReaction, TextChannel, User, UserResolvable } from "discord.js";
-import { errorMessage, simpleEmbed } from "../lib";
+import { coolDownSetup, errorMessage, simpleEmbed } from "../lib";
 
+let coolDown = 25
+let commandName = 'ec'
 
 export function run(client: Client, message: Message, args: Array<string>) {
+  if (coolDownSetup(message, commandName, coolDown)) return
+  
   let ereg = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
 
   let channel = message.channel as TextChannel

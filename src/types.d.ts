@@ -27,3 +27,11 @@ export interface commandProps {
 }
 
 export type presetColor = 'red' | 'green' | 'blue' | 'gold'
+
+export interface cache {
+  [key: string]: any
+}
+
+export interface cooldownCache {
+  [key: string]: boolean
+}

@@ -1,6 +1,7 @@
-import { ColorResolvable, Message, MessageEmbed, VoiceState } from "discord.js" 
+import { ColorResolvable, Message, MessageEmbed, User, VoiceState } from "discord.js" 
 import { get, request } from "http" 
 import { Config, presetColor, voiceCount } from "./types" 
+import db from 'quick.db'
 
 
 // Command for both bans and kicks
@@ -8,19 +9,19 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
   args.shift()
 
   if(!message.member?.hasPermission('KICK_MEMBERS') && mode == 'KICK') {
-    message.channel.send('You have no permissions to do that')
+    message.channel.send(errorMessage('Insufficient Permissions'))
     return
   }
   
   if(!message.member?.hasPermission('BAN_MEMBERS') && mode == 'BAN') {
-    message.channel.send('You have no permissions to do that')
+    message.channel.send(errorMessage('Insufficient Permissions'))
     return
   }
 
   let mentionMember = message.mentions.members?.first()
 
   if(!mentionMember) {
-    return message.channel.send(`Mention member which you want to ${mode == 'BAN' ? 'ban' : 'kick'}`) 
+    return message.channel.send(errorMessage(`Mention member which you want to ${mode == 'BAN' ? 'ban' : 'kick'}`))
   }
 
 
@@ -31,12 +32,12 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
 
 
   if(mentionHighestRole >= authorHighestRole) {
-    message.channel.send(`You can\'t ${mode == 'BAN' ? 'ban' : 'kick'} members with equal or higher position`)
+    message.channel.send(errorMessage(`You can\'t ${mode == 'BAN' ? 'ban' : 'kick'} members with equal or higher position`))
     return
   }
 
   if(!mentionMember.manageable) {
-    message.channel.send(`I do not have the required permissions ${mode == 'BAN' ? 'ban' : 'kick'} this user`)
+    message.channel.send(errorMessage(`I do not have the required permissions ${mode == 'BAN' ? 'ban' : 'kick'} this user`))
     return
   }
 
@@ -47,7 +48,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
     if (mode == 'KICK') {
       mentionMember?.kick(punishReason)
       .then(() => {
-        message.channel?.send(`**${mentionMember?.user.tag}** was kicked by ${message.member?.user.tag}\nReason: \`${punishReason}\``)
+        message.channel?.send(simpleEmbed('green', 'Kick', `**${mentionMember?.user.tag}** was kicked by ${message.member?.user.tag}\nReason: \`${punishReason}\``))
       }).catch(e => message.channel.send(errorMessage(e)))
     }
     else {
@@ -55,7 +56,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
         reason: punishReason
       })
       .then(() => {
-        message.channel?.send(`**${mentionMember?.user.tag}** was banned by ${message.member?.user.tag}\nReason: \`${punishReason}\``)
+        message.channel?.send(simpleEmbed('green', 'Ban', `**${mentionMember?.user.tag}** was banned by ${message.member?.user.tag}\nReason: \`${punishReason}\``))
       }).catch(e => message.channel.send(errorMessage(e)))
     }
   })
@@ -210,4 +211,38 @@ export function simpleEmbed(presetColor: presetColor, title: string, desc: strin
 
 export function errorMessage(e: any) {
   return simpleEmbed('red','Error:',`\`\`\`${e}\`\`\``)
+}
+
+export function coolDown(timeLeftMS: number) {
+  return(simpleEmbed('blue', '⏱ Slow Down!', `There is still ${timeLeftMS / 1000}s before you use this command again`))
+} 
+
+
+export function setCoolDown(userID: string, cmd: string, coolDownSecs: number) {
+  let coolDownMS = coolDownSecs * 1000
+
+  // Sets the database value to the time when the cooldown completes
+  db.set(`cooldowns.${cmd}-${userID}`, Date.now() + coolDownMS)
+}
+
+export function checkCoolDown(msg: Message, userID: string, cmd: string) {
+  let completeTime = db.get(`cooldowns.${cmd}-${userID}`)
+
+  let time = Date.now()
+  
+  if (time < completeTime) {
+    
+    msg.channel.send(coolDown(completeTime - time))
+    return false
+  }
+  else {
+    db.delete(`cooldowns.${cmd}-${userID}`)
+    return true
+  }
+  
+}
+
+export function coolDownSetup(message: Message, commandName: string, coolDownSecs: number) {
+  if(!checkCoolDown(message, message.author.id, commandName)) return true
+  setCoolDown(message.author.id, commandName, coolDownSecs)
 }
