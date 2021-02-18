@@ -6,7 +6,7 @@ import { helpConfig } from "../types";
 import db from 'quick.db'
 
 
-let coolDown = 20
+let coolDown = 120
 let commandName = 'lockdown'
 export function run(client: Client, message: Message, args: Array<string>) {
   if (!message.member?.hasPermission('MANAGE_GUILD')) return message.channel.send(errorMessage('Insufficient permissions'))
