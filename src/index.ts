@@ -39,6 +39,7 @@ client.on('ready', () => {
   db.delete('cooldowns')
 })
 
+
 client.on('message', message => {
   if (message.author.bot) return
 
@@ -59,6 +60,13 @@ client.on('message', message => {
 
   cmd.run(client, message, args)
 })
+
+client.on('guildMemberAdd', member => {
+  if (db.get(`ld.${member.guild.id}`)) {
+    if (member.kickable) member.kick('Server is currently in lockdown')
+  }
+})
+
 
 client.on('voiceStateUpdate', onVoiceStateUpdate)
 
@@ -95,3 +103,4 @@ const server = createServer((req, res) => {
 server.listen(parseInt(process.env.PORT ? process.env.PORT : '3000'), '0.0.0.0', () => {
   console.log(`Server running at http://127.0.0.1:80/`)
 })
+

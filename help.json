@@ -42,5 +42,13 @@
   {
     "name": "emojify-channel",
     "value": "A command that adds an emoji to the channel name, be warned you can only use emojify on a channel between 5 minute intervals.\n`<prefix>emojify-channel <UnicodeEmoji>`"
+  },
+  {
+    "name": "lockdown",
+    "value": "A command that locks down the entire server preventing users from joining to protect a guild against a targeted raid.\n`<prefix>lockdown`"
+  },
+  {
+    "name": "resolve-lockdown",
+    "value": "A command that removes the lockdown on the server if the lockdown exists.\n`<prefix>resolve-lockdown`"
   }
 ]
