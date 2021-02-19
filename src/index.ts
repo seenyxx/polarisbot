@@ -105,7 +105,7 @@ const server = createServer((req, res) => {
   res.end('ONLINE')
 })
 
-server.listen(parseInt(process.env.PORT ? process.env.PORT : '80'), '127.0.0.1', () => {
+server.listen(parseInt(process.env.PORT ? process.env.PORT : '3000'), '0.0.0.0', () => {
   console.log(`Server running at http://127.0.0.1:80/`)
 })
 
