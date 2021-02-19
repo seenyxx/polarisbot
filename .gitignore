@@ -104,3 +104,6 @@ dist
 .tern-port
 
 json.sqlite
+
+config.json
+config-dev.json
