@@ -1,5 +1,5 @@
 {
-  "name": "discordmodbot",
+  "name": "polarisbot",
   "version": "2.0.0",
   "description": "",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/seen-idc/discordmodbot.git"
+    "url": "git+https://github.com/seen-idc/polarisbot.git"
   },
   "author": "seen-idc",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/seen-idc/discordmodbot/issues"
+    "url": "https://github.com/seen-idc/polarisbot/issues"
   },
-  "homepage": "https://github.com/seen-idc/discordmodbot#readme",
+  "homepage": "https://github.com/seen-idc/polarisbot#readme",
   "devDependencies": {},
   "dependencies": {
     "@types/figlet": "^1.2.1",
