@@ -63,7 +63,9 @@ client.on('message', message => {
 
 client.on('guildMemberAdd', member => {
   if (db.get(`ld.${member.guild.id}`)) {
-    if (member.kickable) member.kick('Server is currently in lockdown')
+    if (member.bannable) member.ban({
+      reason: 'LOCKDOWN'
+    })
   }
 })
 
