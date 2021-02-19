@@ -2,7 +2,7 @@ import { Client } from 'discord.js'
 import { existsSync, readdir, readFileSync, rm, rmSync } from 'fs'
 import { createServer } from 'http'
 import { BotCache } from './cache';
-import { noGif, onVoiceStateUpdate } from './lib'
+import { noGif } from './lib'
 import { Command, Commands, Config } from './types'
 import db from 'quick.db'
 
@@ -46,22 +46,26 @@ client.on('message', message => {
   // Get rid of gifs from /tenor or /giphy
   noGif(message)
 
+  let prefix: string = db.get(`prefix.${message.guild?.id}`) ? db.get(`prefix.${message.guild?.id}`) : config.prefix
 
-  if (message.content.indexOf(config.prefix) !== 0) return
+  if (message.content.indexOf(prefix) !== 0) return
 
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g)  
+  const args = message.content.slice(prefix.length).trim().split(/ +/g)  
   const command = args.shift()?.toLowerCase()  
 
 
   if (!command) return
   
+  
   // Get the command to run
   const cmd = commands[command]
-
+  if (!cmd) return
+  
   cmd.run(client, message, args)
 })
 
 client.on('guildMemberAdd', member => {
+  if (member.user.bot) return
   if (db.get(`ld.${member.guild.id}`)) {
     if (member.bannable) member.ban({
       reason: 'LOCKDOWN'
@@ -70,7 +74,6 @@ client.on('guildMemberAdd', member => {
 })
 
 
-client.on('voiceStateUpdate', onVoiceStateUpdate)
 
 
 const commands: Commands  = {}

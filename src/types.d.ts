@@ -19,7 +19,6 @@ export interface voiceCount {
   [key: string]: number
 }
 
-export type helpConfig = Array<commandProps>
 
 export interface commandProps {
   name: string,

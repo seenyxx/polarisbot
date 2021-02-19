@@ -1,54 +1,101 @@
-[
-  {
-    "name": "ban",
-    "value": "A ban command.\n`<prefix>ban <User> <Reason>`"
-  },
-  {
-    "name": "kick",
-    "value": "A kick command.\n`<prefix>kick <User> <Reason>`"
-  },
-  {
+{
+  "mod": [
+    {
+      "name": "ban",
+      "value": "A ban command.\n`<prefix>ban <User> <Reason>`"
+    },
+    {
+      "name": "kick",
+      "value": "A kick command.\n`<prefix>kick <User> <Reason>`"
+    },
+    {
+      "name": "emojify-channel",
+      "value": "A command that adds an emoji to the channel name, be warned you can only use emojify on a channel between 5 minute intervals.\n`<prefix>emojify-channel <UnicodeEmoji>`"
+    },
+    {
+      "name": "lockdown",
+      "value": "A command that locks down the entire server preventing users from joining to protect a guild against a targeted raid.\n`<prefix>lockdown`"
+    },
+    {
+      "name": "resolve-lockdown",
+      "value": "A command that removes the lockdown on the server if the lockdown exists.\n`<prefix>resolve-lockdown`"
+    },
+    {
+      "name": "prune-roles",
+      "value": "A command that deletes all the roles with the name `new role`.\n`<prefix>prune-roles`"
+    },
+    {
+      "name": "toggle-gif-filter",
+      "value": "A command that toggles the no no gif filter.\n`<prefix>toggle-gif-filter`"
+    }
+  ],
+
+
+
+  "misc": [
+    {
     "name": "invite",
     "value": "A command to invite this bot.\n`<prefix>invite`"
-  },
-  {
-    "name": "ping",
-    "value": "A command to check the latency between the bot server and your server.\n`<prefix>ping`"
-  },
-  {
-    "name": "help",
-    "value": "A command that brings up this dialogue.\n`<prefix>help`"
-  },
-  {
-    "name": "ascii",
-    "value": "A command that converts text to ascii.\n`<prefix>ascii <Text>`"
-  },
-  {
-    "name": "ascii-cyan",
-    "value": "A command that converts text to cyan colored ascii.\n`<prefix>ascii-cyan <Text>`"
-  },
-  {
-    "name": "ascii-gold",
-    "value": "A command that converts text to gold colored ascii.\n`<prefix>ascii-gold <Text>`"
-  },
-  {
-    "name": "prune-roles",
-    "value": "A command that deletes all the roles with the name `new role`.\n`<prefix>prune-roles`"
-  },
-  {
+    },
+    {
+      "name": "ping",
+      "value": "A command to check the latency between the bot server and your server.\n`<prefix>ping`"
+    },
+    {
+      "name": "help",
+      "value": "A command that brings up this dialogue.\n`<prefix>help`"
+    }, 
+    {
     "name": "uptime",
     "value": "A command that tells you the amount of time the bot has been up.\n`<prefix>uptime`"
-  },
-  {
-    "name": "emojify-channel",
-    "value": "A command that adds an emoji to the channel name, be warned you can only use emojify on a channel between 5 minute intervals.\n`<prefix>emojify-channel <UnicodeEmoji>`"
-  },
-  {
-    "name": "lockdown",
-    "value": "A command that locks down the entire server preventing users from joining to protect a guild against a targeted raid.\n`<prefix>lockdown`"
-  },
-  {
-    "name": "resolve-lockdown",
-    "value": "A command that removes the lockdown on the server if the lockdown exists.\n`<prefix>resolve-lockdown`"
-  }
-]
+    }
+  ],
+
+
+
+  "text": [
+    {
+      "name": "ascii",
+      "value": "A command that converts text to ascii.\n`<prefix>ascii <Text>`"
+    },
+    {
+      "name": "ascii-cyan",
+      "value": "A command that converts text to cyan colored ascii.\n`<prefix>ascii-cyan <Text>`"
+    },
+    {
+      "name": "ascii-gold",
+      "value": "A command that converts text to gold colored ascii.\n`<prefix>ascii-gold <Text>`"
+    }
+  ],
+  "config": [
+    {
+      "name": "setprefix",
+      "value": "A command that sets the prefix of the bot in the server.\n`<prefix>setprefix <NewPrefix>`"
+    },
+    {
+      "name": "prefix",
+      "value": "A command that gets the current prefix of the bot in the server.\n`<prefix>prefix`"
+    }
+  ],
+  
+
+
+  "cat": [
+    {
+      "name": "Moderation 🛠",
+      "menu": "mod"
+    },
+    {
+      "name": "Text 💬",
+      "menu": "text"
+    },
+    {
+      "name": "Misc ✨",
+      "menu": "misc"
+    },
+    {
+      "name": "Config ⚙",
+      "menu": "config"
+    }
+  ]
+}

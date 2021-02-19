@@ -66,6 +66,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
 
 export function noGif(message: Message) {
   if (!message) return
+  if (!db.get(`gf.${message.guild?.id}`)) return
 
   let containsGif = message.content.match('https://tenor.com/view/sailor-moon-suit-old-man-peace-sign-sailor-scout-anime-gif-14298094')
   if (containsGif) {
@@ -75,95 +76,10 @@ export function noGif(message: Message) {
 }
 
 
-// On voiceStateUpdate
-
-// Variables for the command
-let voiceGenName = 'Create'
-let voiceGeneratedName = 'Room'
-let currentVoiceCount: voiceCount = {}
-let voiceRoomLimit = 8
-let voiceRoomNamingOffset = 0
-
-export function onVoiceStateUpdate(oldMember: VoiceState, newMember: VoiceState) {
-  if (!currentVoiceCount[oldMember.guild.id]) currentVoiceCount[oldMember.guild.id] = 0
-  if (currentVoiceCount[oldMember.guild.id] < 0) currentVoiceCount[oldMember.guild.id] = 0
-
-  let oldMemberChannelName = oldMember.channel?.name.trim()
-  let newMemberChannelName = newMember.channel?.name.trim()
-
-  let newMemberCategory = newMember.channel?.parent
-
-  // If the old channel the member was in was a room
-  if (oldMemberChannelName && oldMemberChannelName?.search(voiceGeneratedName) > -1 ) {
-    
-    // If there is no one currently in the member's previous room
-    if (oldMember.channel && oldMember.channel.members.array().length == 0) {
-
-      // Delete the old channel
-      oldMember.channel.delete().then(c => {
-        // Rename the voice channels to their order
-
-        resortVoiceChannels(oldMember, newMember)
-
-        // Update the channel
-        currentVoiceCount[oldMember.guild.id] -= 1
-      }).catch(console.error)
-
-      
-    }
-  }
-
-  // If the new channel the member is in is a generator
-  if (newMemberChannelName && newMemberChannelName?.search(voiceGenName) > -1) {
-
-    // Create a room for them
-    oldMember.guild.channels.create(`🔊 ${voiceGeneratedName} ${currentVoiceCount[oldMember.guild.id] += 1}`, { type: 'voice', userLimit: voiceRoomLimit }).then(channel => {
-      
-      // If the category of the generation channel exists then append the room to that category
-      if (newMemberCategory)
-        channel.setParent(newMemberCategory).catch(console.error)
-
-      // Move the member to the room
-      newMember.setChannel(channel).then(() => {
-
-        // Rename the voice channels to their order
-        
-        resortVoiceChannels(oldMember, newMember)
-      }).catch(console.error)
-      
-    }).catch(console.error)
-
-  }
-
-} 
 
 
 
-function resortVoiceChannels(oldMember: VoiceState, newMember: VoiceState) {
-  let oldMemberCategory = oldMember.channel?.parent
-  let newMemberCategory = newMember.channel?.parent
 
-
-  let newMemberCategoryRooms = newMemberCategory?.children.filter(c => {
-    return c.type == 'voice' && c.name.search(voiceGeneratedName) > -1 
-  })
-  let oldMemberCategoryRooms = oldMemberCategory?.children.filter(c => {
-    return c.type == 'voice' && c.name.search(voiceGeneratedName) > -1 
-  })
-
-  if (newMemberCategory && newMemberCategoryRooms) {
-    newMemberCategoryRooms.array().forEach(c => {
-      c.setName(`🔊 Room ${c.position - voiceRoomNamingOffset}`).catch(console.error)
-    })
-    return
-  }
-
-  if (oldMemberCategory && oldMemberCategoryRooms) {
-    oldMemberCategoryRooms.array().forEach(c => {
-      c.setName(`🔊 Room ${c.position - voiceRoomNamingOffset}`).catch(console.error)
-    })
-  }
-}
 
 // Function for parsing displayTime
 
