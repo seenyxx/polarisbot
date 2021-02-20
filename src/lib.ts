@@ -162,3 +162,6 @@ export function coolDownSetup(message: Message, commandName: string, coolDownSec
   if(!checkCoolDown(message, message.author.id, commandName)) return true
   setCoolDown(message.author.id, commandName, coolDownSecs)
 }
+
+
+export 

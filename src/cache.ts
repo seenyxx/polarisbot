@@ -1,7 +1,6 @@
 import { cache as cacheObj, cooldownCache as cooldownCacheObj } from "./types";
 
 let cacheObj: cacheObj = {}
-let cooldownCacheObj: cooldownCacheObj = {}
 
 export class BotCache {
   constructor() {}
