@@ -1,10 +1,10 @@
 import { Client, Message, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
-import { BotCache } from "../cache";
-import { coolDownSetup, simpleEmbed } from "../lib";
+import { BotCache } from "../../cache";
+import { coolDownSetup, simpleEmbed } from "../../lib";
 
 
-let coolDown = 5
+let coolDown = 3
 let commandName = 'help'
 export function run(client: Client, message: Message, args: Array<string>) {
 
@@ -14,7 +14,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   const helpEmbed = simpleEmbed('blue', '**Help**', '')
   if (!args[0]) {
     help.cat.forEach((cat: { name: string, menu: string}) => {
-      helpEmbed.addField(cat.name, `\`<prefix>help ${cat.menu}\``)
+      helpEmbed.addField(cat.name, `\`<prefix>help ${cat.menu}\``, true)
     })
     message.channel.send(helpEmbed).catch(console.error)
     return
@@ -27,7 +27,9 @@ export function run(client: Client, message: Message, args: Array<string>) {
 
     if (!menu) return
 
-    helpEmbed.addFields(menu)
+    menu.forEach((data: any) => {
+      helpEmbed.addField(data.name, data.value, true)
+    })
   }
 
 

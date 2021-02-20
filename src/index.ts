@@ -1,5 +1,5 @@
 import { Client } from 'discord.js'
-import { existsSync, readdir, readFileSync, rm, rmSync } from 'fs'
+import { existsSync, fdatasync, fstat, readdir, readFileSync, rm, rmSync, stat } from 'fs'
 import { createServer } from 'http'
 import { BotCache } from './cache';
 import { noGif } from './lib'
@@ -80,20 +80,47 @@ const commands: Commands  = {}
 
 // Command Loader
 
-readdir(`${__dirname}/commands/`, (err, files) => {
-  if (err) return console.error(err)  
+appendDirectoryCommands(`${__dirname}/commands`)
 
-  files.forEach(file => {
-    if (!file.endsWith('.js')) return  
+readdir(`${__dirname}/commands/`, (e, f) => {
+  if (e) return console.error(e)  
 
-    let props: Command = require(`${__dirname}/commands/${file}`)  
-    let commandName = file.split('.')[0]  
 
-    console.log(`Loading command ${commandName}`)  
+  f.forEach(file => {
+    
+    if (file.endsWith('.js')) return
 
-    commands[commandName] = props
+    stat(`${__dirname}/commands/${file}`, (e, fsStat) => {
+      if (e) return console.error(e)
+      if (!fsStat) return
+
+      if (fsStat.isDirectory()) {
+        appendDirectoryCommands(`${__dirname}/commands/${file}`)
+      }
+    })
+  })
+
+})
+
+function appendDirectoryCommands(dir: string) {
+  
+  readdir(dir, (err, files) => {
+    if (err) return console.error(err)  
+
+    files.forEach(file => {
+      if (!file.endsWith('.js')) return  
+
+      let props: Command = require(`${dir}/${file}`)  
+      let commandName = file.split('.')[0]  
+
+      console.log(`Loading command ${commandName}`)  
+
+      commands[commandName] = props
+    })  
   })  
-})  
+}
+
+
 
 
 client.login(config.token)

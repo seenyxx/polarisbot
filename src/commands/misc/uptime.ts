@@ -1,5 +1,5 @@
 import { Client, Message, MessageEmbed } from "discord.js";
-import { parseDisplayUptime, simpleEmbed } from "../lib";
+import { parseDisplayUptime, simpleEmbed } from "../../lib";
 
 export function run(client: Client, message: Message, args: Array<string>) {
   let uptime = parseDisplayUptime(process.uptime())

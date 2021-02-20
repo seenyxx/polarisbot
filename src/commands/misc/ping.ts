@@ -1,5 +1,5 @@
 import { Client, Message } from "discord.js";
-import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed } from "../lib";
+import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed } from "../../lib";
 
 let coolDown = 3
 let commandName = 'ping'

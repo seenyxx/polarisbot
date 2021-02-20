@@ -1,6 +1,6 @@
 import { Client, Message } from "discord.js";
 import figlet from "figlet";
-import { coolDownSetup } from "../lib";
+import { coolDownSetup } from "../../lib";
 
 let coolDown = 25
 let commandName = 'ascii'
@@ -16,6 +16,6 @@ export function run(client: Client, message: Message, args: Array<string>) {
       return
     }
     
-    message.channel.send(`\`\`\`yaml\n${data}\n\`\`\``)
+    message.channel.send(`\`\`\`\n${data}\n\`\`\``)
   })
 }

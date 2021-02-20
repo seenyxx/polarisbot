@@ -1,5 +1,5 @@
 import { Client, Message, MessageEmbed } from "discord.js";
-import { coolDownSetup, simpleEmbed } from "../lib";
+import { coolDownSetup, simpleEmbed } from "../../lib";
 
 let coolDown = 15
 let commandName = 'inv'

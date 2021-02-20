@@ -1,6 +1,6 @@
 import { RSA_PKCS1_OAEP_PADDING } from "constants";
 import { Client, Message } from "discord.js";
-import { simpleEmbed } from "../lib";
+import { simpleEmbed } from "../../lib";
 
 async function loopRoles(message: Message) {
   message.guild?.roles.cache.forEach(role => {
