@@ -31,6 +31,10 @@
     {
       "name": "set-topic",
       "value": "A command that sets the topic of the current channel.\n`<prefix>set-topic`"
+    },
+    {
+      "name": "toggle-captcha",
+      "value": "A command that toggles the server captcha. \n`<prefix>toggle-captcha`"
     }
   ],
 
