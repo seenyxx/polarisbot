@@ -125,14 +125,4 @@ function appendDirectoryCommands(dir: string) {
 
 client.login(config.token)
 
-// Server for the UptimeRobot to connect to
-const server = createServer((req, res) => {
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/plain')
-  res.end('ONLINE')
-})
-
-server.listen(parseInt(process.env.PORT ? process.env.PORT : '3000'), '0.0.0.0', () => {
-  console.log(`Server running at http://127.0.0.1:80/`)
-})
 
