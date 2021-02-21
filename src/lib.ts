@@ -164,4 +164,3 @@ export function coolDownSetup(message: Message, commandName: string, coolDownSec
 }
 
 
-export 
