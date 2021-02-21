@@ -116,6 +116,9 @@ export function simpleEmbed(presetColor: presetColor, title: string, desc: strin
     case 'gold':
       presetColorHex = '#fcba03'
       break
+    case 'pigeon':
+      presetColorHex = '#637d96'
+      break
   }
   let embed = new MessageEmbed()
     .setColor(presetColorHex)

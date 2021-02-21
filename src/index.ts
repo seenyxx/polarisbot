@@ -1,10 +1,12 @@
-import { Client } from 'discord.js'
+import { Client, MessageAttachment, TextChannel, Message } from 'discord.js';
 import { existsSync, fdatasync, fstat, readdir, readFileSync, rm, rmSync, stat } from 'fs'
 import { createServer } from 'http'
 import { BotCache } from './cache';
-import { noGif } from './lib'
+import { noGif, simpleEmbed } from './lib';
 import { Command, Commands, Config } from './types'
 import db from 'quick.db'
+import { create } from 'svg-captcha';
+import { svg2png } from 'svg-png-converter';
 
 
 function parseConfiguration() : Config {
@@ -64,11 +66,45 @@ client.on('message', message => {
   cmd.run(client, message, args)
 })
 
-client.on('guildMemberAdd', member => {
+client.on('guildMemberAdd', async member => {
   if (member.user.bot) return
   if (db.get(`ld.${member.guild.id}`)) {
     if (member.bannable) member.ban({
       reason: 'LOCKDOWN'
+    })
+    return
+  }
+  if (db.get(`captcha.${member.guild.id}`)) {
+    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity as a person')
+    
+    let captcha = create({
+      size: 6,
+      background: 'white'
+    })
+
+    let outputBuffer = await svg2png({ 
+      input: captcha.data, 
+      encoding: 'buffer', 
+      format: 'jpeg',
+    })
+
+    
+    let channel = await member.createDM(true)
+    channel.send(embed)
+    channel.send(new MessageAttachment(outputBuffer))
+
+    let collector = channel.createMessageCollector(m => m.author.id === member.id)
+
+    collector.on('collect', async (m: Message) => {
+      if (m.content.toLowerCase() === captcha.text.toLowerCase()) {
+        m.channel.send(simpleEmbed('pigeon', 'Verified ✅', ''))
+      }
+      else {
+        await m.channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
+        if (member.kickable)
+          member.kick('Failed captcha')
+      }
+      collector.stop()
     })
   }
 })
