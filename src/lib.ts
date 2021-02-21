@@ -68,7 +68,7 @@ export function noGif(message: Message) {
   if (!message) return
   if (!db.get(`gf.${message.guild?.id}`)) return
 
-  let containsGif = message.content.match('https://tenor.com/view/sailor-moon-suit-old-man-peace-sign-sailor-scout-anime-gif-14298094')
+  let containsGif = message.content.match('https://tenor.com/view/sailor-moon-suit-old-man-peace-sign-sailor-scout-anime-gif-14298094') || message.content.match('http://tenor.com/view/sailor-moon-suit-old-man-peace-sign-sailor-scout-anime-gif-14298094') 
   if (containsGif) {
     message.channel.send(`${message.author.tag} sent the no no gif in chat`)
     message.delete().catch(e => message.channel.send(errorMessage(e)))
