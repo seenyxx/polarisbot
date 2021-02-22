@@ -9,6 +9,7 @@ import { create } from 'svg-captcha';
 import { svg2png } from 'svg-png-converter';
 
 
+process.on('unhandledRejection', console.error)
 function parseConfiguration() : Config {
   let unparsedJSON = readFileSync(process.env.NODE_ENV === 'production' ? `${__dirname}/../config.json`: `${__dirname}/../config-dev.json`).toString()
   return JSON.parse(unparsedJSON)
@@ -74,14 +75,17 @@ client.on('guildMemberAdd', async member => {
     })
     return
   }
-  if (db.get(`captcha.${member.guild.id}`)) {
-    member.roles.add(await unverifiedRole(member.guild))
 
-    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity as a person, you have 1 minute to do so')
+  // Server Captcha
+  if (db.get(`captcha.${member.guild.id}`)) {
+    let unverifiedMemberRole = await unverifiedRole(member.guild)
+    member.roles.add(unverifiedMemberRole)
+
+    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity as a person, you have 3 minutes to do so')
     
     let captcha = create({
       size: 6,
-      background: 'white'
+      background: 'black'
     })
 
     let outputBuffer = await svg2png({ 
@@ -96,13 +100,13 @@ client.on('guildMemberAdd', async member => {
     channel.send(new MessageAttachment(outputBuffer))
 
     let collector = channel.createMessageCollector(m => m.author.id === member.id, {
-      time: 60000
+      time: 180000
     })
 
     collector.on('collect', async (m: Message) => {
       if (m.content.toLowerCase() === captcha.text.toLowerCase()) {
+        member.roles.remove(unverifiedMemberRole)
         m.channel.send(simpleEmbed('pigeon', 'Verified ✅', ''))
-        member.roles.remove(await unverifiedRole(member.guild))
       }
       else {
         await m.channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
@@ -112,8 +116,10 @@ client.on('guildMemberAdd', async member => {
       collector.stop()
     })
     collector.on('end', async messages => {
-      if (!messages) {
+      console.log(messages)
+      if (!messages.size) {
         await channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
+        
         if (member.kickable)
           member.kick('Failed captcha')
       }
