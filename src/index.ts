@@ -85,7 +85,7 @@ client.on('guildMemberAdd', async member => {
     
     let captcha = create({
       size: 6,
-      background: 'black'
+      background: '#23272A'
     })
 
     let outputBuffer = await svg2png({ 
