@@ -1,4 +1,4 @@
-import { ColorResolvable, Message, MessageEmbed, User, VoiceState } from "discord.js" 
+import { ColorResolvable, Guild, Message, MessageEmbed, Role, User, VoiceState } from "discord.js" 
 import { get, request } from "http" 
 import { Config, presetColor, voiceCount } from "./types" 
 import db from 'quick.db'
@@ -167,3 +167,30 @@ export function coolDownSetup(message: Message, commandName: string, coolDownSec
 }
 
 
+export async function unverifiedRole(guild: Guild) {
+  let role = guild.roles.cache.get('Unverified')
+
+  if (role) {
+    removeAllPermissions(guild, role)
+    return role
+  }
+
+  let retRole = await guild.roles.create({
+    data: {
+      name: 'Unverified'
+    }
+  })
+  removeAllPermissions(guild, retRole)
+  return retRole
+}
+
+export function removeAllPermissions(guild: Guild, role: Role) {
+  guild.channels.cache.forEach(c => {
+    c.createOverwrite(role, {
+      SEND_MESSAGES: false,
+      MANAGE_CHANNELS: false,
+      MANAGE_MESSAGES: false,
+      VIEW_CHANNEL: true
+    })
+  })
+}

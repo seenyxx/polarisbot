@@ -2,7 +2,7 @@ import { Client, MessageAttachment, TextChannel, Message } from 'discord.js';
 import { existsSync, fdatasync, fstat, readdir, readFileSync, rm, rmSync, stat } from 'fs'
 import { createServer } from 'http'
 import { BotCache } from './cache';
-import { noGif, simpleEmbed } from './lib';
+import { noGif, simpleEmbed, unverifiedRole } from './lib';
 import { Command, Commands, Config } from './types'
 import db from 'quick.db'
 import { create } from 'svg-captcha';
@@ -75,7 +75,9 @@ client.on('guildMemberAdd', async member => {
     return
   }
   if (db.get(`captcha.${member.guild.id}`)) {
-    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity as a person')
+    member.roles.add(await unverifiedRole(member.guild))
+
+    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity as a person, you have 1 minute to do so')
     
     let captcha = create({
       size: 6,
@@ -93,11 +95,14 @@ client.on('guildMemberAdd', async member => {
     channel.send(embed)
     channel.send(new MessageAttachment(outputBuffer))
 
-    let collector = channel.createMessageCollector(m => m.author.id === member.id)
+    let collector = channel.createMessageCollector(m => m.author.id === member.id, {
+      time: 60000
+    })
 
     collector.on('collect', async (m: Message) => {
       if (m.content.toLowerCase() === captcha.text.toLowerCase()) {
         m.channel.send(simpleEmbed('pigeon', 'Verified ✅', ''))
+        member.roles.remove(await unverifiedRole(member.guild))
       }
       else {
         await m.channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
@@ -105,6 +110,13 @@ client.on('guildMemberAdd', async member => {
           member.kick('Failed captcha')
       }
       collector.stop()
+    })
+    collector.on('end', async messages => {
+      if (!messages) {
+        await channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
+        if (member.kickable)
+          member.kick('Failed captcha')
+      }
     })
   }
 })
