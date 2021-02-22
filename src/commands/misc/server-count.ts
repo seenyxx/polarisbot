@@ -4,7 +4,7 @@ import { BotCache } from '../../cache';
 import nodeHtmlToImage from "node-html-to-image";
 
 let coolDown = 3
-let commandName = 'ping'
+let commandName = 'sc'
 export async function run(client: Client, message: Message, args: Array<string>) {
   
   if (coolDownSetup(message, commandName, coolDown)) return
