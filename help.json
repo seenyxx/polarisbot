@@ -25,10 +25,6 @@
       "value": "A command that deletes all the roles with the name `new role`.\n`<prefix>prune-roles`"
     },
     {
-      "name": "toggle-gif-filter",
-      "value": "A command that toggles the no no gif filter.\n`<prefix>toggle-gif-filter`"
-    },
-    {
       "name": "set-topic",
       "value": "A command that sets the topic of the current channel.\n`<prefix>set-topic`"
     },
@@ -60,6 +56,10 @@
     {
       "name": "server-count",
       "value": "A command that tells you the amount of servers the bot is in.\n`<prefix> server-count`"
+    },
+    {
+      "name": "toggle-gif-filter",
+      "value": "A command that toggles the no no gif filter.\n`<prefix>toggle-gif-filter`"
     }
   ],
 
