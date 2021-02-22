@@ -25,6 +25,7 @@ const botCache = new BotCache()
 
 botCache.set('helpConfig', JSON.parse(readFileSync(`${__dirname}/../help.json`).toString()))
 botCache.set('config', config)
+botCache.set('pingDisplay', readFileSync(`${__dirname}/../templates/ping.html`).toString())
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}`)

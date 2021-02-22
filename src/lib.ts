@@ -194,3 +194,7 @@ export function removeAllPermissions(guild: Guild, role: Role) {
     })
   })
 }
+
+export function replaceValue(doc: string, value: string, rep: string) {
+  doc.replace(`{{ ${value} }}`, rep)
+}

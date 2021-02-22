@@ -105,5 +105,5 @@ dist
 
 json.sqlite
 
-./config.json
-./config-dev.json
+config.json
+config-dev.json

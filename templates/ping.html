@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ping HTML template</title>
+  <style>
+    body {
+      width: 800px;
+      height: 380px;
+    }
+    .display {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      font-size: 2em;
+    }
+    #main {
+      padding-left: 1em;
+      background-color: #23272A;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: 2em;
+      color: inherit;
+      padding-bottom: 165px;
+    }
+    #title {
+      margin: 0;
+      padding: 1em;
+      background-color: #7289DA;
+      color: inherit;
+      font-family: inherit;
+      font-size: inherit;
+    }
+  </style>
+</head>
+<body>
+  <div class="display">
+    <h1 id="title">Polaris Bot Ping</h1>
+    <div id="main">
+      {{ message_ping }}
+      <br>
+      {{ ws_ping }}
+    </div>
+  </div>
+</body>
+</html>
