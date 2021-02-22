@@ -54,8 +54,12 @@
       "value": "A command that brings up this dialogue.\n`<prefix>help`"
     }, 
     {
-    "name": "uptime",
-    "value": "A command that tells you the amount of time the bot has been up.\n`<prefix>uptime`"
+      "name": "uptime",
+      "value": "A command that tells you the amount of time the bot has been up.\n`<prefix>uptime`"
+    },
+    {
+      "name": "server-count",
+      "value": "A command that tells you the amount of servers the bot is in.\n`<prefix> server-count`"
     }
   ],
 
