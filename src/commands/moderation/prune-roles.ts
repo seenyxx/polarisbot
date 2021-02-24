@@ -1,10 +1,13 @@
-import { RSA_PKCS1_OAEP_PADDING } from "constants";
 import { Client, Message } from "discord.js";
 import { simpleEmbed } from "../../lib";
 
 async function loopRoles(message: Message) {
   message.guild?.roles.cache.forEach(role => {
     if (role.name.search(/new role/g) > -1 ) {
+      role.delete().catch(e => message.channel.send(simpleEmbed('red','Error',`An error occured when deleting <@&${role.id}> \`\`\`${e}\`\`\``)))
+    }
+
+    if (role.name.search(/Unverified/g) > -1 ) {
       role.delete().catch(e => message.channel.send(simpleEmbed('red','Error',`An error occured when deleting <@&${role.id}> \`\`\`${e}\`\`\``)))
     }
   })

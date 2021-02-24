@@ -168,7 +168,7 @@ export function coolDownSetup(message: Message, commandName: string, coolDownSec
 
 
 export async function unverifiedRole(guild: Guild) {
-  let role = guild.roles.cache.get('Unverified')
+  let role = guild.roles.cache.find(r => r.name == "Unverified")
 
   if (role) {
     removeAllPermissions(guild, role)
