@@ -1,4 +1,4 @@
-import { Client, MessageAttachment, TextChannel, Message } from 'discord.js';
+import { Client, MessageAttachment, TextChannel, Message, MessageEmbed } from 'discord.js';
 import { existsSync, fdatasync, fstat, readdir, readFileSync, rm, rmSync, stat } from 'fs'
 import { createServer } from 'http'
 import { BotCache } from './cache';
@@ -82,7 +82,9 @@ client.on('guildMemberAdd', async member => {
     let unverifiedMemberRole = await unverifiedRole(member.guild)
     member.roles.add(unverifiedMemberRole)
 
-    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity as a person, you have 3 minutes to do so')
+    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity, you have 3 minutes to do so')
+      .addField('Instructions', 'Please send the letters/numbers that are in the image provided to verify that you are not a robot.')
+      .addField('Why?', 'This is to protect this server against raids')
     
     let captcha = create({
       size: 6,
@@ -96,6 +98,8 @@ client.on('guildMemberAdd', async member => {
     })
 
     
+
+
     let channel = await member.createDM(true)
     channel.send(embed)
     channel.send(new MessageAttachment(outputBuffer))
