@@ -2,6 +2,7 @@ import { ColorResolvable, Guild, Message, MessageEmbed, Role, User, VoiceState }
 import { get, request } from "http" 
 import { Config, presetColor, voiceCount } from "./types" 
 import db from 'quick.db'
+import { BotCache } from "./cache";
 
 
 // Command for both bans and kicks
@@ -212,3 +213,21 @@ export const pollEmojis = [
   ':regional_indicator_i:', 
   ':regional_indicator_j:',
 ]
+
+export const pollEmojisResolvable = [
+  '🇦',
+  '🇧',
+  '🇨',
+  '🇩',
+  '🇪',
+  '🇫',
+  '🇬',
+  '🇭',
+  '🇮',
+  '🇯'
+]
+
+export function getPrefix(id?: string) {
+  if (!id) return new BotCache().get('config').prefix
+  return db.get(`prefix.${id}`) ? db.get(`prefix.${id}`) : new BotCache().get('config').prefix
+}

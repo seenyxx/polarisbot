@@ -1,25 +1,24 @@
 import { error } from 'console';
 import { Client, Message, MessageEmbed } from 'discord.js';
-import { coolDownSetup, hardPunish, pollEmojis, errorMessage } from '../../lib';
+import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable } from '../../lib';
 
 let coolDown = 60
 let commandName = 'poll'
 
 export function run(client: Client, message: Message, args: Array<string>) {
   
-
+  if (!message.member?.hasPermission('MANAGE_MESSAGES')) return
   let _title = message.content.match(/\[.+\]/g)
-  let _options = message.content.match(/\(.+\)/g)
-  if(!_options || !_title) return
+  let options = message.content.match(/\([^()]+\)/g)
+  if(!options || !_title) return
   
-  if (!_title.length || !_options.length) return message.channel.send(errorMessage(`Provide values for title and at least 2 options.\nFormat:\n<prefix>poll [Title of poll] (Option 1) (Option 2) ...`))
+  if (!_title.length || !options.length) return message.channel.send(errorMessage(`Provide values for title and at least 2 options but no more than 10 options.\nFormat:\n<prefix>poll [Title of poll] (Option 1) (Option 2) ...`))
   
   if (coolDownSetup(message, commandName, coolDown)) return
   let title = _title[0].trim()
-  let options = _options[0].split(' ')
 
   let poll = new Poll(message, title, options)
-  poll.sendEmbed()
+  poll.sendEmbed().catch(errorMessage)
 }
 
 class Poll {
@@ -29,7 +28,6 @@ class Poll {
 
   constructor(msg: Message, title: string, options: string[]) {
     this.title = title
-    console.log(options)
     this.options = options
     this.msg = msg
   }
@@ -54,7 +52,7 @@ class Poll {
     let msg = await this.msg.channel.send(embed)
     
     for (let i = 0; i < this.options.length; i++) {
-      msg.react(pollEmojis[i].replace(':', ''))
+      msg.react(pollEmojisResolvable[i])
     }
   }
   

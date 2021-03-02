@@ -1,7 +1,7 @@
 import { Client, Message, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
 import { BotCache } from "../../cache";
-import { coolDownSetup, simpleEmbed } from "../../lib";
+import { coolDownSetup, getPrefix, simpleEmbed } from "../../lib";
 
 
 let coolDown = 3
@@ -14,7 +14,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   const helpEmbed = simpleEmbed('blue', '**Help**', '')
   if (!args[0]) {
     help.cat.forEach((cat: { name: string, menu: string}) => {
-      helpEmbed.addField(cat.name, `\`<prefix>help ${cat.menu}\``, true)
+      helpEmbed.addField(cat.name, `\`${getPrefix(message.guild?.id)}help ${cat.menu}\``, true)
     })
     message.channel.send(helpEmbed).catch(console.error)
     return
@@ -28,7 +28,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
     if (!menu) return
 
     menu.forEach((data: any) => {
-      helpEmbed.addField(data.name, data.value, true)
+      helpEmbed.addField(data.name, data.value.replace('<prefix>', getPrefix(message.guild?.id)), true)
     })
   }
 

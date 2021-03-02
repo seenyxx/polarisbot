@@ -31,6 +31,10 @@
     {
       "name": "toggle-captcha",
       "value": "A command that toggles the server captcha. \n`<prefix>toggle-captcha`"
+    },
+    {
+      "name": "poll",
+      "value": "A command that creates an advanced poll. \n`<prefix>poll [<Title>] (<Option1>) (<Option 2>)..`"
     }
   ],
 

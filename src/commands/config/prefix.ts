@@ -1,5 +1,5 @@
 import { Client, Message } from "discord.js";
-import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed } from "../../lib";
+import { checkCoolDown, coolDownSetup, errorMessage, getPrefix, setCoolDown, simpleEmbed } from "../../lib";
 import db from 'quick.db'
 import { BotCache } from "../../cache";
 
@@ -7,10 +7,9 @@ import { BotCache } from "../../cache";
 let coolDown = 3
 let commandName = 'prefix'
 export function run(client: Client, message: Message, args: Array<string>) {
-  
+  if (!message.guild) return errorMessage('Use this in a server')  
   if (coolDownSetup(message, commandName, coolDown)) return
 
-  let prefix = db.get(`prefix.${message.guild?.id}`) ? db.get(`prefix.${message.guild?.id}`) : new BotCache().get('config').prefix
-  
+  let prefix = getPrefix(message.guild.id)
   return message.channel.send(simpleEmbed('blue', 'Server Prefix', `\`${prefix}\``))
 }
