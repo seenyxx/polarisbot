@@ -120,11 +120,12 @@ client.on('guildMemberAdd', async member => {
       }
       collector.stop()
     })
+
     collector.on('end', async messages => {
-      console.log(messages)
+
       if (!messages.size) {
-        await channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
         
+        await channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
         if (member.kickable)
           member.kick('Failed captcha')
       }

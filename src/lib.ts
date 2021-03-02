@@ -198,3 +198,17 @@ export function removeAllPermissions(guild: Guild, role: Role) {
 export function replaceValue(doc: string, value: string, rep: string) {
   doc.replace(`{{ ${value} }}`, rep)
 }
+
+
+export const pollEmojis = [
+  ':regional_indicator_a:', 
+  ':regional_indicator_b:', 
+  ':regional_indicator_c:', 
+  ':regional_indicator_d:', 
+  ':regional_indicator_e:', 
+  ':regional_indicator_f:', 
+  ':regional_indicator_g:', 
+  ':regional_indicator_h:', 
+  ':regional_indicator_i:', 
+  ':regional_indicator_j:',
+]
