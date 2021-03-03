@@ -19,6 +19,8 @@ export function run(client: Client, message: Message, args: Array<string>) {
 
   let poll = new Poll(message, title, options)
   poll.sendEmbed().catch(errorMessage)
+  if (message.deletable)
+    message.delete()
 }
 
 class Poll {
