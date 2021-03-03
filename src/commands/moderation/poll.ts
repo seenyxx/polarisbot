@@ -34,7 +34,7 @@ class Poll {
 
   public getEmbed() {
     let embed = new MessageEmbed({
-      color: 'BLURPLE',
+      color: 'RANDOM',
       title: `Poll: *\`${this.title.replace('[', '').replace(']', '')}\`*`
     })
 

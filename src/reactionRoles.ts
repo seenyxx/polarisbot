@@ -29,3 +29,10 @@ export function RRStatus(guildID: string) {
   if (rrStatus >= maxRR) return false
   if (rrStatus < maxRR) return true
 }
+
+
+export class ReactionRoleDB {
+  constructor() {}
+
+  
+}
