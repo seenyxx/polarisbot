@@ -1,4 +1,4 @@
-import { ColorResolvable, Guild, Message, MessageEmbed, Role, User, VoiceState } from "discord.js" 
+import { ColorResolvable, Guild, Message, MessageEmbed, Role, TextChannel, User, VoiceState } from "discord.js" 
 import { get, request } from "http" 
 import { Config, presetColor, voiceCount } from "./types" 
 import db from 'quick.db'
@@ -231,3 +231,5 @@ export function getPrefix(id?: string) {
   if (!id) return new BotCache().get('config').prefix
   return db.get(`prefix.${id}`) ? db.get(`prefix.${id}`) : new BotCache().get('config').prefix
 }
+
+
