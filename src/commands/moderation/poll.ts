@@ -7,7 +7,7 @@ let commandName = 'poll'
 
 export function run(client: Client, message: Message, args: Array<string>) {
   
-  if (!message.member?.hasPermission('MANAGE_MESSAGES')) return errorMessage('Insufficient permissions')
+  if (!message.member?.hasPermission('MANAGE_MESSAGES')) return message.channel.send(errorMessage('Insufficient permissions'))
   let _title = message.content.match(/\[.+\]/g)
   let options = message.content.match(/\([^()]+\)/g)
   if(!options || !_title) return
