@@ -68,6 +68,7 @@ client.on('message', message => {
   cmd.run(client, message, args)
 })
 
+
 client.on('guildMemberAdd', async member => {
   if (member.user.bot) return
   if (db.get(`ld.${member.guild.id}`)) {
@@ -184,5 +185,3 @@ function appendDirectoryCommands(dir: string) {
 
 
 client.login(config.token)
-
-

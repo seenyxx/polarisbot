@@ -25,7 +25,7 @@ export interface commandProps {
   value: string,
 }
 
-export type presetColor = 'red' | 'green' | 'blue' | 'gold' | 'pigeon'
+export type presetColor = 'red' | 'green' | 'blue' | 'gold' | 'pigeon' | 'RANDOM' | 'BLURPLE'
 
 export interface cache {
   [key: string]: any
