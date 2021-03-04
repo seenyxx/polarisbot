@@ -7,6 +7,7 @@ import { Command, Commands, Config } from './types'
 import db from 'quick.db'
 import { create } from 'svg-captcha';
 import { svg2png } from 'svg-png-converter';
+import { ReactionRoleMsgManager } from './rrManager';
 
 
 process.on('unhandledRejection', console.error)
@@ -20,7 +21,9 @@ console.log(process.env.NODE_ENV)
 // Parse configuration file
 const config = parseConfiguration()
 
-const client = new Client()
+const client = new Client({
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+})
 const botCache = new BotCache()
 
 botCache.set('helpConfig', JSON.parse(readFileSync(`${__dirname}/../help.json`).toString()))
@@ -135,6 +138,19 @@ client.on('guildMemberAdd', async member => {
 })
 
 
+const rrMsg = new ReactionRoleMsgManager()
+
+client.on('messageReactionAdd', async (reaction, user) => {
+  if (reaction.message.partial) await reaction.message.fetch()
+  if (reaction.partial) await reaction.fetch()
+  if (user.bot) return
+  if (!reaction.message.guild) return
+
+  if (rrMsg.exist(reaction.message.id)) {
+    
+  }
+
+})
 
 
 const commands: Commands  = {}

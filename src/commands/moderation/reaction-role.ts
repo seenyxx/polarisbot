@@ -38,13 +38,15 @@ export async function run(client: Client, message: Message, args: Array<string>)
   if (!color?.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)?.length) return message.channel.send(errorMessage('No color provided or invalid color'))
 
   
-  message.channel.send('Provide Title')
+  message.channel.send('Provide Title and description with `|` as the separator')
 
   let titleMsg = await message.channel.awaitMessages(filter, {max: 1, time: 30000, errors: ['time'] })
   if (!titleMsg) return 
 
-  let title = titleMsg.first()
-  if (!title) return message.channel.send(errorMessage('No title provided'))
+  let title = titleMsg.first()?.content.trim().split('|')
+  if (!title?.length) return message.channel.send(errorMessage('Error'))
+  if (title.length < 2) return message.channel.send(errorMessage('No title provided'))
 
-  
+  const actualTitle = title[0]
+  const actualDesc = title[1]
 }
