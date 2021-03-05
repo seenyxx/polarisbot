@@ -1,13 +1,14 @@
 import { Client, MessageAttachment, TextChannel, Message, MessageEmbed } from 'discord.js';
 import { existsSync, fdatasync, fstat, readdir, readFileSync, rm, rmSync, stat } from 'fs'
 import { createServer } from 'http'
-import { BotCache } from './cache';
-import { noGif, simpleEmbed, unverifiedRole } from './lib';
+import { BotCache } from './util/cache';
+import { noGif, simpleEmbed, unverifiedRole } from './util/lib';
 import { Command, Commands, Config } from './types'
 import db from 'quick.db'
 import { create } from 'svg-captcha';
 import { svg2png } from 'svg-png-converter';
-import { reactionHandler, ReactionRoleMsgManager } from './rrManager';
+import { reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager, ReactionRoleCounter, handleDeletion } from './util/rrManager';
+import { runCaptcha } from './util/captcha';
 
 
 process.on('unhandledRejection', console.error)
@@ -28,7 +29,6 @@ const botCache = new BotCache()
 
 botCache.set('helpConfig', JSON.parse(readFileSync(`${__dirname}/../help.json`).toString()))
 botCache.set('config', config)
-botCache.set('pingDisplay', readFileSync(`${__dirname}/../templates/ping.html`).toString())
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}`)
@@ -44,6 +44,8 @@ client.on('ready', () => {
   // Reset cooldowns
 
   db.delete('cooldowns')
+
+  botCache.set('botID', client.user?.id)
 })
 
 
@@ -80,66 +82,26 @@ client.on('guildMemberAdd', async member => {
     })
     return
   }
-
-  // Server Captcha
-  if (db.get(`captcha.${member.guild.id}`)) {
-    let unverifiedMemberRole = await unverifiedRole(member.guild)
-    member.roles.add(unverifiedMemberRole)
-
-    let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity, you have 3 minutes to do so')
-      .addField('Instructions', 'Please send the letters/numbers that are in the image provided to verify that you are not a robot.')
-      .addField('Why?', 'This is to protect this server against raids')
-    
-    let captcha = create({
-      size: 6,
-      background: '#23272A'
-    })
-
-    let outputBuffer = await svg2png({ 
-      input: captcha.data, 
-      encoding: 'buffer', 
-      format: 'jpeg',
-    })
-
-    
-
-
-    let channel = await member.createDM(true)
-    channel.send(embed)
-    channel.send(new MessageAttachment(outputBuffer))
-
-    let collector = channel.createMessageCollector(m => m.author.id === member.id, {
-      time: 180000
-    })
-
-    collector.on('collect', async (m: Message) => {
-      if (m.content.toLowerCase() === captcha.text.toLowerCase()) {
-        member.roles.remove(unverifiedMemberRole)
-        m.channel.send(simpleEmbed('pigeon', 'Verified ✅', ''))
-      }
-      else {
-        await m.channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
-        if (member.kickable)
-          member.kick('Failed captcha')
-      }
-      collector.stop()
-    })
-
-    collector.on('end', async messages => {
-
-      if (!messages.size) {
-        
-        await channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
-        if (member.kickable)
-          member.kick('Failed captcha')
-      }
-    })
-  }
+  await runCaptcha(member)
 })
 
 
-client.on('messageReactionAdd', reactionHandler)
+// Handle reaction roles
+client.on('messageReactionAdd', reactionAddHandler)
+client.on('messageReactionRemove', reactionRemoveHandler)
 
+const rrRoles = new ReactionRoleRoleManager()
+
+client.on('messageDelete', msg => {
+  handleDeletion(msg, rrRoles)
+})
+
+client.on('messageDeleteBulk', msgs => {
+  
+  msgs.forEach(m => {
+    handleDeletion(m, rrRoles)
+  })
+})
 
 const commands: Commands  = {}
 

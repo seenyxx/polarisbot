@@ -1,5 +1,5 @@
 import { Client, Message } from "discord.js";
-import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed } from "../../lib";
+import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed } from "../../util/lib";
 import fetch from 'node-fetch'
 
 let coolDown = 3

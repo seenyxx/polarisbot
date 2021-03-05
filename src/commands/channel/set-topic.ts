@@ -1,5 +1,5 @@
 import { Client, Message, MessageReaction, TextChannel, User, UserResolvable } from "discord.js";
-import { coolDownSetup, errorMessage, simpleEmbed } from "../../lib";
+import { coolDownSetup, errorMessage, simpleEmbed } from "../../util/lib";
 
 let coolDown = 8
 let commandName = 'st'

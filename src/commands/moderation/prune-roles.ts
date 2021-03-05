@@ -1,5 +1,5 @@
 import { Client, Message } from "discord.js";
-import { simpleEmbed } from "../../lib";
+import { simpleEmbed } from "../../util/lib";
 
 async function loopRoles(message: Message) {
   message.guild?.roles.cache.forEach(role => {

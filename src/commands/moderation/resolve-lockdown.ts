@@ -1,7 +1,7 @@
 import { Client, Message, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
-import { BotCache } from "../../cache";
-import { coolDownSetup, errorMessage, simpleEmbed } from "../../lib";
+import { BotCache } from "../../util/cache";
+import { coolDownSetup, errorMessage, simpleEmbed } from "../../util/lib";
 import db from 'quick.db'
 
 

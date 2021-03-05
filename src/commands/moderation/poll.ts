@@ -1,6 +1,6 @@
 import { error } from 'console';
 import { Client, Message, MessageEmbed } from 'discord.js';
-import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable } from '../../lib';
+import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable } from '../../util/lib';
 
 let coolDown = 60
 let commandName = 'poll'

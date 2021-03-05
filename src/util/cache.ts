@@ -1,4 +1,4 @@
-import { cache as cacheObj, cooldownCache as cooldownCacheObj } from "./types";
+import { cache as cacheObj, cooldownCache as cooldownCacheObj } from "../types";
 
 let cacheObj: cacheObj = {}
 

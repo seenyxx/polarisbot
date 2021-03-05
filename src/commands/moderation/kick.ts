@@ -1,5 +1,5 @@
 import { Client, Message } from "discord.js";
-import { coolDownSetup, hardPunish } from "../../lib";
+import { coolDownSetup, hardPunish } from "../../util/lib";
 
 let coolDown = 15
 let commandName = 'kick'

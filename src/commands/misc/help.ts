@@ -1,7 +1,7 @@
 import { Client, Message, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
-import { BotCache } from "../../cache";
-import { coolDownSetup, getPrefix, simpleEmbed } from "../../lib";
+import { BotCache } from "../../util/cache";
+import { coolDownSetup, getPrefix, simpleEmbed } from "../../util/lib";
 
 
 let coolDown = 3

@@ -1,6 +1,6 @@
 import { Client, Message } from "discord.js";
 import figlet from "figlet";
-import { coolDownSetup, simpleEmbed } from "../../lib";
+import { coolDownSetup, simpleEmbed } from "../../util/lib";
 
 let coolDown = 25
 let commandName = 'ascii'
