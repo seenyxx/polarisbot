@@ -56,6 +56,7 @@ const defaultActions: msgActionObj[] = [
     run: (msg: Message) => { if (msg.deletable) msg.delete() }
   }
 ]
+
 export interface tagObj {
   name: string,
   run: () => string

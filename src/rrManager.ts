@@ -40,7 +40,7 @@ export class ReactionRoleRoleManager {
     db.delete(`rr.roles.${id}`)
   }
 
-  public get(id: string) {
+  public get(id: string): ReactionRoleElement[] {
     return db.get(`rr.roles${id}`)
   }
 
@@ -109,8 +109,12 @@ export async function reactionHandler(reaction: MessageReaction, user: PartialUs
   const rrMsg = new ReactionRoleMsgManager()
   const rrRoles = new ReactionRoleRoleManager()
   
-  if (rrMsg.exist(reaction.message.id)) {
-    let message = rrMsg.get(reaction.message.id)
-    let roles = rrRoles.get(reaction.message.id)
-  }
+  // if (rrMsg.exist(reaction.message.id) && rrMsg.exist(reaction.message.id)) {
+    // let message = rrMsg.get(reaction.message.id)
+    // let roles = rrRoles.get(reaction.message.id)
+
+    // for (let i = 0; i < roles.length; i++) {
+      console.log(reaction.emoji.name)
+    // }
+  // }
 }

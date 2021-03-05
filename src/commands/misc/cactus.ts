@@ -1,7 +1,6 @@
 import { Client, Message, MessageAttachment } from "discord.js";
 import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed, replaceValue } from '../../lib';
 import { BotCache } from '../../cache';
-import nodeHtmlToImage from "node-html-to-image";
 
 let coolDown = 5
 let commandName = 'cactus'
