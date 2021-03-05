@@ -7,7 +7,7 @@ import { Command, Commands, Config } from './types'
 import db from 'quick.db'
 import { create } from 'svg-captcha';
 import { svg2png } from 'svg-png-converter';
-import { ReactionRoleMsgManager } from './rrManager';
+import { reactionHandler, ReactionRoleMsgManager } from './rrManager';
 
 
 process.on('unhandledRejection', console.error)
@@ -138,19 +138,7 @@ client.on('guildMemberAdd', async member => {
 })
 
 
-const rrMsg = new ReactionRoleMsgManager()
-
-client.on('messageReactionAdd', async (reaction, user) => {
-  if (reaction.message.partial) await reaction.message.fetch()
-  if (reaction.partial) await reaction.fetch()
-  if (user.bot) return
-  if (!reaction.message.guild) return
-
-  if (rrMsg.exist(reaction.message.id)) {
-    
-  }
-
-})
+client.on('messageReactionAdd', reactionHandler)
 
 
 const commands: Commands  = {}

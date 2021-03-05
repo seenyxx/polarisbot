@@ -403,6 +403,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-emoji@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "@types/node-emoji@npm:1.8.1"
+  checksum: 66678006be9399a7c848167233e651f88a3391e5648995625d539db2d0c68da922c43ab329bd1262dd55e3674cb08ec0e8a9971358cabb0b5076398e64d1aa7e
+  languageName: node
+  linkType: hard
+
 "@types/node-fetch@npm:^2.5.8":
   version: 2.5.8
   resolution: "@types/node-fetch@npm:2.5.8"
@@ -1944,6 +1951,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.toarray@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "lodash.toarray@npm:4.4.0"
+  checksum: f2b8de1812789321335dd5f4cb60625c4b8874cb3b300367d8a22990072459b76eb893feacd243686493393cccd035115cc149563f7aa5123d06d9a3b2825bf1
+  languageName: node
+  linkType: hard
+
 "lodash@npm:^4.17.19, lodash@npm:^4.17.20":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
@@ -2179,6 +2193,15 @@ __metadata:
   dependencies:
     semver: ^5.4.1
   checksum: 8acbedf3cd21244c284b17fc08b0dbdfa1cca4e3bbb2314dc29776ade97d7ac2346f256f982034a026fb89f400e53f3f4d5ac9fd96459bace06260078ebc7e91
+  languageName: node
+  linkType: hard
+
+"node-emoji@npm:^1.10.0":
+  version: 1.10.0
+  resolution: "node-emoji@npm:1.10.0"
+  dependencies:
+    lodash.toarray: ^4.4.0
+  checksum: 9c73cd0af03965131225c388339ec5cb3b7239f9d63f15c7755540d265b20a4ecac855fd270af216fb14cdf8232ec4687ab5a52b4b475a681ee1bd74f7562ced
   languageName: node
   linkType: hard
 
@@ -2564,9 +2587,11 @@ __metadata:
   dependencies:
     "@types/figlet": ^1.2.1
     "@types/node": ^14.14.25
+    "@types/node-emoji": ^1.8.1
     "@types/node-fetch": ^2.5.8
     discord.js: ^12.5.1
     figlet: ^1.5.0
+    node-emoji: ^1.10.0
     node-fetch: ^2.6.1
     node-html-to-image: ^3.1.0
     quick.db: ^7.1.3
