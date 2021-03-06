@@ -31,6 +31,14 @@
     {
       "name": "toggle-captcha",
       "value": "A command that toggles the server captcha. \n`<prefix>toggle-captcha`"
+    },
+    {
+      "name": "reaction-role",
+      "value": "A command that creates a reaction role. \n`<prefix>reaction-role`"
+    },
+    {
+      "name": "get-rr-count",
+      "value": "A command that gets the reaction role count of a server. \n`<prefix>get-rr-count`"
     }
   ],
 
@@ -60,14 +68,6 @@
     {
       "name": "toggle-gif-filter",
       "value": "A command that toggles the no no gif filter.\n`<prefix>toggle-gif-filter`"
-    },
-    {
-      "name": "reaction-role",
-      "value": "A command that creates a reaction role. \n`<prefix>reaction-role`"
-    },
-    {
-      "name": "get-rr-count",
-      "value": "A command that gets the reaction role count of a server. \n`<prefix>get-rr-count`"
     }
   ],
 
