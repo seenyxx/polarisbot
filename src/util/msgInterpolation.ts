@@ -117,7 +117,7 @@ export function parseDefaultInterpolator(text: string, msg?: Message) {
 
 export async function parseCustomInterpolator(text: string, tagObj: tagObjAny, msg?: Message) {
   let regex = new RegExp(`{${tagObj.name.trim()}}`, 'gi')
-  if (msg) 
+  if (msg)
     text.replace(regex, tagObj.run(msg))
   else
     text.replace(regex, tagObj.run())

@@ -63,7 +63,7 @@ export class ReactionRoleCounter {
     if (rrStatus >= maxRR) return false
     if (rrStatus < maxRR) return true
   }
-} 
+}
 type Manager = ReactionRoleRoleManager | ReactionRoleCounter
 
 
