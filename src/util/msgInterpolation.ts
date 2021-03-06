@@ -29,7 +29,7 @@ const defaultMessageTags: msgTagObj[] = [
     run: (msg: Message) => { return `<@${msg.author.id}>`}
   },
   {
-    name: 'msg.author.profile',
+    name: 'msg.author.avatar',
     run: (msg: Message) => { return msg.author.displayAvatarURL() }
   },
   {
@@ -81,34 +81,46 @@ export interface tagObjAny {
   run: (msg?: Message) => any
 }
 
-export async function parseDefualtInterpolator(text: string, msg?: Message) {
+export function parseDefaultInterpolator(text: string, msg?: Message) {
+
+  let modText = text
+
   for (let i = 0; i < defaultDateTags.length; i++) {
     let dateProps = defaultDateTags[i]
 
-    text.replaceAll(`{${dateProps.name.trim()}}`, dateProps.run())
+    let regex = new RegExp(`{${dateProps.name.trim()}}`, 'gi')
+
+    text = text.replace(regex, dateProps.run())
   }
-  if (msg)
+
+  if (msg) {
     for (let i = 0; i < defaultMessageTags.length; i++) {
       let msgProps = defaultMessageTags[i]
 
-      text.replaceAll(`{${msgProps.name.trim()}}`, msgProps.run(msg))
+      let regex = new RegExp(`{${msgProps.name.trim()}\}`, 'gi')
+
+      modText = text.replace(regex, msgProps.run(msg))
     }
 
-  if (msg) 
     for (let i = 0; i < defaultActions.length; i++) {
       let actionsProps = defaultActions[i]
 
       if (text.includes(`{${actionsProps.name.trim()}}`))
         actionsProps.run(msg)
     }
+  }
+
   return text
 }
 
+
+
 export async function parseCustomInterpolator(text: string, tagObj: tagObjAny, msg?: Message) {
+  let regex = new RegExp(`{${tagObj.name.trim()}}`, 'gi')
   if (msg) 
-    text.replaceAll(`{${tagObj.name.trim()}}`, tagObj.run(msg))
+    text.replace(regex, tagObj.run(msg))
   else
-    text.replaceAll(`{${tagObj.name.trim()}}`, tagObj.run())
+    text.replace(regex, tagObj.run())
 }
 
 export async function parseCustomAction(msg: Message, tagName: string, action: msgActionRun) {

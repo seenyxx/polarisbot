@@ -71,10 +71,10 @@ export const GlobalReactionRoleRemove = (id: string, guildID: string) => {
   let m: Manager[] = [ new ReactionRoleRoleManager(), new ReactionRoleCounter() ]
 
 
-  let mr = m[1] as ReactionRoleRoleManager
+  let mr = m.shift() as ReactionRoleRoleManager
   mr.remove(id)
 
-  let mc = m[2] as ReactionRoleCounter
+  let mc = m.shift() as ReactionRoleCounter
   mc.reduceRRCount(guildID)
 }
 
@@ -151,7 +151,6 @@ export async function reactionRemoveHandler(reaction: MessageReaction, user: Par
 
 
 export async function handleDeletion(msg: Message | PartialMessage, rrRoles: ReactionRoleRoleManager) {
-  if (msg.partial) await msg.fetch()
 
   if (rrRoles.get(msg.id) && msg.guild) {
     GlobalReactionRoleRemove(msg.id, msg.guild.id)

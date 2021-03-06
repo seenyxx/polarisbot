@@ -11,13 +11,14 @@ export async function runCaptcha(member: GuildMember) {
       member.roles.add(unverifiedMemberRole)
   
 
-      let embed = simpleEmbed('pigeon', `${member.guild.name} Captcha`, 'Please verify your identity, you have 3 minutes to do so')
+      let embed = simpleEmbed('pigeon', `\`${member.guild.name}\` Captcha`, 'Please verify your identity, you have 3 minutes to do so (This is case insensitive)')
         .addField('Instructions', 'Please send the letters/numbers that are in the image provided to verify that you are not a robot.')
         .addField('Why?', 'This is to protect this server against raids')
+        
 
       let captcha = create({
         size: 6,
-        background: '#23272A'
+        background: '#2C2F33'
       })
   
       let outputBuffer = await svg2png({ 
@@ -27,8 +28,11 @@ export async function runCaptcha(member: GuildMember) {
       })
   
       
-      const attachment = new MessageAttachment(outputBuffer)
-      embed.setImage(attachment.url)
+      const attachment = new MessageAttachment(outputBuffer, 'captcha.jpg')
+
+      embed.attachFiles([attachment])
+      embed.setImage('attachment://captcha.jpg')
+
       let channel = await member.createDM(true)
       channel.send(embed)
       

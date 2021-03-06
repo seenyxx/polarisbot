@@ -1,10 +1,11 @@
 import { error } from 'console';
 import { Client, EmbedField, Message, MessageEmbed, MessageEmbedOptions } from 'discord.js';
 import { emoji } from 'node-emoji';
-import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable, simpleEmbed } from '../../util/lib';
+import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable, simpleEmbed, parseDisplayUptime } from '../../util/lib';
 import { ReactionRoleRoleManager, ReactionRoleCounter } from '../../util/rrManager';
+import { parseDefaultInterpolator } from '../../util/msgInterpolation'
 
-let coolDown = 5
+let coolDown = 25
 let commandName = 'reaction-role'
 
 export async function run(client: Client, message: Message, args: Array<string>) {
@@ -32,7 +33,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
   if (!actualChannel) return message.channel.send(errorMessage('Invalid channel'))
   if (!actualChannel.isText()) return message.channel.send(errorMessage('Invalid channel'))
-
+  if (actualChannel.guild.id !== message.guild.id) return message.channel.send(errorMessage('Channel must be in this server'))
 
   message.channel.send('Provide the embed color')
 
@@ -40,31 +41,30 @@ export async function run(client: Client, message: Message, args: Array<string>)
   if (!colorMsgs) return
 
   let color = colorMsgs.first()?.content.trim()
-  if (!color?.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)?.length) return message.channel.send(errorMessage('No color provided or invalid color'))
-
+  if (!color?.match(/^#([0-9a-f]{6})$/i)?.length) return message.channel.send(errorMessage('No color provided or invalid color'))
+  const actualColor = color.toLowerCase().trim()
   
-  message.channel.send('Provide Title and description with `|` as the separator')
+  message.channel.send('Provide Title and description with `|` as the separator, you can also use variables like `{date.utc}`')
 
   let titleMsg = await message.channel.awaitMessages(filter, {max: 1, time: 30000, errors: ['time'] })
   if (!titleMsg) return 
 
   let title = titleMsg.first()?.content.trim().split('|')
   if (!title?.length) return message.channel.send(errorMessage('Error'))
-  if (title.length < 2) return message.channel.send(errorMessage('No title provided'))
+  if (title.length < 2) return message.channel.send(errorMessage('Invalid title or description format'))
 
   const actualTitle = title[0].trim()
   const actualDesc = title[1].trim()
 
-  let embedOpts: MessageEmbedOptions = {
-    color: color,
-    title: actualTitle,
-    description: actualDesc
-  }
 
-  const embed = new MessageEmbed(embedOpts)
+  const embed = new MessageEmbed()
+    .setColor(actualColor)
+    .setTitle(parseDefaultInterpolator(actualTitle))
+    .setDescription(parseDefaultInterpolator(actualDesc))
 
   
-  message.channel.send('Provide a list of reactions and roles in the format `<reaction> <roleName>, <reaction> <roleName>`, type `finished` when done')
+  
+  message.channel.send('Provide a list of reactions and roles in the format `<reaction> <roleName>, <reaction> <roleName>`')
   const collector = message.channel.createMessageCollector(filter, { max: 1, time: 240000 })
   
   let ereg = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
@@ -75,22 +75,39 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
   let rrMessage = await actualChannel.send(embed)
 
+
+
+  let successful = true
   collector.on('collect', (m: Message) => {
 
     let mRR = m.content.split(',')
 
-    if (!m.content.match(formatRegex)) return message.channel.send(errorMessage('Invalid format'))
+    if (!m.content.match(formatRegex)) { 
+      message.channel.send(errorMessage('Invalid format'))
+      successful = false
+    }
 
+    
     mRR.forEach(m2 => {
       let mArgs = m2.trim().split(' ')
       
-      if (mArgs.length !== 2) return
+      if (!mArgs || mArgs.length < 2) return
 
-      let reaction = mArgs[0].trim()
-      let roleName = mArgs[1].trim()
+
+      let reaction = mArgs.shift() as string
+      let roleName = mArgs.join(' ').trim()
       
       let actualRole = m.guild?.roles.cache.find(r => r.name.trim() === roleName)
-      if (reaction.match(ereg) && actualRole) {
+      
+      if (!actualRole) {
+        successful = false
+        return
+      }
+      
+      
+      if (reaction.match(ereg) && actualRole && m.guild && m.guild.me) {
+        
+        if (actualRole.position > m.guild.me.roles.highest.position) return successful = false
         rrRoles.add(rrMessage.id, {
           emoji: reaction,
           roleID: actualRole.id
@@ -102,6 +119,8 @@ export async function run(client: Client, message: Message, args: Array<string>)
   })
 
   collector.on('end', collected => {
+    if (!collected.size) successful = false 
+    if (!successful && message.deletable) return rrMessage.delete()
     let counter = new ReactionRoleCounter()
     if (!message.guild) return
 
@@ -110,3 +129,4 @@ export async function run(client: Client, message: Message, args: Array<string>)
   })
 
 }
+

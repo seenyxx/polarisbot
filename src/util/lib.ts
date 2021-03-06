@@ -3,6 +3,7 @@ import { get, request } from "http"
 import { Config, presetColor, voiceCount } from "../types" 
 import db from 'quick.db'
 import { BotCache } from "./cache";
+import { parseDefaultInterpolator } from "./msgInterpolation";
 
 
 // Command for both bans and kicks
@@ -120,11 +121,19 @@ export function simpleEmbed(presetColor: presetColor, title: string, desc: strin
     case 'pigeon':
       presetColorHex = '#637d96'
       break
+    case 'RANDOM':
+      presetColorHex = 'RANDOM'
+      break
+    case 'BLURPLE':
+      presetColorHex = 'BLURPLE'
+      break
   }
+  
+  
   let embed = new MessageEmbed()
     .setColor(presetColorHex)
-    .setTitle(title)
-    .setDescription(desc)
+    .setTitle(parseDefaultInterpolator(title))
+    .setDescription(parseDefaultInterpolator(desc))
 
   return embed
 }

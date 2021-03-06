@@ -31,10 +31,6 @@
     {
       "name": "toggle-captcha",
       "value": "A command that toggles the server captcha. \n`<prefix>toggle-captcha`"
-    },
-    {
-      "name": "poll",
-      "value": "A command that creates an advanced poll. \n`<prefix>poll [<Title>] (<Option1>) (<Option 2>)..`"
     }
   ],
 
@@ -64,6 +60,14 @@
     {
       "name": "toggle-gif-filter",
       "value": "A command that toggles the no no gif filter.\n`<prefix>toggle-gif-filter`"
+    },
+    {
+      "name": "reaction-role",
+      "value": "A command that creates a reaction role. \n`<prefix>reaction-role`"
+    },
+    {
+      "name": "get-rr-count",
+      "value": "A command that gets the reaction role count of a server. \n`<prefix>get-rr-count`"
     }
   ],
 
@@ -81,6 +85,10 @@
     {
       "name": "ascii-gold",
       "value": "A command that converts text to gold colored ascii.\n`<prefix>ascii-gold <Text>`"
+    },
+    {
+      "name": "poll",
+      "value": "A command that creates an advanced poll. \n`<prefix>poll [<Title>] (<Option1>) (<Option 2>)..`"
     }
   ],
   "config": [

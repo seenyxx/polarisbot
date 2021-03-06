@@ -2,7 +2,7 @@ import { Client, MessageAttachment, TextChannel, Message, MessageEmbed } from 'd
 import { existsSync, fdatasync, fstat, readdir, readFileSync, rm, rmSync, stat } from 'fs'
 import { createServer } from 'http'
 import { BotCache } from './util/cache';
-import { noGif, simpleEmbed, unverifiedRole } from './util/lib';
+import { noGif, simpleEmbed, unverifiedRole, errorMessage } from './util/lib';
 import { Command, Commands, Config } from './types'
 import db from 'quick.db'
 import { create } from 'svg-captcha';
@@ -49,6 +49,8 @@ client.on('ready', () => {
 })
 
 
+let requiredPerms = 133693055
+
 client.on('message', message => {
   if (message.author.bot) return
 
@@ -65,12 +67,12 @@ client.on('message', message => {
 
   if (!command) return
   
-  
   // Get the command to run
   const cmd = commands[command]
   if (!cmd) return
-  
+
   cmd.run(client, message, args)
+  
 })
 
 
