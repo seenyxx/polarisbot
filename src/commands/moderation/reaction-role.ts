@@ -33,7 +33,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
   if (!actualChannel.isText()) return message.channel.send(errorMessage('Invalid channel'))
   if (actualChannel.guild.id !== message.guild.id) return message.channel.send(errorMessage('Channel must be in this server'))
 
-  message.channel.send('Provide the embed color')
+  message.channel.send('Provide the embed color in hex code format: https://www.color-hex.com/')
 
   let colorMsgs = await message.channel.awaitMessages(filter, {max: 1, time: 30000, errors: ['time'] })
   if (!colorMsgs) return
