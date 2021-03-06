@@ -1,4 +1,4 @@
-import { Client, Message, MessageEmbed } from "discord.js";
+import { Client, Message } from "discord.js";
 import { parseDisplayUptime, simpleEmbed } from "../../util/lib";
 
 export function run(client: Client, message: Message, args: Array<string>) {

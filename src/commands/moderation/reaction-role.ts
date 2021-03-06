@@ -1,9 +1,7 @@
-import { error } from 'console';
-import { Client, EmbedField, Message, MessageEmbed, MessageEmbedOptions } from 'discord.js';
-import { emoji } from 'node-emoji';
-import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable, simpleEmbed, parseDisplayUptime } from '../../util/lib';
-import { ReactionRoleRoleManager, ReactionRoleCounter } from '../../util/rrManager';
-import { parseDefaultInterpolator } from '../../util/msgInterpolation'
+import { Client, Message, MessageEmbed } from 'discord.js';
+import { coolDownSetup, errorMessage, simpleEmbed } from '../../util/lib';
+import { parseDefaultInterpolator } from '../../util/msgInterpolation';
+import { ReactionRoleCounter, ReactionRoleRoleManager } from '../../util/rrManager';
 
 let coolDown = 25
 let commandName = 'reaction-role'

@@ -1,5 +1,5 @@
 import { GuildMember, Message, MessageAttachment } from 'discord.js';
-import db from 'quick.db'
+import db from 'quick.db';
 import { create } from 'svg-captcha';
 import { svg2png } from 'svg-png-converter';
 import { simpleEmbed, unverifiedRole } from './lib';

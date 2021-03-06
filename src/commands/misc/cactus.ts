@@ -1,6 +1,5 @@
-import { Client, Message, MessageAttachment } from "discord.js";
-import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed, replaceValue } from '../../util/lib';
-import { BotCache } from '../../util/cache';
+import { Client, Message } from "discord.js";
+import { coolDownSetup, simpleEmbed } from '../../util/lib';
 
 let coolDown = 5
 let commandName = 'cactus'

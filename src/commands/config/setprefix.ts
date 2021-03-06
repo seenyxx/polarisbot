@@ -1,7 +1,7 @@
 import { Client, Message } from "discord.js";
-import { checkCoolDown, coolDownSetup, errorMessage, setCoolDown, simpleEmbed } from "../../util/lib";
-import db from 'quick.db'
+import db from 'quick.db';
 import { BotCache } from "../../util/cache";
+import { coolDownSetup, errorMessage, simpleEmbed } from "../../util/lib";
 
 
 let coolDown = 10

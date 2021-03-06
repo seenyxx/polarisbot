@@ -1,7 +1,6 @@
-import { ColorResolvable, Guild, Message, MessageEmbed, Role, TextChannel, User, VoiceState } from "discord.js"
-import { get, request } from "http"
-import { Config, presetColor, voiceCount } from "../types"
-import db from 'quick.db'
+import { ColorResolvable, Guild, Message, MessageEmbed, Role } from "discord.js";
+import db from 'quick.db';
+import { presetColor } from "../types";
 import { BotCache } from "./cache";
 import { parseDefaultInterpolator } from "./msgInterpolation";
 
