@@ -24,8 +24,8 @@ export async function run(client: Client, message: Message, args: Array<string>)
   // Channel of the message
   let msgs = await message.channel.awaitMessages(filter, {max: 1, time: 30000, errors: ['time'] })
   if (!msgs) return
-  
-  
+
+
   let channel = msgs.first()?.mentions.channels?.first()
   if (!channel?.id) return message.channel.send(errorMessage('No channel provided or invalid channel'))
 
@@ -43,11 +43,11 @@ export async function run(client: Client, message: Message, args: Array<string>)
   let color = colorMsgs.first()?.content.trim()
   if (!color?.match(/^#([0-9a-f]{6})$/i)?.length) return message.channel.send(errorMessage('No color provided or invalid color'))
   const actualColor = color.toLowerCase().trim()
-  
+
   message.channel.send('Provide Title and description with `|` as the separator, you can also use variables like `{date.utc}`')
 
   let titleMsg = await message.channel.awaitMessages(filter, {max: 1, time: 30000, errors: ['time'] })
-  if (!titleMsg) return 
+  if (!titleMsg) return
 
   let title = titleMsg.first()?.content.trim().split('|')
   if (!title?.length) return message.channel.send(errorMessage('Error'))
@@ -62,11 +62,11 @@ export async function run(client: Client, message: Message, args: Array<string>)
     .setTitle(parseDefaultInterpolator(actualTitle))
     .setDescription(parseDefaultInterpolator(actualDesc))
 
-  
-  
+
+
   message.channel.send('Provide a list of reactions and roles in the format `<reaction> <roleName>, <reaction> <roleName>`')
   const collector = message.channel.createMessageCollector(filter, { max: 1, time: 240000 })
-  
+
   let ereg = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
 
   let formatRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]) (.*)/ig
@@ -82,31 +82,31 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
     let mRR = m.content.split(',')
 
-    if (!m.content.match(formatRegex)) { 
+    if (!m.content.match(formatRegex)) {
       message.channel.send(errorMessage('Invalid format'))
       successful = false
     }
 
-    
+
     mRR.forEach(m2 => {
       let mArgs = m2.trim().split(' ')
-      
+
       if (!mArgs || mArgs.length < 2) return
 
 
       let reaction = mArgs.shift() as string
       let roleName = mArgs.join(' ').trim()
-      
+
       let actualRole = m.guild?.roles.cache.find(r => r.name.trim() === roleName)
-      
+
       if (!actualRole) {
         successful = false
         return
       }
-      
-      
+
+
       if (reaction.match(ereg) && actualRole && m.guild && m.guild.me) {
-        
+
         if (actualRole.position > m.guild.me.roles.highest.position) return successful = false
         rrRoles.add(rrMessage.id, {
           emoji: reaction,
@@ -119,7 +119,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
   })
 
   collector.on('end', collected => {
-    if (!collected.size) successful = false 
+    if (!collected.size) successful = false
     if (!successful && message.deletable) return rrMessage.delete()
     let counter = new ReactionRoleCounter()
     if (!message.guild) return

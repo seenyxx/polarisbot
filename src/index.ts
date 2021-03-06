@@ -61,18 +61,18 @@ client.on('message', message => {
 
   if (message.content.indexOf(prefix) !== 0) return
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/g)  
-  const command = args.shift()?.toLowerCase()  
+  const args = message.content.slice(prefix.length).trim().split(/ +/g)
+  const command = args.shift()?.toLowerCase()
 
 
   if (!command) return
-  
+
   // Get the command to run
   const cmd = commands[command]
   if (!cmd) return
 
   cmd.run(client, message, args)
-  
+
 })
 
 
@@ -99,7 +99,7 @@ client.on('messageDelete', msg => {
 })
 
 client.on('messageDeleteBulk', msgs => {
-  
+
   msgs.forEach(m => {
     handleDeletion(m, rrRoles)
   })
@@ -112,11 +112,11 @@ const commands: Commands  = {}
 appendDirectoryCommands(`${__dirname}/commands`)
 
 readdir(`${__dirname}/commands/`, (e, f) => {
-  if (e) return console.error(e)  
+  if (e) return console.error(e)
 
 
   f.forEach(file => {
-    
+
     if (file.endsWith('.js')) return
 
     stat(`${__dirname}/commands/${file}`, (e, fsStat) => {
@@ -132,21 +132,21 @@ readdir(`${__dirname}/commands/`, (e, f) => {
 })
 
 function appendDirectoryCommands(dir: string) {
-  
+
   readdir(dir, (err, files) => {
-    if (err) return console.error(err)  
+    if (err) return console.error(err)
 
     files.forEach(file => {
-      if (!file.endsWith('.js')) return  
+      if (!file.endsWith('.js')) return
 
-      let props: Command = require(`${dir}/${file}`)  
-      let commandName = file.split('.')[0]  
+      let props: Command = require(`${dir}/${file}`)
+      let commandName = file.split('.')[0]
 
-      console.log(`Loading command ${commandName}`)  
+      console.log(`Loading command ${commandName}`)
 
       commands[commandName] = props
-    })  
-  })  
+    })
+  })
 }
 
 
