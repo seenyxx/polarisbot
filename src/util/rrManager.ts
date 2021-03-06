@@ -1,5 +1,5 @@
-import { Message, MessageReaction, PartialMessage, PartialUser, User } from 'discord.js';
-import db from 'quick.db';
+import { MessageReaction, PartialUser, User, Role, Message, PartialMessage } from 'discord.js';
+import db from 'quick.db'
 
 const maxRR = 100
 

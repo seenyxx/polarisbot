@@ -1,6 +1,6 @@
 import { Client, Message } from "discord.js";
-import db from 'quick.db';
-import { coolDownSetup, errorMessage, simpleEmbed } from "../../util/lib";
+import { checkCoolDown, coolDownSetup, errorMessage, setCoolDown, simpleEmbed } from "../../util/lib";
+import db from 'quick.db'
 
 
 let coolDown = 10

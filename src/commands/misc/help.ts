@@ -1,4 +1,5 @@
-import { Client, Message } from "discord.js";
+import { Client, Message, MessageEmbed } from "discord.js";
+import { readFileSync } from "fs";
 import { BotCache } from "../../util/cache";
 import { coolDownSetup, getPrefix, simpleEmbed } from "../../util/lib";
 

@@ -1,4 +1,4 @@
-import { Client, Message } from "discord.js";
+import { Client, Message, MessageEmbed } from "discord.js";
 import { coolDownSetup, simpleEmbed } from "../../util/lib";
 
 let coolDown = 15

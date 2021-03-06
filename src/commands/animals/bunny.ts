@@ -1,6 +1,6 @@
 import { Client, Message } from "discord.js";
-import fetch from 'node-fetch';
-import { coolDownSetup, simpleEmbed } from "../../util/lib";
+import { checkCoolDown, coolDownSetup, setCoolDown, simpleEmbed } from "../../util/lib";
+import fetch from 'node-fetch'
 
 let coolDown = 3
 let commandName = 'bunny'
