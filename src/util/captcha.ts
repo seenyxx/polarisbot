@@ -21,9 +21,9 @@ export async function runCaptcha(member: GuildMember) {
         background: '#2C2F33'
       })
   
-      let outputBuffer = await svg2png({ 
-        input: captcha.data, 
-        encoding: 'buffer', 
+      let outputBuffer = await svg2png({
+        input: captcha.data,
+        encoding: 'buffer',
         format: 'jpeg',
       })
   
