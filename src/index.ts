@@ -45,9 +45,6 @@ client.on('ready', () => {
   botCache.set('botID', client.user?.id)
 })
 
-
-let requiredPerms = 133693055
-
 client.on('message', message => {
   if (message.author.bot) return
 

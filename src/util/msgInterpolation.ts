@@ -83,8 +83,6 @@ export interface tagObjAny {
 
 export function parseDefaultInterpolator(text: string, msg?: Message) {
 
-  let modText = text
-
   for (let i = 0; i < defaultDateTags.length; i++) {
     let dateProps = defaultDateTags[i]
 
@@ -99,7 +97,7 @@ export function parseDefaultInterpolator(text: string, msg?: Message) {
 
       let regex = new RegExp(`{${msgProps.name.trim()}\}`, 'gi')
 
-      modText = text.replace(regex, msgProps.run(msg))
+      text = text.replace(regex, msgProps.run(msg))
     }
 
     for (let i = 0; i < defaultActions.length; i++) {
