@@ -2,7 +2,7 @@ import { error } from 'console';
 import { Client, Message, MessageEmbed } from 'discord.js';
 import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable } from '../../util/lib';
 
-let coolDown = 60
+let coolDown = 30
 let commandName = 'poll'
 
 export function run(client: Client, message: Message, args: Array<string>) {
@@ -50,7 +50,6 @@ class Poll {
   }
   public async sendEmbed() {
     let embed = this.getEmbed()
-
     let msg = await this.msg.channel.send(embed)
     
     for (let i = 0; i < this.options.length; i++) {

@@ -1,7 +1,7 @@
 import { Client, Message, MessageReaction, TextChannel, User, UserResolvable } from "discord.js";
 import { coolDownSetup, errorMessage, simpleEmbed } from "../../util/lib";
 
-let coolDown = 25
+let coolDown = 12
 let commandName = 'ec'
 
 export function run(client: Client, message: Message, args: Array<string>) {

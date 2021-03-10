@@ -39,6 +39,18 @@
     {
       "name": "get-rr-count",
       "value": "A command that gets the reaction role count of a server. \n`<prefix>get-rr-count`"
+    },
+    {
+      "name": "warn",
+      "value": "Warn a user. \n`<prefix>warn <User> <Reason?>`"
+    },
+    {
+      "name": "clear-warnings",
+      "value": "Clear warnings for a user. \n`<prefix>clear-warnings <User>`"
+    },
+    {
+      "name": "set-logs",
+      "value": "Sets the current channel to the server log channel. \n`<prefix>set-logs`"
     }
   ],
 
