@@ -59,8 +59,12 @@ export class WarnLogger {
     if (!channel || channel.isText() === false) return
 
     let logs = channel as TextChannel
-
-    logs.send(simpleEmbed('green', `Reset Warnings for ${targetUser.user.tag} | ${targetUser.id}`, `Reset issued by <@${author.id}>`))
+    let embed = new MessageEmbed()
+      .setColor('#00FF7F')
+      .setAuthor(`${targetUser.user.tag} | ${targetUser.id}`, targetUser.user.displayAvatarURL())
+      .setTitle(`Reset Warnings`)
+      .setDescription(`Reset issued by <@${author.id}>`)
+    logs.send(embed)
   }
 
   public resetAllWarnings() {
