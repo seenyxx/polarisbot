@@ -1,10 +1,11 @@
-import { error } from 'console';
-import { Client, Guild, Message, MessageEmbed } from 'discord.js';
-import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable, simpleEmbed } from '../../util/lib';
+import { Client, Message } from 'discord.js';
+import { coolDownSetup, errorMessage } from '../../util/lib';
 import { WarnLogger } from '../../util/warns';
 
 let coolDown = 10
 let commandName = 'swarn'
+
+export const aliases = ['logs', 'log']
 
 export function run(client: Client, message: Message, args: Array<string>) {
   if (!message.member?.hasPermission('MANAGE_MESSAGES')) return message.channel.send(errorMessage('Insufficient permissions'))

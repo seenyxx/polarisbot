@@ -111,7 +111,6 @@ appendDirectoryCommands(`${__dirname}/commands`)
 readdir(`${__dirname}/commands/`, (e, f) => {
   if (e) return console.error(e)
 
-
   f.forEach(file => {
 
     if (file.endsWith('.js')) return
@@ -125,11 +124,9 @@ readdir(`${__dirname}/commands/`, (e, f) => {
       }
     })
   })
-
 })
 
 function appendDirectoryCommands(dir: string) {
-
   readdir(dir, (err, files) => {
     if (err) return console.error(err)
 
@@ -142,6 +139,14 @@ function appendDirectoryCommands(dir: string) {
       console.log(`Loading command ${commandName}`)
 
       commands[commandName] = props
+
+      if (props.aliases) {
+        props.aliases.forEach(alias => {
+          commands[alias] = {
+            run: props.run
+          }
+        })
+      }
     })
   })
 }

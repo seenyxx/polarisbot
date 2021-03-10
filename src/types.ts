@@ -1,6 +1,7 @@
-import { Client } from "discord.js";
+import { Client, Message } from "discord.js";
 
 export interface Command {
+  aliases?: string[]
   run: runCommand
 }
 

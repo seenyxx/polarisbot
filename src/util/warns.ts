@@ -34,7 +34,7 @@ export class WarnLogger {
     logs.send(this.logEmbed(author, userWarns, user, reason.trim()))
 
     user.createDM(true).then(dm => {
-      dm.send(`You were warned for:\n\`\`\`${reason}\`\`\``)
+      dm.send(simpleEmbed('gold', `You were warned in ${user.guild.name} | Case: ${userWarns}`, `You were warned for:\n\`\`\`${reason}\`\`\``))
     })
   }
 

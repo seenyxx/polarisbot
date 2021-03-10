@@ -1,12 +1,12 @@
-import { error } from 'console';
-import { Client, EmbedField, Message, MessageEmbed, MessageEmbedOptions } from 'discord.js';
-import { emoji } from 'node-emoji';
-import { coolDownSetup, hardPunish, pollEmojis, errorMessage, pollEmojisResolvable, simpleEmbed, parseDisplayUptime } from '../../util/lib';
-import { ReactionRoleRoleManager, ReactionRoleCounter } from '../../util/rrManager';
-import { parseDefaultInterpolator } from '../../util/msgInterpolation'
+import { Client, Message, MessageEmbed } from 'discord.js';
+import { coolDownSetup, errorMessage, simpleEmbed } from '../../util/lib';
+import { parseDefaultInterpolator } from '../../util/msgInterpolation';
+import { ReactionRoleCounter, ReactionRoleRoleManager } from '../../util/rrManager';
 
 let coolDown = 25
 let commandName = 'reaction-role'
+
+export const aliases = ['rr']
 
 export async function run(client: Client, message: Message, args: Array<string>) {
 
@@ -15,6 +15,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
   if (coolDownSetup(message, commandName, coolDown)) return
 
+  // Check if the server has the maximum amount of reaction roles
   let counter = new ReactionRoleCounter()
   if (!counter.RRStatus(message.guild.id)) return message.channel.send(errorMessage('Your guild has reached the maximum amount of reaction roles'))
 
@@ -104,7 +105,6 @@ export async function run(client: Client, message: Message, args: Array<string>)
         return
       }
 
-
       if (reaction.match(ereg) && actualRole && m.guild && m.guild.me) {
 
         if (actualRole.position > m.guild.me.roles.highest.position) return successful = false
@@ -118,6 +118,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
     })
   })
 
+
   collector.on('end', collected => {
     if (!collected.size) successful = false
     if (!successful && message.deletable) return rrMessage.delete()
@@ -127,6 +128,5 @@ export async function run(client: Client, message: Message, args: Array<string>)
     counter.addRRCount(message.guild.id)
     message.channel.send(simpleEmbed('green', 'Reaction Role Count', `This server's reaction roles:\n${counter.getRRCount(message.guild.id)}/100`))
   })
-
 }
 

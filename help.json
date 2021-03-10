@@ -1,166 +1,140 @@
 {
-  "mod": [
-    {
-      "name": "ban",
-      "value": "A ban command.\n`<prefix>ban <User> <Reason>`"
-    },
-    {
-      "name": "kick",
-      "value": "A kick command.\n`<prefix>kick <User> <Reason>`"
-    },
-    {
-      "name": "emojify-channel",
-      "value": "A command that adds an emoji to the channel name, be warned you can only use emojify on a channel between 5 minute intervals.\n`<prefix>emojify-channel <UnicodeEmoji>`"
-    },
-    {
-      "name": "lockdown",
-      "value": "A command that locks down the entire server preventing users from joining to protect a guild against a targeted raid.\n`<prefix>lockdown`"
-    },
-    {
-      "name": "resolve-lockdown",
-      "value": "A command that removes the lockdown on the server if the lockdown exists.\n`<prefix>resolve-lockdown`"
-    },
-    {
-      "name": "prune-roles",
-      "value": "A command that deletes all the roles with the name `new role`.\n`<prefix>prune-roles`"
-    },
-    {
-      "name": "set-topic",
-      "value": "A command that sets the topic of the current channel.\n`<prefix>set-topic`"
-    },
-    {
-      "name": "toggle-captcha",
-      "value": "A command that toggles the server captcha. \n`<prefix>toggle-captcha`"
-    },
-    {
-      "name": "reaction-role",
-      "value": "A command that creates a reaction role. \n`<prefix>reaction-role`"
-    },
-    {
-      "name": "get-rr-count",
-      "value": "A command that gets the reaction role count of a server. \n`<prefix>get-rr-count`"
-    },
-    {
-      "name": "warn",
-      "value": "Warn a user. \n`<prefix>warn <User> <Reason?>`"
-    },
-    {
-      "name": "clear-warnings",
-      "value": "Clear warnings for a user. \n`<prefix>clear-warnings <User>`"
-    },
-    {
-      "name": "set-logs",
-      "value": "Sets the current channel to the server log channel. \n`<prefix>set-logs`"
-    }
-  ],
-
-
-
-  "misc": [
-    {
-    "name": "invite",
-    "value": "A command to invite this bot.\n`<prefix>invite`"
-    },
-    {
-      "name": "ping",
-      "value": "A command to check the latency between the bot server and your server.\n`<prefix>ping`"
-    },
-    {
-      "name": "help",
-      "value": "A command that brings up this dialogue.\n`<prefix>help`"
-    }, 
-    {
-      "name": "uptime",
-      "value": "A command that tells you the amount of time the bot has been up.\n`<prefix>uptime`"
-    },
-    {
-      "name": "server-count",
-      "value": "A command that tells you the amount of servers the bot is in.\n`<prefix> server-count`"
-    },
-    {
-      "name": "toggle-gif-filter",
-      "value": "A command that toggles the no no gif filter.\n`<prefix>toggle-gif-filter`"
-    }
-  ],
-
-
-
-  "text": [
-    {
-      "name": "ascii",
-      "value": "A command that converts text to ascii.\n`<prefix>ascii <Text>`"
-    },
-    {
-      "name": "ascii-cyan",
-      "value": "A command that converts text to cyan colored ascii.\n`<prefix>ascii-cyan <Text>`"
-    },
-    {
-      "name": "ascii-gold",
-      "value": "A command that converts text to gold colored ascii.\n`<prefix>ascii-gold <Text>`"
-    },
-    {
-      "name": "poll",
-      "value": "A command that creates an advanced poll. \n`<prefix>poll [<Title>] (<Option1>) (<Option 2>)..`"
-    }
-  ],
-  "config": [
-    {
-      "name": "setprefix",
-      "value": "A command that sets the prefix of the bot in the server.\n`<prefix>setprefix <NewPrefix>`"
-    },
-    {
-      "name": "prefix",
-      "value": "A command that gets the current prefix of the bot in the server.\n`<prefix>prefix`"
-    }
-  ],
-  "animals": [
-    {
-      "name": "duck",
-      "value": "DUCK!\n`<prefix>duck`"
-    },
-    {
-      "name": "cat",
-      "value": "KITTY!\n`<prefix>cat`"
-    },
-    {
-      "name": "dog",
-      "value": "DOGGO!\n`<prefix>dog`"
-    },
-    {
-      "name": "fox",
-      "value": "FOXXY!\n`<prefix>fox`"
-    },
-    {
-      "name": "shiba",
-      "value": "SHIBA INU!\n`<prefix>shiba`"
-    },
-    {
-      "name": "bunny",
-      "value": "BUNNY WABBIT!\n`<prefix>bunny`"
-    }
-  ],
-
-
-  "cat": [
+  "categories": [
     {
       "name": "Moderation 🛠",
-      "menu": "mod"
+      "menu": "mod",
+      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role"]
     },
     {
       "name": "Text 💬",
-      "menu": "text"
+      "menu": "text",
+      "cmds": ["ascii", "ascii-gold", "ascii-cyan"]
     },
     {
       "name": "Misc ✨",
-      "menu": "misc"
+      "menu": "misc",
+      "cmds": ["help", "invite", "ping", "server-count", "uptime"]
     },
     {
       "name": "Config ⚙",
-      "menu": "config"
+      "menu": "config",
+      "cmds": ["prefix", "set-prefix"]
     },
     {
       "name": "Animals 🐧",
-      "menu": "animals"
+      "menu": "animals",
+      "cmds": ["bunny", "cat", "dog", "duck", "fox"]
     }
-  ]
+  ],
+  "commands": {
+    "ban": {
+      "usage": "ban <User> <Reason?>",
+      "desc": "Bans a member"
+    },
+    "kick": {
+      "usage": "kick <User> <Reason?>",
+      "desc": "Kicks a member"
+    },
+    "warn": {
+      "usage": "warn <User> <Reason?>",
+      "desc": "Warns a member",
+      "aliases": ["w"]
+    },
+    "clear-warnings": {
+      "usage": "clear-warnings <User>",
+      "desc": "Clears a member's previous warnings",
+      "aliases": ["clear-warn", "clear-warns", "clearwarns", "clearwarn", "cw"]
+    },
+    "poll": {
+      "usage": "poll [<Title>] (<Option1>) (<Option2>) ...",
+      "desc": "Makes a poll in the current channel"
+    },
+    "prune-roles": {
+      "usage": "prune-roles",
+      "desc": "Removes all roles named `new role`"
+    },
+    "lockdown": {
+      "usage": "lockdown",
+      "desc": "Locks down the server so anyone who joins is instantly banned"
+    },
+    "resolve-lockdown": {
+      "usage": "resolve-lockdown",
+      "desc": "Removes the lockdown from the server"
+    },
+    "set-logs": {
+      "usage": "set-logs",
+      "desc": "Sets the log channel for warns",
+      "aliases": ["logs", "log"]
+    },
+    "toggle-captcha": {
+      "usage": "toggle-captcha",
+      "desc": "Toggles the image captcha for anyone new"
+    },
+    "reaction-role": {
+      "usage": "reaction-role",
+      "desc": "Creates a reaction role",
+      "aliases": ["rr"]
+    },
+    "ascii": {
+      "usage": "ascii <Text>",
+      "desc": "Outputs ASCII text (larger text built with other characters)"
+    },
+    "ascii-gold": {
+      "usage": "ascii-gold <Text>",
+      "desc": "Does the same as ascii but makes the text gold (Only visible on desktop)"
+    },
+    "ascii-cyan": {
+      "usage": "ascii-cyan <Text>",
+      "desc": "Does the same as ascii but makes the text cyan (Only visible on desktop)"
+    },
+    "help": {
+      "usage": "help <CommandName/Category>",
+      "desc": "Provides the help menu"
+    },
+    "invite": {
+      "usage": "invite",
+      "desc": "Invite link for this bot"
+    },
+    "ping": {
+      "usage": "ping",
+      "desc": "Gets the ping of the bot"
+    },
+    "server-count": {
+      "usage": "server-count",
+      "desc": "Gets the amount of servers the bot is in"
+    },
+    "uptime": {
+      "usage": "uptime",
+      "desc": "Gets the uptime of the bot"
+    },
+    "prefix": {
+      "usage": "prefix",
+      "desc": "Gets the prefix for the current server"
+    },
+    "set-prefix": {
+      "usage": "set-prefix <NewPrefix>",
+      "desc": "Sets the guild prefix to something else",
+      "aliases": ["setprefix"]
+    },
+    "bunny": {
+      "usage": "bunny",
+      "desc": "Gets an image of a cute bunny"
+    },
+    "cat": {
+      "usage": "cat",
+      "desc": "Gets an image of a cute kitty"
+    },
+    "dog": {
+      "usage": "dog",
+      "desc": "Gets an image of a doggo"
+    },
+    "duck": {
+      "usage": "duck",
+      "desc": "Gets an image of a ducky"
+    },
+    "fox": {
+      "usage": "fox",
+      "desc": "Gets an image of a foxxy"
+    }
+  }
 }

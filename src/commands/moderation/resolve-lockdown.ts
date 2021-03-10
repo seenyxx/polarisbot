@@ -1,8 +1,6 @@
-import { Client, Message, MessageEmbed } from "discord.js";
-import { readFileSync } from "fs";
-import { BotCache } from "../../util/cache";
-import { coolDownSetup, errorMessage, simpleEmbed } from "../../util/lib";
-import db from 'quick.db'
+import { Client, Message } from "discord.js";
+import db from 'quick.db';
+import { errorMessage, simpleEmbed } from "../../util/lib";
 
 
 let coolDown = 30

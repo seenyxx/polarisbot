@@ -6,6 +6,9 @@ import { BotCache } from "../../util/cache";
 
 let coolDown = 10
 let commandName = 'setprefix'
+
+export const aliases = ['setprefix']
+
 export function run(client: Client, message: Message, args: Array<string>) {
   if (coolDownSetup(message, commandName, coolDown)) return
   

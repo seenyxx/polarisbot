@@ -236,7 +236,7 @@ export const pollEmojisResolvable = [
   '🇯'
 ]
 
-export function getPrefix(id?: string) {
+export function getPrefix(id?: string): string {
   if (!id) return new BotCache().get('config').prefix
   return db.get(`prefix.${id}`) ? db.get(`prefix.${id}`) : new BotCache().get('config').prefix
 }
