@@ -14,7 +14,7 @@ export class WarnLogger {
       .setColor('#ff9900')
       .setAuthor(`${user.user.tag} | ${user.id}`, user.user.displayAvatarURL())
       .setTitle(`Warning | Case: ${number}`)
-      .setDescription(`Issued by: <@${author.id}> Reason:\n\`\`\`${reason}\`\`\``)
+      .setDescription(`Offender: <@${user.id}>\nIssued by: <@${author.id}>\nReason:\n\`\`\`${reason}\`\`\``)
 
     return embed
   }
@@ -63,7 +63,7 @@ export class WarnLogger {
       .setColor('#00FF7F')
       .setAuthor(`${targetUser.user.tag} | ${targetUser.id}`, targetUser.user.displayAvatarURL())
       .setTitle(`Reset Warnings`)
-      .setDescription(`Reset issued by <@${author.id}>`)
+      .setDescription(`Reset warnings for: <@${targetUser.id}>\nReset issued by <@${author.id}>`)
     logs.send(embed)
   }
 
