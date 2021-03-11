@@ -24,5 +24,5 @@ export function run(client: Client, message: Message, args: Array<string>) {
 
   logger.warn(message.member, mention, reason)
   
-  message.channel.send(simpleEmbed('gold', `Warned`, ` <@${mention.id}>`))
+  message.channel.send(simpleEmbed('gold', `Warned`, ` <@${mention.id}> for: \`\`\`${reason}\`\`\``))
 }
