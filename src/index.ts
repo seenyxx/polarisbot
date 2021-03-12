@@ -1,14 +1,13 @@
-import { Client, MessageAttachment, TextChannel, Message, MessageEmbed } from 'discord.js';
-import { existsSync, fdatasync, fstat, readdir, readFileSync, rm, rmSync, stat } from 'fs'
-import { createServer } from 'http'
+import { Client } from 'discord.js';
+import { readdir, readFileSync, stat } from 'fs';
+import db from 'quick.db';
+
+import { Command, Commands, Config } from './types';
 import { BotCache } from './util/cache';
-import { noGif, simpleEmbed, unverifiedRole, errorMessage } from './util/lib';
-import { Command, Commands, Config } from './types'
-import db from 'quick.db'
-import { create } from 'svg-captcha';
-import { svg2png } from 'svg-png-converter';
-import { reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager, ReactionRoleCounter, handleDeletion } from './util/rrManager';
 import { runCaptcha } from './util/captcha';
+import { lvlSetup } from './util/leveling';
+import { noGif } from './util/lib';
+import { handleDeletion, reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager } from './util/rrManager';
 
 
 process.on('unhandledRejection', console.error)
@@ -50,6 +49,10 @@ client.on('ready', () => {
 
 client.on('message', message => {
   if (message.author.bot) return
+
+  // Leveling
+  if (message.guild)
+    lvlSetup(message.author.id, message.guild.id)
 
   // Get rid of gifs from /tenor or /giphy
   noGif(message)

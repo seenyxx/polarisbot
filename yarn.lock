@@ -738,7 +738,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"canvas@npm:^2.6.1":
+"canvas@npm:^2.6.1, canvas@npm:^2.7.0":
   version: 2.7.0
   resolution: "canvas@npm:2.7.0"
   dependencies:
@@ -2454,6 +2454,7 @@ __metadata:
     "@types/node-emoji": ^1.8.1
     "@types/node-fetch": ^2.5.8
     buffer: ^6.0.3
+    canvas: ^2.7.0
     discord.js: ^12.5.1
     figlet: ^1.5.0
     node-emoji: ^1.10.0
