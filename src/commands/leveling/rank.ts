@@ -74,20 +74,23 @@ async function progressBar(canvas: Canvas,ctx: CanvasRenderingContext2D, size: n
   const pfpSizeMargin = 140
 
   ctx.strokeStyle = progressColor
-  ctx.lineWidth = 60
+  ctx.lineWidth = 70
   ctx.lineCap = 'round'
+  
   ctx.beginPath();
   ctx.moveTo(pfpSize - pfpSizeMargin, verticalDistance);
-  ctx.lineTo(pfpSize - pfpSizeMargin + (size * 1.2), verticalDistance);
+  ctx.lineTo((pfpSize - pfpSizeMargin) + (size * 1.25), verticalDistance);
   ctx.stroke();
 }
 
 async function drawStatus(ctx: CanvasRenderingContext2D, color: string, pfpSize: number) {
-  const statusSize = 70
+  const statusSize = 72
   const offset = pfpSize + 32
+
   ctx.strokeStyle = color
   ctx.lineWidth = statusSize
   ctx.lineCap = 'round'
+
   ctx.beginPath()
   ctx.moveTo(offset + 5, offset)
   ctx.lineTo(offset + 5, offset)

@@ -14,8 +14,9 @@ export function run(client: Client, message: Message, args: Array<string>) {
   
 
   const mention = message.mentions.members?.first()
-
+  
   if (!mention) return message.channel.send(errorMessage('Mention a member'))
+  if (mention.user.bot) return
   
   args.shift()
 
