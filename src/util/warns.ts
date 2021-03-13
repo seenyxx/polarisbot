@@ -44,6 +44,11 @@ export class WarnLogger {
     if (!channel || !this.guild.me) return
     let dbID = db.get(`log.${this.guild.id}`)
     let wh = (await channel.fetchWebhooks()).find(wh => wh.id === dbID)
+    let possibleGuildWH = (await channel.fetchWebhooks()).find(wh => wh.id === dbID)
+    
+    if (possibleGuildWH && possibleGuildWH.channelID !== id) {
+      possibleGuildWH.delete()
+    }
 
     if (wh) {
       db.set(`log.${this.guild.id}`, wh.id)
