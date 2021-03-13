@@ -37,7 +37,7 @@ export class Leveling {
   }
 
   public getGuild() {
-    return db.get(`lvl${this.guildID}`) 
+    return db.get(`lvl${this.guildID}`)
   }
 
   public setGuildMulti(multi: number) {
