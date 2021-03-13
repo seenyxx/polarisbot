@@ -22,7 +22,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   const reason = args[0] ? args.join(' ') : 'No reason provided'
   const logger = new WarnLogger(message.guild)
 
-  logger.warn(message.member, mention, reason)
+  logger.warn(message, message.member, mention, reason)
   
   message.channel.send(simpleEmbed('gold', `Warned`, ` <@${mention.id}> for: \`\`\`${reason}\`\`\``))
 }

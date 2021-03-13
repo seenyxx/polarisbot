@@ -17,7 +17,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
 
   const logger = new WarnLogger(message.guild)
 
-  logger.resetUserWarnings(message.member, mention)
+  logger.resetUserWarnings(message, message.member, mention)
   
   message.channel.send(simpleEmbed('green', `Cleared warnings for `, `<@${mention.id}>`))
 }

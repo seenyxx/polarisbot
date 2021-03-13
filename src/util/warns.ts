@@ -9,17 +9,17 @@ export class WarnLogger {
     this.guild = guild
   }
 
-  private logEmbed(author: GuildMember, number: number, user: GuildMember, reason: string) {
+  private logEmbed(msg: Message, author: GuildMember, number: number, user: GuildMember, reason: string) {
     let embed = new MessageEmbed()
       .setColor('#ff9900')
       .setAuthor(`${user.user.tag} | ${user.id}`, user.user.displayAvatarURL())
       .setTitle(`Warning | Case: ${number}`)
       .setDescription(`Offender: <@${user.id}>\nIssued by: <@${author.id}>\nReason:\n\`\`\`${reason}\`\`\``)
-
+      .setFooter(msg.url)
     return embed
   }
 
-  public async warn(author: GuildMember, user: GuildMember, reason: string) {
+  public async warn(msg: Message, author: GuildMember, user: GuildMember, reason: string) {
     let id = db.get(`log.${this.guild.id}`)
 
     db.add(`warns.${this.guild.id}.${user.id}`, 1)
@@ -31,7 +31,7 @@ export class WarnLogger {
 
     const logs = channel as TextChannel
   
-    logs.send(this.logEmbed(author, userWarns, user, reason.trim()))
+    logs.send(this.logEmbed(msg, author, userWarns, user, reason.trim()))
 
     user.createDM(true).then(dm => {
       dm.send(simpleEmbed('gold', `You were warned in ${user.guild.name} | Case: ${userWarns}`, `You were warned for:\n\`\`\`${reason}\`\`\``))
@@ -48,7 +48,7 @@ export class WarnLogger {
     msg.channel.send(simpleEmbed('green', 'Updated Warn Log channel', '')).catch(e => sendE(msg, e))
   }
   
-  public resetUserWarnings(author: GuildMember, targetUser: GuildMember) {
+  public resetUserWarnings(msg: Message, author: GuildMember, targetUser: GuildMember) {
     let id = db.get(`log.${this.guild.id}`)
 
 
@@ -64,6 +64,7 @@ export class WarnLogger {
       .setAuthor(`${targetUser.user.tag} | ${targetUser.id}`, targetUser.user.displayAvatarURL())
       .setTitle(`Reset Warnings`)
       .setDescription(`Reset warnings for: <@${targetUser.id}>\nReset issued by <@${author.id}>`)
+      .setFooter(msg.url)
     logs.send(embed)
   }
 
