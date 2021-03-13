@@ -61,7 +61,7 @@ export class WarnLogger {
         db.set(`log.${this.guild.id}`, wh.id)
 
       })
-      return msg.channel.send(simpleEmbed('green', 'Updated Warn Log channel', '')).catch(e => sendE(msg, e)) 
+      return msg.channel.send(simpleEmbed('green', 'Updated Warn Log channel', '')).catch(e => sendE(msg, e))
     }
   }
   
