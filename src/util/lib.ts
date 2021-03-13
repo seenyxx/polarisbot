@@ -286,8 +286,8 @@ export const statusColors = {
   online: '#43b581',
   idle: '#faa61a',
   dnd: '#f04747',
-  offline: '#99ab5',
-  invisible: '#ffffff'
+  offline: '#99aab5',
+  invisible: '#99aab5'
 }
 
 export const hypeSquadColors = {

@@ -1,8 +1,8 @@
 import { Canvas, loadImage, registerFont } from 'canvas';
-import { Client, GuildMember, Message, MessageAttachment } from 'discord.js';
+import { Client, GuildMember, Message, MessageAttachment, PresenceStatus } from 'discord.js';
 
 import { Leveling } from '../../util/leveling';
-import { coolDownSetup, simpleEmbed, statuses } from '../../util/lib';
+import { coolDownSetup, simpleEmbed, statuses, statusColors } from '../../util/lib';
 
 let coolDown = 5
 let commandName = 'rank'
@@ -30,12 +30,12 @@ export async function run(client: Client, message: Message, args: Array<string>)
   const xpLevel = Math.floor(xp / 1000)
   const color = userEXP.getColor()
   
-  const attachment = new MessageAttachment(await genCard(xpLevel, color !== 'default' && color ? color : member.displayHexColor , xpModulo, member), 'progressbar.png')
+  const attachment = new MessageAttachment(await genCard(xpLevel, color !== 'default' && color ? color : member.displayHexColor !== '#000000' ? member.displayHexColor : '#0099ff' , xpModulo, member, member.user.presence.status), 'progressbar.png')
 
   message.channel.send(attachment)
 }
 
-async function genCard(xplevel: number, progressColor: string, precisePercentage: number, member: GuildMember) {
+async function genCard(xplevel: number, progressColor: string, precisePercentage: number, member: GuildMember, status: PresenceStatus) {
   const canvas = new Canvas(1500, 500)
   const ctx = canvas.getContext('2d')
   const size = 256
@@ -62,7 +62,7 @@ async function genCard(xplevel: number, progressColor: string, precisePercentage
 
 	const avatar = await genProfilePic(size, member)
 	ctx.drawImage(avatar, 80, 70, 256, 256);
-
+  drawStatus(ctx, statusColors[status] ,size)
 
 
   return canvas.toBuffer()
@@ -80,6 +80,18 @@ async function progressBar(canvas: Canvas,ctx: CanvasRenderingContext2D, size: n
   ctx.moveTo(pfpSize - pfpSizeMargin, verticalDistance);
   ctx.lineTo(pfpSize - pfpSizeMargin + (size * 1.2), verticalDistance);
   ctx.stroke();
+}
+
+async function drawStatus(ctx: CanvasRenderingContext2D, color: string, pfpSize: number) {
+  const statusSize = 70
+  const offset = pfpSize + 32
+  ctx.strokeStyle = color
+  ctx.lineWidth = statusSize
+  ctx.lineCap = 'round'
+  ctx.beginPath()
+  ctx.moveTo(offset + 5, offset)
+  ctx.lineTo(offset + 5, offset)
+  ctx.stroke()
 }
 
 async function genProfilePic(size: number, member: GuildMember) {
