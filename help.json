@@ -24,6 +24,11 @@
       "name": "Animals 🐧",
       "menu": "animals",
       "cmds": ["bunny", "cat", "dog", "duck", "fox"]
+    },
+    {
+      "name": "Leveling 🏆",
+      "menu": "level",
+      "cmds": ["rank", "leaderboard", "set-color", "toggle-leveling", "get-multi", "set-multi"]
     }
   ],
   "commands": {
@@ -135,6 +140,36 @@
     "fox": {
       "usage": "fox",
       "desc": "Gets an image of a foxxy"
+    },
+    "toggle-leveling": {
+      "usage": "toggle-leveling",
+      "desc": "Turns on/off the leveling module",
+      "aliases": ["toggle-level", "toggle-levels", "toggle-lvl", "toggle-lvls", "toggleleveling", "togglelevels", "togglelevel"]
+    },
+    "rank": {
+      "usage": "rank <@User?>",
+      "desc": "Gets the rank of the user in the leveling system",
+      "aliases": ["lvl", "level"]
+    },
+    "leaderboard": {
+      "usage": "leaderboard",
+      "desc": "Gets the top 10 users in the guild with the most XP",
+      "aliases": ["lb"]
+    },
+    "set-color": {
+      "usage": "set-color <HexColor | \"default\">",
+      "desc": "Sets the color of the rank display",
+      "aliases": ["set-colour", "sc", "lvl-color", "lvl-colour"]
+    },
+    "set-multi": {
+      "usage": "set-multi <Number From 1 to 3>",
+      "desc": "Sets the XP multiplier for the server",
+      "aliases": ["multi", "set-multiplier", "setmulti"]
+    },
+    "get-multi": {
+      "usage": "get-multi",
+      "desc": "Gets the current XP multiplier for the server",
+      "aliases": ["getmulti", "get-multiplier"]
     }
   }
 }

@@ -1,8 +1,7 @@
 import { Client, Message } from 'discord.js';
-import db from 'quick.db';
 
-import { BotCache } from '../../util/cache';
-import { coolDownSetup, errorMessage, simpleEmbed } from '../../util/lib';
+import { coolDownSetup, simpleEmbed } from '../../util/lib';
+import { Leveling } from '../../util/leveling';
 
 
 let coolDown = 8
@@ -11,17 +10,36 @@ let commandName = 'lb'
 export const aliases = ['lb']
 
 export function run(client: Client, message: Message, args: Array<string>) {
+  if (!message.guild || !message.member) return
   if (coolDownSetup(message, commandName, coolDown)) return
   
-  if (!message.guild) return
-  if (!message.member?.hasPermission('MANAGE_GUILD')) return message.channel.send(errorMessage('Insufficient Permissions'))
-  if (!args[0]) return message.channel.send(errorMessage('No prefix provided'))
-  let newPrefix = args[0].trim()
-  
-  db.set(`prefix.${message.guild.id}`, newPrefix)
+  const guild = new Leveling(message.member.id, message.guild.id)
+  if (!guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
+  const users: Record<string, number> = guild.getGuild()
 
-  if (newPrefix == new BotCache().get('config').prefix) db.delete(`prefix.${message.guild.id}`)
+  if (users) {
+    const sortable = Object.fromEntries(
+      Object.entries(users).sort(([, a], [, b]) => b - a).slice(0, 10)
+    )
+    const embed = simpleEmbed('gold', `${message.guild.name} Leaderboard`, '')
+    let text = ''
+    Object.entries(sortable).forEach((user, index) => {
+      let badge: string | undefined
+      switch(index) {
+        case 0:
+          badge = '🥇'
+          break
+        case 1:
+          badge = '🥈'
+          break
+        case 2:
+          badge = '🥉'
+          break
+      }
+      text = text.concat(`\n ${badge ? `${badge}${index + 1}`: `:white_small_square:${index + 1}`} <@${user[0]}> **LVL:** \`${Math.floor(user[1] / 1000)}\` **XP:**\`${user[1] % 1000}/1000\` **Total XP:** \`${user[1] > 1000 ? `${user[1] / 1000}k` : user[1]}\``)
+    })
 
-  message.channel.send(simpleEmbed('blue', 'Server Prefix', `Set prefix to \`${newPrefix}\``))
-  
+    embed.setDescription(text)
+    message.channel.send(embed)
+  }
 }

@@ -4,6 +4,8 @@ import { Config, presetColor, voiceCount } from "../types"
 import db from 'quick.db'
 import { BotCache } from "./cache";
 import { parseDefaultInterpolator } from "./msgInterpolation";
+import { createWriteStream, unlink, existsSync, mkdirSync } from "fs";
+
 
 
 // Command for both bans and kicks
@@ -103,32 +105,40 @@ export function parseDisplayUptime(uptime: number) {
   return [`${days}:${hours}:${mins}:${secs}`, `${days}d ${hours}h ${mins}m ${secs}s`]
 }
 
-export function simpleEmbed(presetColor: presetColor, title: string, desc: string) {
+export function simpleEmbed(presetColor: presetColor | string, title: string, desc: string) {
   let presetColorHex: ColorResolvable = '#000000'
+  let preset = false
   switch(presetColor) {
     case 'red':
+      preset = true
       presetColorHex = '#e71837'
       break
     case 'blue':
+      preset = true
       presetColorHex = '#0099ff'
       break
     case 'green':
+      preset = true
       presetColorHex = '#00FF7F'
       break
     case 'gold':
+      preset = true
       presetColorHex = '#fcba03'
       break
     case 'pigeon':
+      preset = true
       presetColorHex = '#637d96'
       break
     case 'RANDOM':
+      preset = true
       presetColorHex = 'RANDOM'
       break
     case 'BLURPLE':
+      preset = true
       presetColorHex = 'BLURPLE'
       break
   }
-
+  if (!preset) presetColorHex = presetColor
 
   let embed = new MessageEmbed()
     .setColor(presetColorHex)
@@ -242,3 +252,46 @@ export function getPrefix(id?: string): string {
 }
 
 
+export async function dlE(url: string, dest: string) {
+  if (!existsSync('./botcache')) mkdirSync('./botcache')
+  const file = createWriteStream(`./botcache/${dest}`)
+  file.on('finish', () => file.close())
+  file.on('error', (e) => {
+    unlink(`./botcache/${dest}`, () => {
+      console.error(e)
+    })
+  })
+
+  const req = get(url, res => {
+    if (res.statusCode !== 200) throw new Error(`Status Code: ${res.statusCode}`)
+    res.pipe(file)
+  })
+  req.on('error', e => {
+    unlink(`./botcache/${dest}`, () => {
+      console.error(e)
+    })
+  })
+  return `./botcache/${dest}`
+}
+
+export const statuses = {
+  online: '🟢',
+  idle: '🌙',
+  dnd: '🔴',
+  offline: '⚫',
+  invisible: '⚪'
+}
+
+export const statusColors = {
+  online: '#43b581',
+  idle: '#faa61a',
+  dnd: '#f04747',
+  offline: '#99ab5',
+  invisible: '#ffffff'
+}
+
+export const hypeSquadColors = {
+  bravery: '#9b84ee',
+  balance: '#44ddbf',
+  brilliance: '#f47b68'
+}

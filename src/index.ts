@@ -1,3 +1,4 @@
+import { registerFont } from 'canvas';
 import { Client } from 'discord.js';
 import { readdir, readFileSync, stat } from 'fs';
 import db from 'quick.db';
@@ -6,7 +7,7 @@ import { Command, Commands, Config } from './types';
 import { BotCache } from './util/cache';
 import { runCaptcha } from './util/captcha';
 import { lvlSetup } from './util/leveling';
-import { noGif } from './util/lib';
+import { noGif, dlE } from './util/lib';
 import { handleDeletion, reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager } from './util/rrManager';
 
 
@@ -29,7 +30,7 @@ const botCache = new BotCache()
 botCache.set('helpConfig', JSON.parse(readFileSync(`${__dirname}/../help.json`).toString()))
 botCache.set('config', config)
 
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log(`Logged in as ${client.user?.tag}`)
 
   client.user?.setPresence({
@@ -39,7 +40,14 @@ client.on('ready', () => {
       type: 'LISTENING'
     }
   })
-
+  registerFont('./fonts/notosansjp/NotoSansJP-Regular.otf', {
+    family: 'Noto Sans JP',
+    weight: '400',
+  })
+  registerFont('./fonts/notosansjp/NotoSansJP-Bold.otf', {
+    family: 'Noto Sans JP',
+    weight: '700',
+  })
   // Reset cooldowns
 
   db.delete('cooldowns')
@@ -49,9 +57,9 @@ client.on('ready', () => {
 
 client.on('message', message => {
   if (message.author.bot) return
-
+  
   // Leveling
-  if (message.guild)
+  if (message.guild && message.content.length > 2)
     lvlSetup(message.author.id, message.guild.id)
 
   // Get rid of gifs from /tenor or /giphy
