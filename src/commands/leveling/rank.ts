@@ -56,7 +56,7 @@ async function genCard(xplevel: number, progressColor: string, precisePercentage
   ctx.fillStyle = '#FFFFFF'
   ctx.fillText(`${member.user.tag}`, pfpMargin + 80, canvas.height / 2.5)
   ctx.font = '70px Noto Sans JP'
-  ctx.fillText(`LVL: ${xplevel} XP: ${precisePercentage} / 1000`, pfpMargin + 80, canvas.height / 2.5 + 70)
+  ctx.fillText(`LVL: ${xplevel + 1} XP: ${precisePercentage} / 1000`, pfpMargin + 80, canvas.height / 2.5 + 70)
 
   
 
