@@ -24,8 +24,8 @@ export class Leveling {
     db.set(this.query, val)
   }
   
-  public add() {
-    db.add(this.query, this.xpFormula())
+  public add(user?: GuildMember) {
+    db.add(this.query, this.xpFormula() * (user && user?.premiumSince ? 1.2 : 1))
   }
 
   public xpFormula() {
@@ -96,7 +96,7 @@ export function lvlSetup(msg: Message, user: GuildMember, guildID: string) {
       msg.channel.send(simpleEmbed(user.displayHexColor && user.displayHexColor !== '#000000' ? user.displayHexColor : 'blue' , '', `<@${user.id}> has reached level **${nextLevel + 1}**!`))
     }
 
-    lvl.add()
+    lvl.add(user)
 
     setCoolDown(user.id, guildID)
   }
