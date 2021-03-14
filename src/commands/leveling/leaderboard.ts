@@ -35,6 +35,10 @@ export function run(client: Client, message: Message, args: Array<string>) {
         case 2:
           badge = '🥉'
           break
+        case 3:
+          badge = '🏅'
+        case 4:
+          badge = '🏅'
       }
       text = text.concat(`\n ${badge ? `${badge}${index + 1}`: `:white_small_square:${index + 1}`} <@${user[0]}> **LVL:** \`${Math.floor(user[1] / 1000) + 1}\` **XP:**\`${user[1] % 1000}/1000\` **Total XP:** \`${user[1] > 1000 ? `${user[1] / 1000}k` : user[1]}\``)
     })

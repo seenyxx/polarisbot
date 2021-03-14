@@ -1,8 +1,8 @@
-import { Canvas, loadImage, registerFont } from 'canvas';
-import { Client, GuildMember, Message, MessageAttachment, PresenceStatus } from 'discord.js';
+import { Canvas, loadImage, registerFont } from 'canvas'
+import { Client, GuildMember, Message, MessageAttachment, PresenceStatus } from 'discord.js'
 
-import { Leveling } from '../../util/leveling';
-import { coolDownSetup, simpleEmbed, statuses, statusColors } from '../../util/lib';
+import { Leveling } from '../../util/leveling'
+import { coolDownSetup, simpleEmbed, statuses, statusColors } from '../../util/lib'
 
 let coolDown = 5
 let commandName = 'rank'
@@ -30,9 +30,16 @@ export async function run(client: Client, message: Message, args: Array<string>)
   const xpLevel = Math.floor(xp / 1000)
   const color = userEXP.getColor()
   const users = userEXP.getGuild()
-  const sortable = Object.entries(users).sort(([, a], [, b]) => b - a).slice(0, 15)
+  const sortable = Object.entries(users).sort(([, a], [, b]) => b - a)
   const rankNumber = sortable.findIndex(u => u[0] === member.id && u[1] === xp) + 1
-  const attachment = new MessageAttachment(await genCard(rankNumber, xpLevel, color !== 'default' && color ? color : member.displayHexColor !== '#000000' ? member.displayHexColor : '#0099ff' , xpModulo, member, member.user.presence.status), 'progressbar.png')
+  const attachment = new MessageAttachment(await genCard(
+    rankNumber,
+    xpLevel,
+    color !== 'default' && color ? color : member.displayHexColor !== '#000000' ? member.displayHexColor : '#0099ff' ,
+    xpModulo,
+    member,
+    member.user.presence.status
+    ), 'progressbar.png')
 
   message.channel.send(attachment)
 }
@@ -57,14 +64,15 @@ async function genCard(rankNumber: number, xplevel: number, progressColor: strin
   ctx.font = member.user.tag.length < 12 ? 'bold 70px Noto Sans JP' : 'bold 50px Noto Sans JP'
   ctx.fillStyle = '#FFFFFF'
   ctx.fillText(`${member.user.tag}`, pfpMargin + 80, canvas.height / 2.5)
-  ctx.font = '68px Noto Sans JP'
-  ctx.fillText(`LVL: ${xplevel + 1} • XP: ${precisePercentage} / 1000 • RANK: ${rankNumber}`, pfpMargin + 80, canvas.height / 2.5 + 70)
+  const stats = `LVL: ${xplevel + 1} • XP: ${precisePercentage} / 1000 • RANK: ${rankNumber}`
+  ctx.font = stats.length < 36 ? '68px Noto Sans JP' : '60px Noto Sans JP'
+  ctx.fillText(stats, pfpMargin + 80, canvas.height / 2.5 + 70)
 
   
 
 	const avatar = await genProfilePic(size, member)
-	ctx.drawImage(avatar, 80, 70, 256, 256);
-  drawStatus(ctx, statusColors[status] ,size)
+	ctx.drawImage(avatar, 80, 70, 256, 256)
+  drawStatus(ctx, statusColors[status], size)
 
 
   return canvas.toBuffer()
@@ -79,10 +87,10 @@ async function progressBar(canvas: Canvas,ctx: CanvasRenderingContext2D, size: n
   ctx.lineWidth = 70
   ctx.lineCap = 'round'
   
-  ctx.beginPath();
-  ctx.moveTo(pfpSize - pfpSizeMargin, verticalDistance);
-  ctx.lineTo((pfpSize - pfpSizeMargin) + (size * 1.25), verticalDistance);
-  ctx.stroke();
+  ctx.beginPath()
+  ctx.moveTo(pfpSize - pfpSizeMargin, verticalDistance)
+  ctx.lineTo((pfpSize - pfpSizeMargin) + (size * 1.25), verticalDistance)
+  ctx.stroke()
 }
 
 async function drawStatus(ctx: CanvasRenderingContext2D, color: string, pfpSize: number) {
@@ -103,12 +111,12 @@ async function genProfilePic(size: number, member: GuildMember) {
   const canvas = new Canvas(size, size)
   const ctx = canvas.getContext('2d')
 
-  ctx.beginPath();
-	ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2, true);
-	ctx.closePath();
-	ctx.clip();
+  ctx.beginPath()
+	ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2, true)
+	ctx.closePath()
+	ctx.clip()
   
-	const avatar = await loadImage(member.user.displayAvatarURL({ format: 'jpg' }));
+	const avatar = await loadImage(member.user.displayAvatarURL({ format: 'jpg' }))
 	
   ctx.drawImage(avatar, 0, 0, size, size)
 

@@ -22,7 +22,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   if (!guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
 
   if (!multi.match(numberRegex)) return message.channel.send(errorMessage('Invalid number'))
-  if (parseFloat(multi) > 3) return message.channel.send(errorMessage('Multi is too high, the max multi is 3'))
+  if (parseFloat(multi) > 8) return message.channel.send(errorMessage('Multi is too high, the max multi is 8'))
   guild.setGuildMulti(parseFloat(multi))
 
   message.channel.send(simpleEmbed('blue', 'Set Multiplier', `Set multiplier to \`${multi}\``))

@@ -1,4 +1,6 @@
+import { GuildMember, Message } from 'discord.js';
 import db from 'quick.db';
+import { simpleEmbed } from './lib';
 
 export const xp = 20
 export const xpPerLevel = 1000
@@ -23,8 +25,12 @@ export class Leveling {
   }
   
   public add() {
+    db.add(this.query, this.xpFormula())
+  }
+
+  public xpFormula() {
     let multi = this.getGuildMulti()
-    db.add(this.query,  xp * multi)
+    return xp * multi
   }
 
   public setColor(color: string) {
@@ -65,7 +71,7 @@ export class Leveling {
 
 
 export function setCoolDown(userID: string, guildID: string) {
-  db.set(`lvlcd${guildID}.${userID}`, Date.now() + 30000)
+  db.set(`lvlcd${guildID}.${userID}`, Date.now() + 3000)
 }
 
 export function checkCoolDown(userID: string, guildID: string) {
@@ -77,16 +83,22 @@ export function checkCoolDown(userID: string, guildID: string) {
 }
 
 
-export function lvlSetup(userID: string, guildID: string) {
-  const lvl = new Leveling(userID, guildID)
+export function lvlSetup(msg: Message, user: GuildMember, guildID: string) {
+  const lvl = new Leveling(user.id, guildID)
 
   if (!lvl.getLevelingStatus()) return
 
-  if (!checkCoolDown(userID, guildID)) {
+  if (!checkCoolDown(user.id, guildID)) {
+    let currentLevel = Math.floor(lvl.get() / 1000)
+    let nextLevel = Math.floor((lvl.get() + lvl.xpFormula()) / 1000)
+
+    if (nextLevel > currentLevel) {
+      msg.channel.send(simpleEmbed(user.displayHexColor && user.displayHexColor !== '#000000' ? user.displayHexColor : 'blue' , '', `<@${user.id}> has reached level **${nextLevel + 1}**!`))
+    }
 
     lvl.add()
 
-    setCoolDown(userID, guildID)
+    setCoolDown(user.id, guildID)
   }
 }
 

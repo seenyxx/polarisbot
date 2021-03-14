@@ -59,8 +59,8 @@ client.on('message', message => {
   if (message.author.bot) return
   
   // Leveling
-  if (message.guild && message.content.length > 2)
-    lvlSetup(message.author.id, message.guild.id)
+  if (message.guild && message.content.length > 2 && message.member)
+    lvlSetup(message, message.member, message.guild.id)
 
   // Get rid of gifs from /tenor or /giphy
   noGif(message)
