@@ -18,12 +18,12 @@ export function run(client: Client, message: Message, args: Array<string>) {
   const users: Record<string, number> = guild.getGuild()
 
   if (users) {
-    const sortable = Object.fromEntries(
-      Object.entries(users).sort(([, a], [, b]) => b - a).slice(0, 10)
-    )
+    
+    const sortable = Object.entries(users).sort(([, a], [, b]) => b - a).slice(0, 15)
     const embed = simpleEmbed('gold', `${message.guild.name} Leaderboard`, '')
     let text = ''
-    Object.entries(sortable).forEach((user, index) => {
+
+    sortable.forEach((user, index) => {
       let badge: string | undefined
       switch(index) {
         case 0:

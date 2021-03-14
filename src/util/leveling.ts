@@ -36,7 +36,7 @@ export class Leveling {
     return db.get(`colors.${this.userID}`) ? db.get(`colors.${this.userID}`) : 'default'
   }
 
-  public getGuild() {
+  public getGuild(): Record<string, number> {
     return db.get(`lvl${this.guildID}`)
   }
 

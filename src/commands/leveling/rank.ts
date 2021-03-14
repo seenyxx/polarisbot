@@ -29,13 +29,15 @@ export async function run(client: Client, message: Message, args: Array<string>)
   const xpModulo = xp % 1000
   const xpLevel = Math.floor(xp / 1000)
   const color = userEXP.getColor()
-  
-  const attachment = new MessageAttachment(await genCard(xpLevel, color !== 'default' && color ? color : member.displayHexColor !== '#000000' ? member.displayHexColor : '#0099ff' , xpModulo, member, member.user.presence.status), 'progressbar.png')
+  const users = userEXP.getGuild()
+  const sortable = Object.entries(users).sort(([, a], [, b]) => b - a).slice(0, 15)
+  const rankNumber = sortable.findIndex(u => u[0] === member.id && u[1] === xp) + 1
+  const attachment = new MessageAttachment(await genCard(rankNumber, xpLevel, color !== 'default' && color ? color : member.displayHexColor !== '#000000' ? member.displayHexColor : '#0099ff' , xpModulo, member, member.user.presence.status), 'progressbar.png')
 
   message.channel.send(attachment)
 }
 
-async function genCard(xplevel: number, progressColor: string, precisePercentage: number, member: GuildMember, status: PresenceStatus) {
+async function genCard(rankNumber: number, xplevel: number, progressColor: string, precisePercentage: number, member: GuildMember, status: PresenceStatus) {
   const canvas = new Canvas(1500, 500)
   const ctx = canvas.getContext('2d')
   const size = 256
@@ -55,8 +57,8 @@ async function genCard(xplevel: number, progressColor: string, precisePercentage
   ctx.font = member.user.tag.length < 12 ? 'bold 70px Noto Sans JP' : 'bold 50px Noto Sans JP'
   ctx.fillStyle = '#FFFFFF'
   ctx.fillText(`${member.user.tag}`, pfpMargin + 80, canvas.height / 2.5)
-  ctx.font = '70px Noto Sans JP'
-  ctx.fillText(`LVL: ${xplevel + 1} XP: ${precisePercentage} / 1000`, pfpMargin + 80, canvas.height / 2.5 + 70)
+  ctx.font = '68px Noto Sans JP'
+  ctx.fillText(`LVL: ${xplevel + 1} • XP: ${precisePercentage} / 1000 • RANK: ${rankNumber}`, pfpMargin + 80, canvas.height / 2.5 + 70)
 
   
 
