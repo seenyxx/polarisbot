@@ -1,4 +1,5 @@
 {
   "prefix": "i!",
-  "token": "TOKEN_HERE"
+  "token": "TOKEN_HERE",
+  "owner": "OWNER_ID_HERE"
 }
