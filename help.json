@@ -13,7 +13,7 @@
     {
       "name": "Misc ✨",
       "menu": "misc",
-      "cmds": ["help", "invite", "ping", "server-count", "uptime"]
+      "cmds": ["help", "invite", "ping", "server-count", "uptime", "metrics", "shard-count"]
     },
     {
       "name": "Config ⚙",
@@ -170,6 +170,14 @@
       "usage": "get-multi",
       "desc": "Gets the current XP multiplier for the server",
       "aliases": ["getmulti", "get-multiplier"]
+    },
+    "metrics": {
+      "usage": "metrics",
+      "desc": "Gets the system usage of the server that the bot is running on"
+    },
+    "shard-count": {
+      "usage": "shard-count",
+      "desc": "Gets the number of shards the bot has"
     }
   }
 }

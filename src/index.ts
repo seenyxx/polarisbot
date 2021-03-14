@@ -8,7 +8,7 @@ function parseConfiguration() : Config {
 }
 const config = parseConfiguration()
 const manager = new ShardingManager(`${__dirname}/bot.js`, {
-  token: config.token
+  token: config.token,
 })
 manager.on('shardCreate', s => console.log(`Launched shard ${s.id}`))
 manager.spawn()
