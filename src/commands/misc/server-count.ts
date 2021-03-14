@@ -5,7 +5,9 @@ import { BotCache } from '../../util/cache';
 let coolDown = 3
 let commandName = 'sc'
 export async function run(client: Client, message: Message, args: Array<string>) {
-  
   if (coolDownSetup(message, commandName, coolDown)) return
-  message.channel.send(simpleEmbed('blue', 'Server count', `👑 Currently serving ${client.guilds.cache.size} servers`))
+
+  const count = (await client.shard?.fetchClientValues('guilds.cache.size'))?.reduce((acc, guild) => acc + guild, 0)
+  
+  message.channel.send(simpleEmbed('blue', 'Server count', `👑 Currently serving ${count} servers`))
 }
