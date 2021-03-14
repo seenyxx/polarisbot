@@ -71,7 +71,7 @@ export class Leveling {
 
 
 export function setCoolDown(userID: string, guildID: string) {
-  db.set(`lvlcd${guildID}.${userID}`, Date.now() + 3000)
+  db.set(`lvlcd${guildID}.${userID}`, Date.now() + 45000)
 }
 
 export function checkCoolDown(userID: string, guildID: string) {
