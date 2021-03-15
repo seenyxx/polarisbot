@@ -1,10 +1,11 @@
-import { ColorResolvable, Guild, Message, MessageEmbed, Role, TextChannel, User, VoiceState } from "discord.js"
-import { get, request } from "http"
-import { Config, presetColor, voiceCount } from "../types"
-import db from 'quick.db'
-import { BotCache } from "./cache";
-import { parseDefaultInterpolator } from "./msgInterpolation";
-import { createWriteStream, unlink, existsSync, mkdirSync } from "fs";
+import { ColorResolvable, Guild, Message, MessageEmbed, Role } from 'discord.js';
+import { createWriteStream, existsSync, mkdirSync, unlink } from 'fs';
+import { get } from 'http';
+import db from 'quick.db';
+
+import { presetColor } from '../types';
+import { BotCache } from './cache';
+import { parseDefaultInterpolator } from './msgInterpolation';
 
 
 
@@ -50,14 +51,14 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
   mentionMember.send(`You were ${mode == 'BAN' ? 'banned' : 'kicked'} from **${message.guild?.name}**\nReason: \`${punishReason}\``).then(() => {
 
     if (mode == 'KICK') {
-      mentionMember?.kick(punishReason)
+      mentionMember?.kick(`Issued by ${message.author.tag} | ${message.author.id}\n ${punishReason}`)
       .then(() => {
         message.channel?.send(simpleEmbed('green', 'Kick', `**${mentionMember?.user.tag}** was kicked by ${message.member?.user.tag}\nReason: \`${punishReason}\``))
       }).catch(e => message.channel.send(errorMessage(e)))
     }
     else {
       mentionMember?.ban({
-        reason: punishReason
+        reason: `Issued by ${message.author.tag} | ${message.author.id}\n ${punishReason}`
       })
       .then(() => {
         message.channel?.send(simpleEmbed('green', 'Ban', `**${mentionMember?.user.tag}** was banned by ${message.member?.user.tag}\nReason: \`${punishReason}\``))
@@ -205,12 +206,19 @@ export async function unverifiedRole(guild: Guild) {
 }
 
 export function removeAllPermissions(guild: Guild, role: Role) {
+
   guild.channels.cache.forEach(c => {
+    const everyone = c.guild.roles.everyone
+    const perms = c.permissionsFor(everyone)?.serialize()
+
+
     c.createOverwrite(role, {
       SEND_MESSAGES: false,
       MANAGE_CHANNELS: false,
       MANAGE_MESSAGES: false,
-      VIEW_CHANNEL: true
+      VIEW_CHANNEL: perms?.VIEW_CHANNEL ? true : false,
+      ADD_REACTIONS: false,
+      CREATE_INSTANT_INVITE: false,
     })
   })
 }
