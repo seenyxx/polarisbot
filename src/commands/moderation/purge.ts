@@ -71,6 +71,7 @@ export async function run(client: Client, message: Message, args: string[] ) {
       m.delete({
         timeout: 3000
       })
+      message.delete()
     })
 
     return
@@ -124,6 +125,7 @@ export async function run(client: Client, message: Message, args: string[] ) {
       m.delete({
         timeout: 3000
       })
+      message.delete()
     })
 
     return
@@ -142,6 +144,7 @@ export async function run(client: Client, message: Message, args: string[] ) {
       m.delete({
         timeout: 3000
       })
+      message.delete()
     })
   }
 }
