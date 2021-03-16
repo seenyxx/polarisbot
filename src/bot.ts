@@ -11,7 +11,11 @@ import { noGif, dlE } from './util/lib';
 import { handleDeletion, reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager } from './util/rrManager';
 
 
-process.on('unhandledRejection', console.error)
+process.on('unhandledRejection', (e) => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.error(e)
+  }
+})
 function parseConfiguration() : Config {
   let unparsedJSON = readFileSync(process.env.NODE_ENV === 'production' ? `${__dirname}/../config.json`: `${__dirname}/../config-dev.json`).toString()
   return JSON.parse(unparsedJSON)

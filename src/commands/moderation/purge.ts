@@ -17,7 +17,7 @@ export async function run(client: Client, message: Message, args: string[] ) {
 
   if (!arg1.match(/[0-9]+/)) return
   
-  if (arg2.match(/contains/i)) {
+  if (arg2 && arg2.match(/contains/i)) {
     if (!args) return
     
     const search = args.join(' ').trim()
@@ -76,7 +76,27 @@ export async function run(client: Client, message: Message, args: string[] ) {
 
     return
   }
+
   const user = message.mentions.users.first()
+  
+  if (arg1.match(/[0-9]+/) && !user) {
+    const deleteAmount = parseInt(arg1)
+
+    if (deleteAmount > 1000) return message.channel.send(errorMessage('You cannot delete more than 1000 messages or less than 2 messages'))
+
+    const deleted = await channel.bulkDelete(deleteAmount)
+
+    
+
+    channel.send(simpleEmbed('green', 'Purge', `Issued by: <@${message.author.id}>\nRemoved ${deleted.size} message(s)`)).then(m => {
+      m.delete({
+        timeout: 3000
+      })
+      message.delete()
+    })
+  }
+
+  
   if (user) {
     const deleteAmount = parseInt(arg1)
     
@@ -129,23 +149,6 @@ export async function run(client: Client, message: Message, args: string[] ) {
     })
 
     return
-  }
-
-  if (arg1.match(/[0-9]+/)) {
-    const deleteAmount = parseInt(arg1)
-
-    if (deleteAmount > 1000) return message.channel.send(errorMessage('You cannot delete more than 1000 messages or less than 2 messages'))
-
-    const deleted = await channel.bulkDelete(deleteAmount)
-
-    
-
-    channel.send(simpleEmbed('green', 'Purge', `Issued by: <@${message.author.id}>\nRemoved ${deleted.size} message(s)`)).then(m => {
-      m.delete({
-        timeout: 3000
-      })
-      message.delete()
-    })
   }
 }
 
