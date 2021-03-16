@@ -3,7 +3,7 @@
     {
       "name": "Moderation 🛠",
       "menu": "mod",
-      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role"]
+      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role", "purge"]
     },
     {
       "name": "Text 💬",
@@ -178,6 +178,9 @@
     "shard-count": {
       "usage": "shard-count",
       "desc": "Gets the number of shards the bot has"
+    },
+    "purge": {
+      "usage": "purge <FetchCount> \"contains\" <SearchString> <@User?>"
     }
   }
 }
