@@ -10,7 +10,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   if (coolDownSetup(message, commandName, coolDown)) return
   if (!args[0]) return
 
-  let text = args[0]
+  let text = args.join(' ')
   const canvas = new Canvas(1024, 400)
   const ctx = canvas.getContext('2d')
 
