@@ -2,7 +2,7 @@ import { Client, Message } from "discord.js";
 import figlet from "figlet";
 import { coolDownSetup, simpleEmbed } from "../../util/lib";
 
-let coolDown = 25
+let coolDown = 5
 let commandName = 'ascii'
 
 export function run(client: Client, message: Message, args: Array<string>) {

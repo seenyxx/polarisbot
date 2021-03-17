@@ -2,8 +2,8 @@ import { Client, Message } from "discord.js";
 import figlet from "figlet";
 import { coolDownSetup, simpleEmbed } from "../../util/lib";
 
-let coolDown = 25
-let commandName = 'ascii'
+let coolDown = 5
+let commandName = 'asciig'
 
 export function run(client: Client, message: Message, args: Array<string>) {
   if (coolDownSetup(message, commandName, coolDown)) return
