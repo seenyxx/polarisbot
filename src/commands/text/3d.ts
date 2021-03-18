@@ -3,7 +3,7 @@ import figlet from "figlet";
 import { coolDownSetup, simpleEmbed, errorMessage } from '../../util/lib';
 import { Canvas } from 'canvas';
 
-let coolDown = 8
+let coolDown = 5
 let commandName = '3dt'
 
 export function run(client: Client, message: Message, args: Array<string>) {

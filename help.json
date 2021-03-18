@@ -180,7 +180,12 @@
       "desc": "Gets the number of shards the bot has"
     },
     "purge": {
-      "usage": "purge <FetchCount> \"contains\" <SearchString> <@User?>"
+      "usage": "purge <FetchCount> \"contains\" <SearchString> <@User?>",
+      "desc": "Deletes n number of messages"
+    },
+    "announce": {
+      "usage": "announce",
+      "desc": "Global announcement setup"
     }
   }
 }
