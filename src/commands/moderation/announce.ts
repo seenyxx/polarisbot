@@ -27,18 +27,18 @@ export function run(client: Client, message: Message, args: Array<string>) {
     if (messageOpts.length !== 2) return message.channel.send(errorMessage('Invalid format'))
     
     const channels = message.guild.channels.cache.filter(c => c.isText()) as Collection<string, TextChannel>
-    const pingRole = message.guild.roles.cache.find(r => r.name.toLowerCase().includes('announcement'))
+    const pingRole = message.guild.roles.cache.find(r => r.name.toLowerCase().includes('announce'))
 
     let sent = 0
 
     channels.forEach(c => {
       if (!message.guild) return
       if (sent < 1 && c.permissionsFor(message.guild.roles.everyone)?.has('READ_MESSAGE_HISTORY') && c.name.toLowerCase().includes('announce')) {
-        c.send(`${pingRole ? `<@${pingRole.id}>` : '@everyone'} New Global Announcement 📢`)
+        c.send(`${pingRole ? `<@&${pingRole.id}>` : '@everyone'} New Global Announcement 📢`)
         sent++
       }
       
-      const embed = simpleEmbed('blue', `Announcement: \`${messageOpts[0].trim()}\``, messageOpts[1].trim())
+      const embed = simpleEmbed('blue', messageOpts[0].trim(), messageOpts[1].trim())
 
       embed.setTimestamp(Date.now())
       embed.setAuthor(message.author.tag, message.author.displayAvatarURL())

@@ -1,4 +1,4 @@
-import { ColorResolvable, Guild, Message, MessageEmbed, Role } from 'discord.js';
+import { ColorResolvable, Guild, GuildMemberRoleManager, Message, MessageEmbed, Role } from 'discord.js';
 import { createWriteStream, existsSync, mkdirSync, unlink } from 'fs';
 import { get } from 'http';
 import db from 'quick.db';
@@ -10,7 +10,7 @@ import { parseDefaultInterpolator } from './msgInterpolation';
 
 
 // Command for both bans and kicks
-export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<string>) {
+export function hardPunish(mode: 'BAN' | 'KICK' | 'SOFTBAN', message: Message, args: Array<string>) {
   args.shift()
 
   if(!message.member?.hasPermission('KICK_MEMBERS') && mode == 'KICK') {
@@ -18,7 +18,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
     return
   }
 
-  if(!message.member?.hasPermission('BAN_MEMBERS') && mode == 'BAN') {
+  if(!message.member?.hasPermission('BAN_MEMBERS') && mode == 'BAN' ||!message.member?.hasPermission('BAN_MEMBERS') && mode == 'SOFTBAN') {
     message.channel.send(errorMessage('Insufficient Permissions'))
     return
   }
@@ -26,7 +26,7 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
   let mentionMember = message.mentions.members?.first()
 
   if(!mentionMember) {
-    return message.channel.send(errorMessage(`Mention member which you want to ${mode == 'BAN' ? 'ban' : 'kick'}`))
+    return message.channel.send(errorMessage(`Mention member which you want to ${mode == 'BAN' ? 'ban' : mode == 'KICK' ? 'kick': 'softban'}`))
   }
 
 
@@ -37,18 +37,18 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
 
 
   if(mentionHighestRole >= authorHighestRole) {
-    message.channel.send(errorMessage(`You can\'t ${mode == 'BAN' ? 'ban' : 'kick'} members with equal or higher position`))
+    message.channel.send(errorMessage(`You can\'t ${mode == 'BAN' ? 'ban' : mode == 'KICK' ? 'kick': 'softban'} members with equal or higher position`))
     return
   }
 
   if(!mentionMember.manageable) {
-    message.channel.send(errorMessage(`I do not have the required permissions ${mode == 'BAN' ? 'ban' : 'kick'} this user`))
+    message.channel.send(errorMessage(`I do not have the required permissions ${mode == 'BAN' ? 'ban' : mode == 'KICK' ? 'kick': 'softban'} this user`))
     return
   }
 
   let punishReason = args[0] ? args.join(' ') : 'No reason provided'
 
-  mentionMember.send(`You were ${mode == 'BAN' ? 'banned' : 'kicked'} from **${message.guild?.name}**\nReason: \`${punishReason}\``).then(() => {
+  mentionMember.send(`You were ${mode == 'BAN' ? 'banned' : mode == 'KICK' ? 'kicked': 'softbanned'} from **${message.guild?.name}**\nReason: \`${punishReason}\``).then(() => {
 
     if (mode == 'KICK') {
       mentionMember?.kick(`Issued by ${message.author.tag} | ${message.author.id}\n ${punishReason}`)
@@ -56,15 +56,28 @@ export function hardPunish(mode: 'BAN' | 'KICK', message: Message, args: Array<s
         message.channel?.send(simpleEmbed('green', 'Kick', `**${mentionMember?.user.tag}** was kicked by ${message.member?.user.tag}\nReason: \`${punishReason}\``))
       }).catch(e => message.channel.send(errorMessage(e)))
     }
-    else {
+    else if (mode == 'BAN') {
       mentionMember?.ban({
-        reason: `Issued by ${message.author.tag} | ${message.author.id}\n ${punishReason}`
+        reason: `Issued by ${message.author.tag} | ${message.author.id}\n ${punishReason}`,
       })
       .then(() => {
         message.channel?.send(simpleEmbed('green', 'Ban', `**${mentionMember?.user.tag}** was banned by ${message.member?.user.tag}\nReason: \`${punishReason}\``))
       }).catch(e => message.channel.send(errorMessage(e)))
     }
+    else if (mode == 'SOFTBAN') {
+      mentionMember?.ban({
+        reason: `Issued by ${message.author.tag} | ${message.author.id}\n ${punishReason}`,
+        days: 7
+      })
+      .then(async mem => {
+        if (!message.guild) return
+        message.channel?.send(simpleEmbed('green', 'Softban', `**${mentionMember?.user.tag}** was softbanned by ${message.member?.user.tag}\nReason: \`${punishReason}\``))
+
+        message.guild.members.unban(mem, 'Softban')
+      }).catch(e => message.channel.send(errorMessage(e)))
+    }
   })
+  
 }
 
 // Text Filters

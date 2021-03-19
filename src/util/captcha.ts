@@ -4,7 +4,7 @@ import { create } from 'svg-captcha';
 import { svg2png } from 'svg-png-converter';
 import { simpleEmbed, unverifiedRole } from './lib';
 
-export async function runCaptcha(member: GuildMember) {
+export async function runCaptcha(member: GuildMember, throwOnFail?: boolean) {
     // Server Captcha
     if (db.get(`captcha.${member.guild.id}`)) {
       let unverifiedMemberRole = await unverifiedRole(member.guild)
@@ -56,6 +56,9 @@ export async function runCaptcha(member: GuildMember) {
           await m.channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
           if (member.kickable)
             member.kick('Failed captcha')
+          if (throwOnFail) {
+            throw new Error('The user failed the verification process')
+          }
         }
         collector.stop()
       })
@@ -67,6 +70,9 @@ export async function runCaptcha(member: GuildMember) {
           await channel.send(simpleEmbed('red', 'Failed Verification ❌', 'You will now be kicked from the server'))
           if (member.kickable)
             member.kick('Failed captcha')
+          if (throwOnFail) {
+            throw new Error('The user failed the verification process')
+          }
         }
       })
     }

@@ -27,8 +27,10 @@ export class PersistentCacheConnection {
   remove(name: string) {
     db.delete(this.buildQuery(name))
   }
-  
-  private buildQuery(name: string) {
-    return `${this.namespace}.${name}`
+  removeAll() {
+    db.delete(this.buildQuery())
+  }
+  private buildQuery(name?: string) {
+    return `${this.namespace}${name ? `.${name}` : ''}`
   }
 }

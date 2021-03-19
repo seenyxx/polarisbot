@@ -3,7 +3,7 @@
     {
       "name": "Moderation 🛠",
       "menu": "mod",
-      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role", "purge"]
+      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role", "purge", "reverify", "announce", "softban", "lock-channels", "unlock-channels"]
     },
     {
       "name": "Text 💬",
@@ -186,6 +186,24 @@
     "announce": {
       "usage": "announce",
       "desc": "Global announcement setup"
+    },
+    "lock-channels": {
+      "usage": "lock-channels",
+      "desc": "Locks all the channels in the server",
+      "aliases": ["lock-c", "lgc"]
+    },
+    "unlock-channels": {
+      "usage": "unlock-channels",
+      "desc": "Unlocks all the channels in the server",
+      "aliases": ["unlock-c", "ulgc"]
+    },
+    "reverify": {
+      "usage": "reverify <@User>",
+      "desc": "Runs the verification process again for the member"
+    },
+    "softban": {
+      "usage": "softban <@User>",
+      "desc": "Bans a member then immediately unbans them. (Basically a kick but deletes the messages)"
     }
   }
 }
