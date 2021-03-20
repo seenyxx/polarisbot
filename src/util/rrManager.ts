@@ -15,7 +15,7 @@ export class ReactionRoleRoleManager {
   constructor() {}
 
   public add(id: string, rrEl: ReactionRoleElement) {
-    db.push(`rr_roles)${id}`, rrEl)
+    db.push(`rr_roles_${id}`, rrEl)
   }
 
   public remove(id: string) {
