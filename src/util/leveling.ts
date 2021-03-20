@@ -8,6 +8,7 @@ export const xpPerLevel = 1000
 
 const db = new Database(require('../../config.json').db);
 
+db.on('ready', () => console.log('MongoDB database connected'))
 export class Leveling {
   readonly userID
   readonly guildID
