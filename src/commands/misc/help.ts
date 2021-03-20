@@ -12,8 +12,9 @@ export function run(client: Client, message: Message, args: Array<string>) {
   if (coolDownSetup(message, commandName, coolDown)) return
 
   let help = new BotCache().get('helpConfig') as Help
-  const helpEmbed = simpleEmbed('blue', '**Help**', '')
+  
   if (!args[0]) {
+    const helpEmbed = simpleEmbed('blue', 'Help', '')
     help.categories.forEach((cat: { name: string, menu: string}) => {
       helpEmbed.addField(cat.name, `\`${getPrefix(message.guild?.id)}help ${cat.menu}\``, true)
     })
@@ -46,7 +47,4 @@ export function run(client: Client, message: Message, args: Array<string>) {
       return
     }
   }
-
-
-  message.channel.send(helpEmbed).catch(console.error)
 }

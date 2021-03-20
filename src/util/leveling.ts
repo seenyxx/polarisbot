@@ -2,13 +2,14 @@ import { GuildMember, Message } from 'discord.js';
 import { Database } from 'quickmongo';
 import { simpleEmbed } from './lib';
 import { BotCache } from './cache';
+import db from 'quick.db'
 
 export const xp = 20
 export const xpPerLevel = 1000
 
-const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db);
+const mongodb = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db);
 
-db.on('ready', () => console.log('MongoDB database connected'))
+mongodb.on('ready', () => console.log('MongoDB database connected'))
 export class Leveling {
   readonly userID
   readonly guildID
@@ -20,15 +21,15 @@ export class Leveling {
   }
 
   public async get(): Promise<number> {
-    return await db.get(this.query) ? await db.get(this.query) : 0
+    return await mongodb.get(this.query) ? await mongodb.get(this.query) : 0
   }
 
   public set(val: number) {
-    db.set(this.query, val)
+    mongodb.set(this.query, val)
   } 
   
   public async add(user?: GuildMember) {
-    db.add(this.query, await this.xpFormula() * (user && user?.premiumSince ? 1.2 : 1))
+    mongodb.add(this.query, await this.xpFormula() * (user && user?.premiumSince ? 1.2 : 1))
   }
 
   public async xpFormula() {
@@ -37,39 +38,39 @@ export class Leveling {
   }
 
   public setColor(color: string) {
-    if (color === 'default') return db.delete(`colors.${this.userID}`)
-    db.set(`colors.${this.userID}`, color.toLowerCase())
+    if (color === 'default') return mongodb.delete(`colors.${this.userID}`)
+    mongodb.set(`colors.${this.userID}`, color.toLowerCase())
   }
 
   public async getColor(): Promise<string> {
-    return await db.get(`colors.${this.userID}`) ? await db.get(`colors.${this.userID}`) : 'default'
+    return await mongodb.get(`colors.${this.userID}`) ? await mongodb.get(`colors.${this.userID}`) : 'default'
   }
 
   public async getGuild(): Promise<Record<string, number>> {
     const emptyObj: Record<string, number> = {}
     emptyObj[this.userID] = 0
 
-    return await db.get(`lvl${this.guildID}`) ? await db.get(`lvl${this.guildID}`) : emptyObj
+    return await mongodb.get(`lvl${this.guildID}`) ? await mongodb.get(`lvl${this.guildID}`) : emptyObj
   }
 
   public setGuildMulti(multi: number) {
     if (multi === 1) {
-      db.delete(`lvlmulti.${this.guildID}`)
+      mongodb.delete(`lvlmulti.${this.guildID}`)
       return
     }
-    db.set(`lvlmulti.${this.guildID}`, multi)
+    mongodb.set(`lvlmulti.${this.guildID}`, multi)
   }
 
   public async getGuildMulti(): Promise<number> {
-    return await db.get(`lvlmulti.${this.guildID}`) ? await db.get(`lvlmulti.${this.guildID}`) : 1
+    return await mongodb.get(`lvlmulti.${this.guildID}`) ? await mongodb.get(`lvlmulti.${this.guildID}`) : 1
   }
 
   public setLevelingStatus(status: boolean) {
-    db.set(`lvlenabled.${this.guildID}`, status)
+    mongodb.set(`lvlenabled.${this.guildID}`, status)
   }
 
   public async getLevelingStatus(): Promise<boolean> {
-    return await db.get(`lvlenabled.${this.guildID}`) ? await db.get(`lvlenabled.${this.guildID}`) : false
+    return await mongodb.get(`lvlenabled.${this.guildID}`) ? await mongodb.get(`lvlenabled.${this.guildID}`) : false
   }
 }
 
@@ -81,7 +82,7 @@ export function setCoolDown(userID: string, guildID: string) {
 }
 
 export function checkCoolDown(userID: string, guildID: string) {
-  const cd = db.get(`lvlcd${guildID}.${userID}`) ? db.get(`lvlcd${guildID}.${userID}`) : 0
+  const cd = db.get(`lvlcd${guildID}.${userID}`) ? mongodb.get(`lvlcd${guildID}.${userID}`) : 0
   const now = Date.now()
 
   if (cd > now) return true
