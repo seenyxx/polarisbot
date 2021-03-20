@@ -15,19 +15,19 @@ export class ReactionRoleRoleManager {
   constructor() {}
 
   public add(id: string, rrEl: ReactionRoleElement) {
-    db.push(`rr.roles.${id}`, rrEl)
+    db.push(`rr_roles)${id}`, rrEl)
   }
 
   public remove(id: string) {
-    db.delete(`rr.roles.${id}`)
+    db.delete(`rr_roles_${id}`)
   }
 
   public async get(id: string): Promise<ReactionRoleElement[]> {
-    return await db.get(`rr.roles.${id}`)
+    return await db.get(`rr_roles_${id}`)
   }
 
   public async exist(id: string) {
-    return await db.get(`rr.roles.${id}`) ? true : false
+    return await db.get(`rr_roles_${id}`) ? true : false
   }
 }
 
