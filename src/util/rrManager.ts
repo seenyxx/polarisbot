@@ -45,7 +45,7 @@ export class ReactionRoleCounter {
   }
 
   public async getRRCount(guildID: string): Promise<number> {
-    return await db.get(`rr.counter.${guildID}`)
+    return await db.get(`rr.counter.${guildID}`) ? await db.get(`rr.counter.${guildID}`) : 0
   }
 
   public setRRCount(guildID: string, val: number) {
