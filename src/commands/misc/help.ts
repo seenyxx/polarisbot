@@ -5,7 +5,7 @@ import { Help } from "../../util/helpTypes";
 import { coolDownSetup, getPrefix, simpleEmbed } from '../../util/lib';
 
 
-let coolDown = 3
+let coolDown = 2
 let commandName = 'help'
 export function run(client: Client, message: Message, args: Array<string>) {
 
