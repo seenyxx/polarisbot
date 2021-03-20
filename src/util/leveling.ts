@@ -7,7 +7,7 @@ import db from 'quick.db'
 export const xp = 20
 export const xpPerLevel = 1000
 
-const mongodb = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db);
+const mongodb = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db).createModel('leveling');
 
 mongodb.on('ready', () => console.log('MongoDB database connected'))
 export class Leveling {
@@ -17,7 +17,7 @@ export class Leveling {
   constructor(userID: string, guildID: string) {
     this.userID = userID
     this.guildID = guildID
-    this.query = `lvl${this.guildID}.${userID}`
+    this.query = `${this.guildID}.${userID}`
   }
 
   public async get(): Promise<number> {
@@ -50,27 +50,27 @@ export class Leveling {
     const emptyObj: Record<string, number> = {}
     emptyObj[this.userID] = 0
 
-    return await mongodb.get(`lvl${this.guildID}`) ? await mongodb.get(`lvl${this.guildID}`) : emptyObj
+    return await mongodb.get(`${this.guildID}`) ? await mongodb.get(`${this.guildID}`) : emptyObj
   }
 
   public setGuildMulti(multi: number) {
     if (multi === 1) {
-      mongodb.delete(`lvlmulti.${this.guildID}`)
+      mongodb.delete(`multi.${this.guildID}`)
       return
     }
-    mongodb.set(`lvlmulti.${this.guildID}`, multi)
+    mongodb.set(`multi.${this.guildID}`, multi)
   }
 
   public async getGuildMulti(): Promise<number> {
-    return await mongodb.get(`lvlmulti.${this.guildID}`) ? await mongodb.get(`lvlmulti.${this.guildID}`) : 1
+    return await mongodb.get(`multi.${this.guildID}`) ? await mongodb.get(`multi.${this.guildID}`) : 1
   }
 
   public setLevelingStatus(status: boolean) {
-    mongodb.set(`lvlenabled.${this.guildID}`, status)
+    mongodb.set(`enabled.${this.guildID}`, status)
   }
 
   public async getLevelingStatus(): Promise<boolean> {
-    return await mongodb.get(`lvlenabled.${this.guildID}`) ? await mongodb.get(`lvlenabled.${this.guildID}`) : false
+    return await mongodb.get(`enabled.${this.guildID}`) ? await mongodb.get(`enabled.${this.guildID}`) : false
   }
 }
 
@@ -90,7 +90,7 @@ export function checkCoolDown(userID: string, guildID: string) {
 }
 
 
-export async function lvlSetup(msg: Message, user: GuildMember, guildID: string) {
+export async function Setup(msg: Message, user: GuildMember, guildID: string) {
   const lvl = new Leveling(user.id, guildID)
 
   if (!await lvl.getLevelingStatus()) return

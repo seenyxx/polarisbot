@@ -3,7 +3,7 @@ import { Database } from 'quickmongo';
 
 const maxRR = 100
 
-const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db);
+const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db).createModel('reactionrole');
 
 
 export interface ReactionRoleElement {
@@ -15,19 +15,19 @@ export class ReactionRoleRoleManager {
   constructor() {}
 
   public add(id: string, rrEl: ReactionRoleElement) {
-    db.push(`rr_roles_${id}`, rrEl)
+    db.push(`roles_${id}`, rrEl)
   }
 
   public remove(id: string) {
-    db.delete(`rr_roles_${id}`)
+    db.delete(`roles_${id}`)
   }
 
   public async get(id: string): Promise<ReactionRoleElement[]> {
-    return await db.get(`rr_roles_${id}`)
+    return await db.get(`roles_${id}`)
   }
 
   public async exist(id: string) {
-    return await db.get(`rr_roles_${id}`) ? true : false
+    return await db.get(`roles_${id}`) ? true : false
   }
 }
 
