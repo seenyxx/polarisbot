@@ -23,7 +23,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
   const userEXP = new Leveling(member.id, message.guild.id)
   
-  if (!userEXP.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
+  if (!await userEXP.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
 
   const xp = await userEXP.get()
   const xpModulo = xp % 1000

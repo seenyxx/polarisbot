@@ -10,7 +10,7 @@ export const aliases = ['multi', 'set-multiplier', 'setmulti']
 
 const numberRegex = /^\d*\.?\d*$/
 
-export function run(client: Client, message: Message, args: Array<string>) {
+export async function run(client: Client, message: Message, args: Array<string>) {
   if (!message.member?.hasPermission('MANAGE_GUILD')) return message.channel.send(errorMessage('Insufficient permissions'))
 
   if (coolDownSetup(message, commandName, coolDown)) return
@@ -19,7 +19,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   const multi = args[0].trim()
   const guild = new Leveling(message.member.id, message.guild.id)
 
-  if (!guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
+  if (!await guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
 
   if (!multi.match(numberRegex)) return message.channel.send(errorMessage('Invalid number'))
   if (parseFloat(multi) > 8) return message.channel.send(errorMessage('Multi is too high, the max multi is 8'))

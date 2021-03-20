@@ -16,7 +16,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
   const guild = new Leveling(message.member.id, message.guild.id)
   
-  if (!guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
+  if (!await guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
 
   const multi = await guild.getGuildMulti()
 
