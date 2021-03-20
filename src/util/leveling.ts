@@ -6,7 +6,7 @@ import { BotCache } from './cache';
 export const xp = 20
 export const xpPerLevel = 1000
 
-const db = new Database(new BotCache().get('config').db);
+const db = new Database(require('../../config.json').db);
 
 export class Leveling {
   readonly userID
@@ -24,7 +24,7 @@ export class Leveling {
 
   public set(val: number) {
     db.set(this.query, val)
-  }
+  } 
   
   public async add(user?: GuildMember) {
     db.add(this.query, await this.xpFormula() * (user && user?.premiumSince ? 1.2 : 1))
