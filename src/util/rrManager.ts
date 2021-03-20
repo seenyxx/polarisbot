@@ -36,29 +36,29 @@ export class ReactionRoleRoleManager {
 export class ReactionRoleCounter {
   constructor() {}
 
-  public async addRRCount(guildID: string) {
-    await db.add(`rr.counter.${guildID}`, 1)
+  public async addRRCount(guildID: string): Promise<number> {
+    return await this.getRRCount(guildID) ? await db.add(`rrcounter.${guildID}`, 1) : await db.set(`rrcounter.${guildID}`, 1)
   }
 
   public reduceRRCount(guildID: string) {
-    db.subtract(`rr.counter.${guildID}`, 1)
+    db.subtract(`rrcounter.${guildID}`, 1)
   }
 
   public async getRRCount(guildID: string): Promise<number> {
-    return await db.get(`rr.counter.${guildID}`) ? await db.get(`rr.counter.${guildID}`) : 0
+    return await db.get(`rrcounter.${guildID}`) ? await db.get(`rrcounter.${guildID}`) : 0
   }
 
   public setRRCount(guildID: string, val: number) {
-    db.set(`rr.counter.${guildID}`, val)
+    db.set(`rrcounter.${guildID}`, val)
   }
 
   public resetRRCount(guildID: string) {
-    db.set(`rr.counter.${guildID}`, 0)
+    db.set(`rrcounter.${guildID}`, 0)
   }
 
 
   public async RRStatus(guildID: string) {
-    let rrStatus = await db.get(`rr.counter.${guildID}`)
+    let rrStatus = await db.get(`rrcounter.${guildID}`)
 
     if (!rrStatus) return true
     if (rrStatus >= maxRR) return false
