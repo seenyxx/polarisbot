@@ -9,13 +9,13 @@ let commandName = 'lb'
 
 export const aliases = ['lb']
 
-export function run(client: Client, message: Message, args: Array<string>) {
+export async function run(client: Client, message: Message, args: Array<string>) {
   if (!message.guild || !message.member) return
   if (coolDownSetup(message, commandName, coolDown)) return
   
   const guild = new Leveling(message.member.id, message.guild.id)
   if (!guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
-  const users: Record<string, number> = guild.getGuild()
+  const users: Record<string, number> = await guild.getGuild()
 
   if (users) {
     

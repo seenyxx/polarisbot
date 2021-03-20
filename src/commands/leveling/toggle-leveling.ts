@@ -9,7 +9,7 @@ let commandName = 'togglelvl'
 export const aliases = ['toggle-level', 'toggle-levels', 'toggle-lvl', 'toggle-lvls', 'toggleleveling', 'togglelevels', 'togglelevel']
 
 
-export function run(client: Client, message: Message, args: Array<string>) {
+export async function run(client: Client, message: Message, args: Array<string>) {
   if (!message.member?.hasPermission('MANAGE_GUILD')) return message.channel.send(errorMessage('Insufficient permissions'))
 
 
@@ -18,7 +18,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   
   const guild = new Leveling(message.member.id, message.guild.id)
 
-  if (guild.getLevelingStatus()) {
+  if (await guild.getLevelingStatus()) {
     guild.setLevelingStatus(false)
     message.channel.send(simpleEmbed('blue','Leveling 🏆', 'Disabled ❌'))
   }

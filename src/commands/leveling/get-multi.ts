@@ -10,7 +10,7 @@ export const aliases = ['getmulti', 'get-multiplier']
 
 const numberRegex = /^\d*\.?\d*$/
 
-export function run(client: Client, message: Message, args: Array<string>) {
+export async function run(client: Client, message: Message, args: Array<string>) {
   if (coolDownSetup(message, commandName, coolDown)) return
   if (!message.guild || !message.member) return
 
@@ -18,7 +18,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
   
   if (!guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
 
-  const multi = guild.getGuildMulti()
+  const multi = await guild.getGuildMulti()
 
   message.channel.send(simpleEmbed('blue', 'Get Multiplier', `The current multiplier is \`${multi}\``))
 }

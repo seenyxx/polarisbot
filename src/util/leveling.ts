@@ -1,10 +1,12 @@
 import { GuildMember, Message } from 'discord.js';
-import db from 'quick.db';
+import { Database } from 'quickmongo';
 import { simpleEmbed } from './lib';
+import { BotCache } from './cache';
 
 export const xp = 20
 export const xpPerLevel = 1000
 
+const db = new Database(new BotCache().get('config').db);
 
 export class Leveling {
   readonly userID
@@ -16,20 +18,20 @@ export class Leveling {
     this.query = `lvl${this.guildID}.${userID}`
   }
 
-  public get(): number {
-    return db.get(this.query) ? db.get(this.query) : 0
+  public async get(): Promise<number> {
+    return await db.get(this.query) ? await db.get(this.query) : 0
   }
 
   public set(val: number) {
     db.set(this.query, val)
   }
   
-  public add(user?: GuildMember) {
-    db.add(this.query, this.xpFormula() * (user && user?.premiumSince ? 1.2 : 1))
+  public async add(user?: GuildMember) {
+    db.add(this.query, await this.xpFormula() * (user && user?.premiumSince ? 1.2 : 1))
   }
 
-  public xpFormula() {
-    let multi = this.getGuildMulti()
+  public async xpFormula() {
+    let multi = await this.getGuildMulti()
     return xp * multi
   }
 
@@ -38,12 +40,12 @@ export class Leveling {
     db.set(`colors.${this.userID}`, color.toLowerCase())
   }
 
-  public getColor() {
-    return db.get(`colors.${this.userID}`) ? db.get(`colors.${this.userID}`) : 'default'
+  public async getColor(): Promise<string> {
+    return await db.get(`colors.${this.userID}`) ? await db.get(`colors.${this.userID}`) : 'default'
   }
 
-  public getGuild(): Record<string, number> {
-    return db.get(`lvl${this.guildID}`)
+  public async getGuild(): Promise<Record<string, number>> {
+    return await db.get(`lvl${this.guildID}`)
   }
 
   public setGuildMulti(multi: number) {
@@ -54,16 +56,16 @@ export class Leveling {
     db.set(`lvlmulti.${this.guildID}`, multi)
   }
 
-  public getGuildMulti() {
-    return db.get(`lvlmulti.${this.guildID}`) ? db.get(`lvlmulti.${this.guildID}`) : 1
+  public async getGuildMulti(): Promise<number> {
+    return await db.get(`lvlmulti.${this.guildID}`) ? await db.get(`lvlmulti.${this.guildID}`) : 1
   }
 
   public setLevelingStatus(status: boolean) {
     db.set(`lvlenabled.${this.guildID}`, status)
   }
 
-  public getLevelingStatus() {
-    return db.get(`lvlenabled.${this.guildID}`) ? db.get(`lvlenabled.${this.guildID}`) : false
+  public async getLevelingStatus(): Promise<boolean> {
+    return await db.get(`lvlenabled.${this.guildID}`) ? await db.get(`lvlenabled.${this.guildID}`) : false
   }
 }
 
@@ -83,14 +85,14 @@ export function checkCoolDown(userID: string, guildID: string) {
 }
 
 
-export function lvlSetup(msg: Message, user: GuildMember, guildID: string) {
+export async function lvlSetup(msg: Message, user: GuildMember, guildID: string) {
   const lvl = new Leveling(user.id, guildID)
 
   if (!lvl.getLevelingStatus()) return
 
   if (!checkCoolDown(user.id, guildID)) {
-    let currentLevel = Math.floor(lvl.get() / 1000)
-    let nextLevel = Math.floor((lvl.get() + lvl.xpFormula()) / 1000)
+    let currentLevel = Math.floor(await lvl.get() / 1000)
+    let nextLevel = Math.floor((await lvl.get() + await lvl.xpFormula()) / 1000)
 
     if (nextLevel > currentLevel) {
       msg.channel.send(simpleEmbed(user.displayHexColor && user.displayHexColor !== '#000000' ? user.displayHexColor : 'blue' , '', `<@${user.id}> has reached level **${nextLevel + 1}**!`))

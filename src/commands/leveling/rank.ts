@@ -25,11 +25,11 @@ export async function run(client: Client, message: Message, args: Array<string>)
   
   if (!userEXP.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
 
-  const xp = userEXP.get()
+  const xp = await userEXP.get()
   const xpModulo = xp % 1000
   const xpLevel = Math.floor(xp / 1000)
-  const color = userEXP.getColor()
-  const users = userEXP.getGuild()
+  const color = await userEXP.getColor()
+  const users = await userEXP.getGuild()
   const sortable = Object.entries(users).sort(([, a], [, b]) => b - a)
   const rankNumber = sortable.findIndex(u => u[0] === member.id && u[1] === xp) + 1
   const attachment = new MessageAttachment(await genCard(
