@@ -1,12 +1,15 @@
 import { GuildMember, Message, MessageAttachment } from 'discord.js';
-import db from 'quick.db'
+import { Database } from 'quickmongo';
 import { create } from 'svg-captcha';
 import { svg2png } from 'svg-png-converter';
 import { simpleEmbed, unverifiedRole } from './lib';
 
+const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db);
+
+
 export async function runCaptcha(member: GuildMember, throwOnFail?: boolean) {
     // Server Captcha
-    if (db.get(`captcha.${member.guild.id}`)) {
+    if (await db.get(`captcha.${member.guild.id}`)) {
       let unverifiedMemberRole = await unverifiedRole(member.guild)
       member.roles.add(unverifiedMemberRole)
   

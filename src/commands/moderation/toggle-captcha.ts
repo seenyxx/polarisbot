@@ -5,7 +5,7 @@ import { coolDownSetup, errorMessage, simpleEmbed } from "../../util/lib";
 
 let coolDown = 10
 let commandName = 'captcha'
-export function run(client: Client, message: Message, args: Array<string>) {
+export async function run(client: Client, message: Message, args: Array<string>) {
   if (coolDownSetup(message, commandName, coolDown)) return
   
   if (!message.guild) return
@@ -13,7 +13,7 @@ export function run(client: Client, message: Message, args: Array<string>) {
 
   let status: boolean = false
   if (!message.guild?.id) return
-  if (db.get(`captcha.${message.guild.id}`)){
+  if (await db.get(`captcha.${message.guild.id}`)){
     db.delete(`captcha.${message.guild.id}`)
     status = false
   }

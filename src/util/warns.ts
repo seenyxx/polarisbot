@@ -1,6 +1,8 @@
 import { Guild, Message, TextChannel, MessageEmbed, GuildMember, Webhook, Client } from 'discord.js';
-import db from 'quick.db';
+import { Database } from 'quickmongo';
 import { simpleEmbed } from './lib';
+
+const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db);
 
 export class WarnLogger {
   public guild: Guild
@@ -20,11 +22,11 @@ export class WarnLogger {
   }
 
   public async warn(msg: Message, author: GuildMember, user: GuildMember, reason: string) {
-    let id = db.get(`log.${this.guild.id}`)
+    let id = await db.get(`log.${this.guild.id}`)
 
-    db.add(`warns.${this.guild.id}.${user.id}`, 1)
+    await db.add(`warns.${this.guild.id}.${user.id}`, 1)
 
-    let userWarns = db.get(`warns.${this.guild.id}.${user.id}`)
+    let userWarns = await db.get(`warns.${this.guild.id}.${user.id}`)
     let channel = (await this.guild.fetchWebhooks()).find(wh => wh.id === id)
 
     if (!channel) return
@@ -42,7 +44,7 @@ export class WarnLogger {
     let channel = this.guild.channels.cache.get(id) as TextChannel | undefined
 
     if (!channel || !this.guild.me) return
-    let dbID = db.get(`log.${this.guild.id}`)
+    let dbID = await db.get(`log.${this.guild.id}`)
     let wh = (await channel.fetchWebhooks()).find(wh => wh.id === dbID)
     let possibleGuildWH = (await channel.fetchWebhooks()).find(wh => wh.id === dbID)
     
@@ -66,7 +68,7 @@ export class WarnLogger {
   }
   
   public async resetUserWarnings(msg: Message, author: GuildMember, targetUser: GuildMember) {
-    let id = db.get(`log.${this.guild.id}`)
+    let id = await db.get(`log.${this.guild.id}`)
 
 
     db.delete(`warns.${this.guild.id}.${targetUser.id}`)
