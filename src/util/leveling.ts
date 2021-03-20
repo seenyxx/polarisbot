@@ -82,7 +82,7 @@ export function setCoolDown(userID: string, guildID: string) {
 }
 
 export function checkCoolDown(userID: string, guildID: string) {
-  const cd = db.get(`lvlcd${guildID}.${userID}`) ? mongodb.get(`lvlcd${guildID}.${userID}`) : 0
+  const cd = db.get(`lvlcd${guildID}.${userID}`) ? db.get(`lvlcd${guildID}.${userID}`) : 0
   const now = Date.now()
 
   if (cd > now) return true
