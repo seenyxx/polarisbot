@@ -125,7 +125,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
     let counter = new ReactionRoleCounter()
     if (!message.guild) return
 
-    counter.addRRCount(message.guild.id)
+    await counter.addRRCount(message.guild.id)
     message.channel.send(simpleEmbed('green', 'Reaction Role Count', `This server's reaction roles:\n${await counter.getRRCount(message.guild.id)}/100`))
   })
 }

@@ -36,8 +36,8 @@ export class ReactionRoleRoleManager {
 export class ReactionRoleCounter {
   constructor() {}
 
-  public addRRCount(guildID: string) {
-    db.add(`rr.counter.${guildID}`, 1)
+  public async addRRCount(guildID: string) {
+    await db.add(`rr.counter.${guildID}`, 1)
   }
 
   public reduceRRCount(guildID: string) {
