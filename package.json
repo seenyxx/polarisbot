@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc && NODE_ENV=production node ./dist/index.js",
     "start:dev": "tsc && node ./dist/index.js",
-    "import": "tsc && node ./dist/util/import.js"
+    "import": "tsc && NODE_ENV=production node node ./dist/util/import.js"
   },
   "repository": {
     "type": "git",
