@@ -93,7 +93,7 @@ export function checkCoolDown(userID: string, guildID: string) {
 export async function lvlSetup(msg: Message, user: GuildMember, guildID: string) {
   const lvl = new Leveling(user.id, guildID)
 
-  if (!lvl.getLevelingStatus()) return
+  if (!await lvl.getLevelingStatus()) return
 
   if (!checkCoolDown(user.id, guildID)) {
     let currentLevel = Math.floor(await lvl.get() / 1000)
