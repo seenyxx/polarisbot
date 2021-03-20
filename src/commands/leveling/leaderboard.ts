@@ -40,7 +40,7 @@ export async function run(client: Client, message: Message, args: Array<string>)
         case 4:
           badge = '🏅'
       }
-      text = text.concat(`\n ${badge ? `${badge}${index + 1}`: `:white_small_square:${index + 1}`} [-](https://example.com)<@${user[0]}> **LVL:** \`${Math.floor(user[1] / 1000) + 1}\` **XP:** [\`${user[1] % 1000}/1000\`](https://example.com) **Total XP:** [\`${user[1] > 1000 ? `${user[1] / 1000}k` : user[1]}](https://example.com)\``)
+      text = text.concat(`\n ${badge ? `${badge}${index + 1}`: `:white_small_square:${index + 1}`} [-](https://example.com)<@${user[0]}> **LVL:** [\`${Math.floor(user[1] / 1000) + 1}\`](https://example.com) **XP:** [\`${user[1] % 1000}/1000\`](https://example.com) **Total XP:** [\`${user[1] > 1000 ? `${user[1] / 1000}k` : user[1]}\`](https://example.com)`)
     })
 
     embed.setDescription(text)
