@@ -119,14 +119,14 @@ export async function run(client: Client, message: Message, args: Array<string>)
   })
 
 
-  collector.on('end', collected => {
+  collector.on('end', async collected => {
     if (!collected.size) successful = false
     if (!successful && message.deletable) return rrMessage.delete()
     let counter = new ReactionRoleCounter()
     if (!message.guild) return
 
     counter.addRRCount(message.guild.id)
-    message.channel.send(simpleEmbed('green', 'Reaction Role Count', `This server's reaction roles:\n${counter.getRRCount(message.guild.id)}/100`))
+    message.channel.send(simpleEmbed('green', 'Reaction Role Count', `This server's reaction roles:\n${await counter.getRRCount(message.guild.id)}/100`))
   })
 }
 

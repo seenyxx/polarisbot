@@ -1,8 +1,9 @@
 import { MessageReaction, PartialUser, User, Role, Message, PartialMessage } from 'discord.js';
-import db from 'quick.db'
+import { Database } from 'quickmongo';
 
 const maxRR = 100
 
+const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db);
 
 
 export interface ReactionRoleElement {
@@ -21,12 +22,12 @@ export class ReactionRoleRoleManager {
     db.delete(`rr.roles.${id}`)
   }
 
-  public get(id: string): ReactionRoleElement[] {
-    return db.get(`rr.roles.${id}`)
+  public async get(id: string): Promise<ReactionRoleElement[]> {
+    return await db.get(`rr.roles.${id}`)
   }
 
-  public exist(id: string) {
-    return db.get(`rr.roles.${id}`) ? true : false
+  public async exist(id: string) {
+    return await db.get(`rr.roles.${id}`) ? true : false
   }
 }
 
@@ -43,8 +44,8 @@ export class ReactionRoleCounter {
     db.subtract(`rr.counter.${guildID}`, 1)
   }
 
-  public getRRCount(guildID: string): number {
-    return db.get(`rr.counter.${guildID}`)
+  public async getRRCount(guildID: string): Promise<number> {
+    return await db.get(`rr.counter.${guildID}`)
   }
 
   public setRRCount(guildID: string, val: number) {
@@ -56,14 +57,15 @@ export class ReactionRoleCounter {
   }
 
 
-  public RRStatus(guildID: string) {
-    let rrStatus = db.get(`rr.counter.${guildID}`)
+  public async RRStatus(guildID: string) {
+    let rrStatus = await db.get(`rr.counter.${guildID}`)
 
     if (!rrStatus) return true
     if (rrStatus >= maxRR) return false
     if (rrStatus < maxRR) return true
   }
 }
+
 type Manager = ReactionRoleRoleManager | ReactionRoleCounter
 
 
@@ -90,8 +92,8 @@ export async function reactionAddHandler(reaction: MessageReaction, user: Partia
 
   const rrRoles = new ReactionRoleRoleManager()
   
-  if (rrRoles.exist(reaction.message.id)) {
-    let roles = rrRoles.get(reaction.message.id)
+  if (await rrRoles.exist(reaction.message.id)) {
+    let roles = await rrRoles.get(reaction.message.id)
 
     for (let i = 0; i < roles.length; i++) {
       if (reaction.emoji.name == roles[i].emoji) {
@@ -124,8 +126,8 @@ export async function reactionRemoveHandler(reaction: MessageReaction, user: Par
 
   const rrRoles = new ReactionRoleRoleManager()
   
-  if (rrRoles.exist(reaction.message.id)) {
-    let roles = rrRoles.get(reaction.message.id)
+  if (await rrRoles.exist(reaction.message.id)) {
+    let roles = await rrRoles.get(reaction.message.id)
 
     for (let i = 0; i < roles.length; i++) {
       if (reaction.emoji.name == roles[i].emoji) {
@@ -152,7 +154,7 @@ export async function reactionRemoveHandler(reaction: MessageReaction, user: Par
 
 export async function handleDeletion(msg: Message | PartialMessage, rrRoles: ReactionRoleRoleManager) {
 
-  if (rrRoles.get(msg.id) && msg.guild) {
+  if (await rrRoles.get(msg.id) && msg.guild) {
     GlobalReactionRoleRemove(msg.id, msg.guild.id)
   }
 }
