@@ -10,7 +10,7 @@ import { lvlSetup } from './util/leveling';
 import { noGif, dlE } from './util/lib';
 import { handleDeletion, reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager } from './util/rrManager';
 
-
+console.time('Starting bot')
 process.on('unhandledRejection', (e) => {
   if (process.env.NODE_ENV !== 'production') {
     console.error(e)
@@ -36,7 +36,7 @@ botCache.set('config', config)
 
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user?.tag}`)
-
+  
   client.user?.setPresence({
     status: 'online',
     activity: {
@@ -57,9 +57,11 @@ client.on('ready', async () => {
   db.delete('cooldowns')
 
   botCache.set('botID', client.user?.id)
+
+  console.timeEnd('Starting bot')
 })
 
-client.on('message', message => {
+client.on('message', async message => {
   if (message.author.bot) return
   
   // Leveling
@@ -82,9 +84,9 @@ client.on('message', message => {
   // Get the command to run
   const cmd = commands[command]
   if (!cmd) return
-
-  cmd.run(client, message, args)
-
+  if (process.env.NODE_ENV !== 'production') console.time(`Command run ${command}`)
+  await cmd.run(client, message, args)
+  if (process.env.NODE_ENV !== 'production') console.timeEnd(`Command run ${command}`)
 })
 
 

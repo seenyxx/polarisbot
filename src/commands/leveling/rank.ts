@@ -63,7 +63,7 @@ async function genCard(rankNumber: number, xplevel: number, progressColor: strin
 
   ctx.fillStyle = '#FFFFFF'
   ctx.font = member.user.tag.length < 22 ? 'bold 70px Noto Sans JP' : 'bold 50px Noto Sans JP'
-  console.log(member.user.tag.length)
+
   ctx.fillText(`${member.user.tag}`, pfpMargin + 80, canvas.height / 2.5)
   const stats = `LVL: ${xplevel + 1} • XP: ${precisePercentage} / 1000 • RANK: ${rankNumber}`
   ctx.font = stats.length < 36 ? '68px Noto Sans JP' : '60px Noto Sans JP'

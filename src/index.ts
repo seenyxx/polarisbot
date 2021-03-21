@@ -6,9 +6,14 @@ function parseConfiguration() : Config {
   let unparsedJSON = readFileSync(process.env.NODE_ENV === 'production' ? `${__dirname}/../config.json`: `${__dirname}/../config-dev.json`).toString()
   return JSON.parse(unparsedJSON)
 }
+
+console.time('Shard Spawn')
 const config = parseConfiguration()
 const manager = new ShardingManager(`${__dirname}/bot.js`, {
   token: config.token,
 })
+
 manager.on('shardCreate', s => console.log(`Launched shard ${s.id}`))
-manager.spawn()
+manager.spawn().then(() => {
+  console.timeEnd('Shard Spawn')
+})

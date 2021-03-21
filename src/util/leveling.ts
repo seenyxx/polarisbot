@@ -7,9 +7,15 @@ import db from 'quick.db'
 export const xp = 20
 export const xpPerLevel = 1000
 
+console.time('Connecting Database')
 const mongodb = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db).createModel('leveling');
 
-mongodb.on('ready', () => console.log('MongoDB database connected'))
+mongodb.on('ready', () => {
+  console.log('MongoDB database connected') 
+  console.timeEnd('Connecting Database')
+})
+
+
 export class Leveling {
   readonly userID
   readonly guildID

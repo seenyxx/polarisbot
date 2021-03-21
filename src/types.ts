@@ -5,7 +5,7 @@ export interface Command {
   run: runCommand
 }
 
-export type runCommand = (client: Client, message: Message, args: Array<string>) => void
+export type runCommand = (client: Client, message: Message, args: Array<string>) => Promise<any> | any
 
 export interface Config {
   prefix: string,
