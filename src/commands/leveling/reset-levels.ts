@@ -8,8 +8,6 @@ let commandName = 'gmulti'
 
 export const aliases = ['clear-level', 'clear-levels', 'clear-rank', 'clear-lvl', 'clear-lvls', 'reset-lvl', 'reset-rank', 'reset-lvls', 'reset-levels', 'reset-level']
 
-const numberRegex = /^\d*\.?\d*$/
-
 export async function run(client: Client, message: Message, args: Array<string>) {
   if (!message.member?.hasPermission('MANAGE_GUILD')) return message.channel.send(errorMessage('Insufficient permissions'))
   if (coolDownSetup(message, commandName, coolDown)) return

@@ -28,7 +28,7 @@
     {
       "name": "Leveling 🏆",
       "menu": "level",
-      "cmds": ["rank", "leaderboard", "set-color", "toggle-leveling", "get-multi", "set-multi"]
+      "cmds": ["rank", "leaderboard", "set-color", "toggle-leveling", "get-multi", "set-multi", "reset-levels"]
     }
   ],
   "commands": {
@@ -204,6 +204,11 @@
     "softban": {
       "usage": "softban <@User>",
       "desc": "Bans a member then immediately unbans them. (Basically a kick but deletes the messages)"
+    },
+    "reset-levels": {
+      "usage": "reset-levels <@User>",
+      "desc": "Clears the levels of a member",
+      "aliases": ["clear-level", "clear-levels", "clear-rank", "clear-lvl", "clear-lvls", "reset-lvl", "reset-rank", "reset-lvls", "reset-levels", "reset-level"]
     }
   }
 }
