@@ -32,6 +32,6 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
   logger.logMute(message, user, 'unmute', message.member, reason)
 
-  message.channel.send(simpleEmbed('green', 'Unmuted User', `Unmuted: <@${user.id}>\nIssued by: <@s${message.author.id}>`))
+  message.channel.send(simpleEmbed('green', 'Unmuted User', `Unmuted: <@${user.id}>\nIssued by: <@${message.author.id}>`))
 }
 

@@ -34,6 +34,6 @@ export async function run(client: Client, message: Message, args: Array<string>)
 
   user?.roles.add(await muteRole(user.guild))
 
-  message.channel.send(simpleEmbed('green', 'Muted User', `Muted: <@${user.id}>\nIssued by: <@s${message.author.id}>`))
+  message.channel.send(simpleEmbed('green', 'Muted User', `Muted: <@${user.id}>\nIssued by: <@${message.author.id}>`))
 }
 

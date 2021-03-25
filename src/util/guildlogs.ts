@@ -101,7 +101,7 @@ export class WarnLogger {
 
     if (!channel) return
 
-    const cases = db.get(`${type}_${this.guild.id}.${user.id}`)
+    const cases = await db.get(`${type}_${this.guild.id}.${user.id}`)
 
     const embed = new MessageEmbed()
       .setColor('#99AAB5')
