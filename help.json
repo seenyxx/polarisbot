@@ -3,7 +3,7 @@
     {
       "name": "Moderation 🛠",
       "menu": "mod",
-      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role", "purge", "reverify", "announce", "softban", "lock-channels", "unlock-channels"]
+      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role", "purge", "reverify", "announce", "softban", "lock-channels", "unlock-channels", "mute", "unmute"]
     },
     {
       "name": "Text 💬",
@@ -209,6 +209,16 @@
       "usage": "reset-levels <@User>",
       "desc": "Clears the levels of a member",
       "aliases": ["clear-level", "clear-levels", "clear-rank", "clear-lvl", "clear-lvls", "reset-lvl", "reset-rank", "reset-lvls", "reset-levels", "reset-level"]
+    },
+    "mute": {
+      "usage": "mute <@User> <Reason?>",
+      "desc": "Mutes a member",
+      "aliases": ["m"]
+    },
+    "unmute": {
+      "usage": "unmute <@User> <Reason?>",
+      "desc": "Unmutes a member",
+      "aliases": ["um"]
     }
   }
 }

@@ -18,7 +18,8 @@ export async function run(client: Client, message: Message, args: Array<string>)
   
   if (!user) return
   
-  
+  const mRole = await muteRole(user.guild)
+  if (!user.roles.cache.find(r => r.id === mRole.id)) return message.channel.send('This member is not muted')
 
   updateMuteRolePerms(user.guild)
   
