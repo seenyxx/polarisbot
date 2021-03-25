@@ -1,6 +1,6 @@
 import { Client, Message } from 'discord.js';
 import { coolDownSetup, errorMessage, simpleEmbed } from '../../util/lib';
-import { WarnLogger } from '../../util/warns';
+import { WarnLogger } from '../../util/guildlogs';
 
 let coolDown = 8
 let commandName = 'cwarn'

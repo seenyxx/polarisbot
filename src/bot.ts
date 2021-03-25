@@ -8,6 +8,7 @@ import { BotCache } from './util/cache';
 import { runCaptcha } from './util/captcha';
 import { lvlSetup } from './util/leveling';
 import { noGif, dlE } from './util/lib';
+import { updateMuteRolePerms } from './util/mute';
 import { handleDeletion, reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager } from './util/rrManager';
 
 console.time('Starting bot')
@@ -105,6 +106,10 @@ client.on('guildMemberAdd', async member => {
 // Handle reaction roles
 client.on('messageReactionAdd', reactionAddHandler)
 client.on('messageReactionRemove', reactionRemoveHandler)
+
+
+
+
 
 const rrRoles = new ReactionRoleRoleManager()
 

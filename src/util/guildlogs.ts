@@ -2,7 +2,7 @@ import { Guild, Message, TextChannel, MessageEmbed, GuildMember, Webhook, Client
 import { Database } from 'quickmongo';
 import { simpleEmbed } from './lib';
 
-const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db).createModel('warns');
+const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db).createModel('modlog');
 
 export class WarnLogger {
   public guild: Guild
@@ -11,9 +11,9 @@ export class WarnLogger {
     this.guild = guild
   }
 
-  private logEmbed(msg: Message, author: GuildMember, number: number, user: GuildMember, reason: string) {
+  private logEmbed(msg: Message, author: GuildMember, number: number, user: GuildMember, reason: string, color?: string) {
     let embed = new MessageEmbed()
-      .setColor('#ff9900')
+      .setColor(color ? color :'#ff9900')
       .setAuthor(`${user.user.tag} | ${user.id}`, user.user.displayAvatarURL())
       .setTitle(`Warning | Case: ${number}`)
       .setDescription(`Offender: <@${user.id}>\nIssued by: <@${author.id}>\nReason:\n\`\`\`${reason}\`\`\`\n[\`[Message Link]\`](${msg.url})`)
@@ -88,6 +88,28 @@ export class WarnLogger {
 
   public resetAllWarnings() {
     db.delete(`${this.guild.id}`)
+  }
+
+  public async logMute(msg: Message, user: GuildMember, type: 'unmute' | 'mute', author: GuildMember, reason: string) {
+    let id = await db.get(`log.${this.guild.id}`)
+
+    await db.add(`${type}_${this.guild.id}.${user.id}`, 1)
+
+
+    let userWarns = await db.get(`${this.guild.id}.${user.id}`)
+    let channel = (await this.guild.fetchWebhooks()).find(wh => wh.id === id)
+
+    if (!channel) return
+
+    const cases = db.get(`${type}_${this.guild.id}.${user.id}`)
+
+    const embed = new MessageEmbed()
+      .setColor('#99AAB5')
+      .setTitle(`${`${type.split('')[0].toUpperCase()}${type.substr(1, type.length)}`} | Case: ${cases}`)
+      .setAuthor(`${user.user.tag} | ${user.id}`, user.user.displayAvatarURL())
+      .setDescription(`${type === 'mute' ? 'Offender' : 'Unmuted:'}: <@${user.id}>\nIssued by: <@${author.id}>\nReason:\n\`\`\`${reason}\`\`\`\n[\`[Message Link]\`](${msg.url})`)
+
+    channel.send(embed)
   }
 }
 
