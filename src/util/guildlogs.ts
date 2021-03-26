@@ -10,7 +10,7 @@ export class WarnLogger {
   constructor(guild: Guild) {
     this.guild = guild
   }
-
+  
   private logEmbed(msg: Message, author: GuildMember, number: number, user: GuildMember, reason: string, color?: string) {
     let embed = new MessageEmbed()
       .setColor(color ? color :'#ff9900')
@@ -20,7 +20,10 @@ export class WarnLogger {
 
     return embed
   }
-
+  private async fetchWebhook() {
+    let id = await db.get(`log.${this.guild.id}`)
+    return (await this.guild.fetchWebhooks()).find(wh => wh.id === id)
+  }
   public async warn(msg: Message, author: GuildMember, user: GuildMember, reason: string) {
     let id = await db.get(`log.${this.guild.id}`)
 
@@ -91,13 +94,9 @@ export class WarnLogger {
   }
 
   public async logMute(msg: Message, user: GuildMember, type: 'unmute' | 'mute', author: GuildMember, reason: string) {
-    let id = await db.get(`log.${this.guild.id}`)
-
     await db.add(`${type}_${this.guild.id}.${user.id}`, 1)
 
-
-    let userWarns = await db.get(`${this.guild.id}.${user.id}`)
-    let channel = (await this.guild.fetchWebhooks()).find(wh => wh.id === id)
+    let channel = await this.fetchWebhook()
 
     if (!channel) return
 
