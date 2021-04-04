@@ -1,31 +1,36 @@
-import { Client, Message } from 'discord.js';
+import { Client, Message } from 'discord.js'
 
-import { coolDownSetup, simpleEmbed } from '../../util/lib';
-import { Leveling } from '../../util/leveling';
-
+import { coolDownSetup, simpleEmbed } from '../../util/lib'
+import { Leveling } from '../../util/leveling'
 
 let coolDown = 8
 let commandName = 'lb'
 
 export const aliases = ['lb']
 
-export async function run(client: Client, message: Message, args: Array<string>) {
+export async function run(
+  client: Client,
+  message: Message,
+  args: Array<string>
+) {
   if (!message.guild || !message.member) return
   if (coolDownSetup(message, commandName, coolDown)) return
-  
+
   const guild = new Leveling(message.member.id, message.guild.id)
-  if (!await guild.getLevelingStatus()) return message.channel.send('Leveling is not enabled in this server')
+  if (!(await guild.getLevelingStatus()))
+    return message.channel.send('Leveling is not enabled in this server')
   const users: Record<string, number> = await guild.getGuild()
 
   if (users) {
-    
-    const sortable = Object.entries(users).sort(([, a], [, b]) => b - a).slice(0, 15)
+    const sortable = Object.entries(users)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 15)
     const embed = simpleEmbed('gold', `${message.guild.name} Leaderboard`, '')
     let text = ''
 
     sortable.forEach((user, index) => {
       let badge: string | undefined
-      switch(index) {
+      switch (index) {
         case 0:
           badge = '🥇'
           break
@@ -40,7 +45,17 @@ export async function run(client: Client, message: Message, args: Array<string>)
         case 4:
           badge = '🏅'
       }
-      text = text.concat(`\n ${badge ? `${badge}${index + 1}`: `:white_small_square:${index + 1}`} [-](https://example.com)<@${user[0]}> **LVL:** [\`${Math.floor(user[1] / 1000) + 1}\`](https://example.com) **XP:** [\`${user[1] % 1000}/1000\`](https://example.com) **Total XP:** [\`${user[1] > 1000 ? `${user[1] / 1000}k` : user[1]}\`](https://example.com)`)
+      text = text.concat(
+        `\n ${
+          badge ? `${badge}${index + 1}` : `:white_small_square:${index + 1}`
+        } [-](https://example.com)<@${user[0]}> **LVL:** [\`${
+          Math.floor(user[1] / 1000) + 1
+        }\`](https://example.com) **XP:** [\`${
+          user[1] % 1000
+        }/1000\`](https://example.com) **Total XP:** [\`${
+          user[1] > 1000 ? `${user[1] / 1000}k` : user[1]
+        }\`](https://example.com)`
+      )
     })
 
     embed.setDescription(text)

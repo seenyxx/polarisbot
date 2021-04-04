@@ -1,49 +1,60 @@
-import { registerFont } from 'canvas';
-import { Client } from 'discord.js';
-import { readdir, readFileSync, stat } from 'fs';
-import db from 'quick.db';
+import { registerFont } from 'canvas'
+import { Client } from 'discord.js'
+import { readdir, readFileSync, stat } from 'fs'
+import db from 'quick.db'
 
-import { Command, Commands, Config } from './types';
-import { BotCache } from './util/cache';
-import { runCaptcha } from './util/captcha';
-import { lvlSetup } from './util/leveling';
-import { noGif, dlE } from './util/lib';
-import { updateMuteRolePerms } from './util/mute';
-import { handleDeletion, reactionAddHandler, reactionRemoveHandler, ReactionRoleRoleManager } from './util/rrManager';
+import { Command, Commands, Config } from './types'
+import { BotCache } from './util/cache'
+import { runCaptcha } from './util/captcha'
+import { lvlSetup } from './util/leveling'
+import { noGif, dlE } from './util/lib'
+import { updateMuteRolePerms } from './util/mute'
+import {
+  handleDeletion,
+  reactionAddHandler,
+  reactionRemoveHandler,
+  ReactionRoleRoleManager,
+} from './util/rrManager'
 
 console.time('Starting bot')
-process.on('unhandledRejection', (e) => {
+process.on('unhandledRejection', e => {
   if (process.env.NODE_ENV !== 'production') {
     console.error(e)
   }
 })
-function parseConfiguration() : Config {
-  let unparsedJSON = readFileSync(process.env.NODE_ENV === 'production' ? `${__dirname}/../config.json`: `${__dirname}/../config-dev.json`).toString()
+function parseConfiguration(): Config {
+  let unparsedJSON = readFileSync(
+    process.env.NODE_ENV === 'production'
+      ? `${__dirname}/../config.json`
+      : `${__dirname}/../config-dev.json`
+  ).toString()
   return JSON.parse(unparsedJSON)
 }
-
 
 console.log(process.env.NODE_ENV)
 // Parse configuration file
 const config = parseConfiguration()
 
 const client = new Client({
-  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 })
 const botCache = new BotCache()
 
-botCache.set('helpConfig', JSON.parse(readFileSync(`${__dirname}/../help.json`).toString()))
+botCache.set(
+  'helpConfig',
+  JSON.parse(readFileSync(`${__dirname}/../help.json`).toString())
+)
 botCache.set('config', config)
 
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user?.tag}`)
-  
+
   client.user?.setPresence({
     status: 'online',
     activity: {
       name: `${config.prefix}help`,
-      type: 'LISTENING'
-    }
+      type: 'LISTENING',
+    },
   })
   registerFont('./fonts/notosansjp/NotoSansJP-Regular.otf', {
     family: 'Noto Sans JP',
@@ -64,7 +75,7 @@ client.on('ready', async () => {
 
 client.on('message', async message => {
   if (message.author.bot) return
-  
+
   // Leveling
   if (message.guild && message.content.length > 2 && message.member)
     lvlSetup(message, message.member, message.guild.id)
@@ -72,44 +83,42 @@ client.on('message', async message => {
   // Get rid of gifs from /tenor or /giphy
   noGif(message)
 
-  let prefix: string = db.get(`prefix.${message.guild?.id}`) ? db.get(`prefix.${message.guild?.id}`) : config.prefix
+  let prefix: string = db.get(`prefix.${message.guild?.id}`)
+    ? db.get(`prefix.${message.guild?.id}`)
+    : config.prefix
 
   if (message.content.indexOf(prefix) !== 0) return
 
   const args = message.content.slice(prefix.length).trim().split(/ +/g)
   const command = args.shift()?.toLowerCase()
 
-
   if (!command) return
 
   // Get the command to run
   const cmd = commands[command]
   if (!cmd) return
-  if (process.env.NODE_ENV !== 'production') console.time(`Command run ${command}`)
+  if (process.env.NODE_ENV !== 'production')
+    console.time(`Command run ${command}`)
   await cmd.run(client, message, args)
-  if (process.env.NODE_ENV !== 'production') console.timeEnd(`Command run ${command}`)
+  if (process.env.NODE_ENV !== 'production')
+    console.timeEnd(`Command run ${command}`)
 })
-
 
 client.on('guildMemberAdd', async member => {
   if (member.user.bot) return
   if (db.get(`ld.${member.guild.id}`)) {
-    if (member.bannable) member.ban({
-      reason: 'LOCKDOWN'
-    })
+    if (member.bannable)
+      member.ban({
+        reason: 'LOCKDOWN',
+      })
     return
   }
   await runCaptcha(member)
 })
 
-
 // Handle reaction roles
 client.on('messageReactionAdd', reactionAddHandler)
 client.on('messageReactionRemove', reactionRemoveHandler)
-
-
-
-
 
 const rrRoles = new ReactionRoleRoleManager()
 
@@ -118,13 +127,12 @@ client.on('messageDelete', msg => {
 })
 
 client.on('messageDeleteBulk', msgs => {
-
   msgs.forEach(m => {
     handleDeletion(m, rrRoles)
   })
 })
 
-const commands: Commands  = {}
+const commands: Commands = {}
 
 // Command Loader
 
@@ -134,7 +142,6 @@ readdir(`${__dirname}/commands/`, (e, f) => {
   if (e) return console.error(e)
 
   f.forEach(file => {
-
     if (file.endsWith('.js')) return
 
     stat(`${__dirname}/commands/${file}`, (e, fsStat) => {
@@ -165,15 +172,12 @@ function appendDirectoryCommands(dir: string) {
       if (props.aliases) {
         props.aliases.forEach(alias => {
           commands[alias] = {
-            run: props.run
+            run: props.run,
           }
         })
       }
     })
   })
 }
-
-
-
 
 client.login(config.token)

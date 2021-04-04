@@ -1,25 +1,34 @@
-import { Client, Message, MessageEmbed } from 'discord.js';
-import { coolDownSetup, errorMessage, pollEmojis, pollEmojisResolvable } from '../../util/lib';
+import { Client, Message, MessageEmbed } from 'discord.js'
+import {
+  coolDownSetup,
+  errorMessage,
+  pollEmojis,
+  pollEmojisResolvable,
+} from '../../util/lib'
 
 let coolDown = 30
 let commandName = 'poll'
 
 export function run(client: Client, message: Message, args: Array<string>) {
-  
-  if (!message.member?.hasPermission('MANAGE_MESSAGES')) return message.channel.send(errorMessage('Insufficient permissions'))
+  if (!message.member?.hasPermission('MANAGE_MESSAGES'))
+    return message.channel.send(errorMessage('Insufficient permissions'))
   let _title = message.content.match(/\[.+\]/g)
   let options = message.content.match(/\([^()]+\)/g)
-  if(!options || !_title) return
-  
-  if (!_title.length || !options.length) return message.channel.send(errorMessage(`Provide values for title and at least 2 options but no more than 10 options.\nFormat:\n<prefix>poll [Title of poll] (Option 1) (Option 2) ...`))
-  
+  if (!options || !_title) return
+
+  if (!_title.length || !options.length)
+    return message.channel.send(
+      errorMessage(
+        `Provide values for title and at least 2 options but no more than 10 options.\nFormat:\n<prefix>poll [Title of poll] (Option 1) (Option 2) ...`
+      )
+    )
+
   if (coolDownSetup(message, commandName, coolDown)) return
   let title = _title[0].trim()
 
   let poll = new Poll(message, title, options)
   poll.sendEmbed().catch(errorMessage)
-  if (message.deletable)
-    message.delete()
+  if (message.deletable) message.delete()
 }
 
 class Poll {
@@ -36,24 +45,27 @@ class Poll {
   public getEmbed() {
     let embed = new MessageEmbed({
       color: 'RANDOM',
-      title: `Poll: *\`${this.title.replace('[', '').replace(']', '')}\`*`
+      title: `Poll: *\`${this.title.replace('[', '').replace(']', '')}\`*`,
     })
 
     embed.setAuthor(this.msg.author.tag, this.msg.author.displayAvatarURL())
 
     for (let i = 0; i < this.options.length; i++) {
-      embed.addField(`Option ${pollEmojis[i]}`, this.options[i].replace('(', '').replace(')', ''), this.options.length < 5 ? false : true)
+      embed.addField(
+        `Option ${pollEmojis[i]}`,
+        this.options[i].replace('(', '').replace(')', ''),
+        this.options.length < 5 ? false : true
+      )
     }
-    
+
     return embed
   }
   public async sendEmbed() {
     let embed = this.getEmbed()
     let msg = await this.msg.channel.send(embed)
-    
+
     for (let i = 0; i < this.options.length; i++) {
       msg.react(pollEmojisResolvable[i])
     }
   }
-  
 }

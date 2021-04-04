@@ -3,7 +3,27 @@
     {
       "name": "Moderation 🛠",
       "menu": "mod",
-      "cmds": ["ban", "kick", "warn", "clear-warnings", "poll", "prune-roles", "lockdown", "resolve-lockdown", "set-logs", "toggle-captcha", "reaction-role", "purge", "reverify", "announce", "softban", "lock-channels", "unlock-channels", "mute", "unmute"]
+      "cmds": [
+        "ban",
+        "kick",
+        "warn",
+        "clear-warnings",
+        "poll",
+        "prune-roles",
+        "lockdown",
+        "resolve-lockdown",
+        "set-logs",
+        "toggle-captcha",
+        "reaction-role",
+        "purge",
+        "reverify",
+        "announce",
+        "softban",
+        "lock-channels",
+        "unlock-channels",
+        "mute",
+        "unmute"
+      ]
     },
     {
       "name": "Text 💬",
@@ -13,7 +33,15 @@
     {
       "name": "Misc ✨",
       "menu": "misc",
-      "cmds": ["help", "invite", "ping", "server-count", "uptime", "metrics", "shard-count"]
+      "cmds": [
+        "help",
+        "invite",
+        "ping",
+        "server-count",
+        "uptime",
+        "metrics",
+        "shard-count"
+      ]
     },
     {
       "name": "Config ⚙",
@@ -28,7 +56,15 @@
     {
       "name": "Leveling 🏆",
       "menu": "level",
-      "cmds": ["rank", "leaderboard", "set-color", "toggle-leveling", "get-multi", "set-multi", "reset-levels"]
+      "cmds": [
+        "rank",
+        "leaderboard",
+        "set-color",
+        "toggle-leveling",
+        "get-multi",
+        "set-multi",
+        "reset-levels"
+      ]
     }
   ],
   "commands": {
@@ -144,7 +180,15 @@
     "toggle-leveling": {
       "usage": "toggle-leveling",
       "desc": "Turns on/off the leveling module",
-      "aliases": ["toggle-level", "toggle-levels", "toggle-lvl", "toggle-lvls", "toggleleveling", "togglelevels", "togglelevel"]
+      "aliases": [
+        "toggle-level",
+        "toggle-levels",
+        "toggle-lvl",
+        "toggle-lvls",
+        "toggleleveling",
+        "togglelevels",
+        "togglelevel"
+      ]
     },
     "rank": {
       "usage": "rank <@User?>",
@@ -208,7 +252,18 @@
     "reset-levels": {
       "usage": "reset-levels <@User>",
       "desc": "Clears the levels of a member",
-      "aliases": ["clear-level", "clear-levels", "clear-rank", "clear-lvl", "clear-lvls", "reset-lvl", "reset-rank", "reset-lvls", "reset-levels", "reset-level"]
+      "aliases": [
+        "clear-level",
+        "clear-levels",
+        "clear-rank",
+        "clear-lvl",
+        "clear-lvls",
+        "reset-lvl",
+        "reset-rank",
+        "reset-lvls",
+        "reset-levels",
+        "reset-level"
+      ]
     },
     "mute": {
       "usage": "mute <@User> <Reason?>",

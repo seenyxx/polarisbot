@@ -10,12 +10,12 @@ jobs:
     name: tsc
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: install node v14
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-    - name: npm install
-      run: npm i
-    - name: tsc
-      uses: icrawl/action-tsc@v1
+      - uses: actions/checkout@v1
+      - name: install node v14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: npm install
+        run: npm i
+      - name: tsc
+        uses: icrawl/action-tsc@v1

@@ -1,20 +1,33 @@
-import { Client, Message } from 'discord.js';
-import { freemem, totalmem } from 'os';
-import { cpuUsage } from 'os-utils';
+import { Client, Message } from 'discord.js'
+import { freemem, totalmem } from 'os'
+import { cpuUsage } from 'os-utils'
 
-import { coolDownSetup, simpleEmbed } from '../../util/lib';
+import { coolDownSetup, simpleEmbed } from '../../util/lib'
 
 let coolDown = 10
 let commandName = 'metrics'
-export async function run(client: Client, message: Message, args: Array<string>) {
-  
+export async function run(
+  client: Client,
+  message: Message,
+  args: Array<string>
+) {
   if (coolDownSetup(message, commandName, coolDown)) return
-  
+
   const embed = simpleEmbed('blue', 'Metrics 📊', '')
-  
+
   embed.addField('Process CPU Usage', `\`${getCpuUsage()}%\``, true)
-  embed.addField('Process Memory Usage', `\`${heapInMB(process.memoryUsage().heapUsed)}MB\``, true)
-  embed.addField('System Memory Usage', `\`${heapInMB(totalmem()) - heapInMB(freemem())}MB / ${heapInMB(totalmem())}MB\``, true)
+  embed.addField(
+    'Process Memory Usage',
+    `\`${heapInMB(process.memoryUsage().heapUsed)}MB\``,
+    true
+  )
+  embed.addField(
+    'System Memory Usage',
+    `\`${heapInMB(totalmem()) - heapInMB(freemem())}MB / ${heapInMB(
+      totalmem()
+    )}MB\``,
+    true
+  )
 
   message.channel.send(embed)
 }

@@ -1,13 +1,19 @@
-import { Channel, Guild, GuildChannel, GuildMember, TextChannel } from 'discord.js';
-import { removeAllPermissions } from './lib';
+import {
+  Channel,
+  Guild,
+  GuildChannel,
+  GuildMember,
+  TextChannel,
+} from 'discord.js'
+import { removeAllPermissions } from './lib'
 
 export async function muteRole(guild: Guild) {
   let role = guild.roles.cache.find(r => r.name.toLowerCase() === 'muted')
   if (!role) {
     role = await guild.roles.create({
       data: {
-        name: 'Muted'
-      }
+        name: 'Muted',
+      },
     })
   }
   return role

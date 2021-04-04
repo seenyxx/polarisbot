@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsc && NODE_ENV=production node ./dist/index.js",
     "start:dev": "tsc && node ./dist/index.js",
-    "import": "tsc && NODE_ENV=production node ./dist/util/import.js"
+    "import": "tsc && NODE_ENV=production node ./dist/util/import.js",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/seen-idc/polarisbot#readme",
   "dependencies": {
+    "@types/color": "^3.0.1",
     "@types/figlet": "^1.2.1",
     "@types/node": "^14.14.34",
     "@types/node-emoji": "^1.8.1",
@@ -27,6 +29,7 @@
     "buffer": "^6.0.3",
     "bufferutil": "^4.0.3",
     "canvas": "^2.7.0",
+    "color": "^3.1.3",
     "discord.js": "^12.5.1",
     "erlpack": "^0.1.3",
     "figlet": "^1.5.0",
@@ -34,6 +37,7 @@
     "node-fetch": "^2.6.1",
     "node-fs": "^0.1.7",
     "os-utils": "^0.0.14",
+    "prettier": "^2.2.1",
     "quick.db": "^7.1.3",
     "quickmongo": "^3.0.2",
     "svg-captcha": "^1.4.0",

@@ -1,7 +1,7 @@
-import { Client, Message, MessageAttachment, MessageEmbed } from 'discord.js';
-import figlet from "figlet";
-import { coolDownSetup, simpleEmbed, errorMessage } from '../../util/lib';
-import { Canvas } from 'canvas';
+import { Client, Message, MessageAttachment, MessageEmbed } from 'discord.js'
+import figlet from 'figlet'
+import { coolDownSetup, simpleEmbed, errorMessage } from '../../util/lib'
+import { Canvas } from 'canvas'
 
 let coolDown = 5
 let commandName = '3dt'
@@ -17,14 +17,15 @@ export function run(client: Client, message: Message, args: Array<string>) {
   ctx.font = 'bold 96px Noto Sans JP'
   ctx.fillStyle = '#ffffff'
 
-
-  if (text.length > 38) return message.channel.send(errorMessage('You are not allowed to put more than 38 characters'))
+  if (text.length > 38)
+    return message.channel.send(
+      errorMessage('You are not allowed to put more than 38 characters')
+    )
 
   if (text.length > 16) text = insert(text, 17, '\n')
-  
+
   if (text.length > 32) text = insert(text, 33, '\n')
   draw3dText(ctx, text, 12, 120, 8)
-
 
   const image = new MessageAttachment(canvas.toBuffer(), '3d.png')
 
@@ -36,23 +37,28 @@ export function run(client: Client, message: Message, args: Array<string>) {
   message.channel.send(embed)
 }
 
-function draw3dText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, depth: number){
+function draw3dText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  depth: number
+) {
   let i = 0
-  ctx.fillStyle = "#DDDDDD";
+  ctx.fillStyle = '#DDDDDD'
 
   for (i = 0; i < depth; i++) {
-    ctx.fillText(text, x - i, y - i);
+    ctx.fillText(text, x - i, y - i)
   }
-  
-  ctx.fillStyle = "#FFFFFF";
-  ctx.shadowColor = "#222222";
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetX = depth + 2;
-  ctx.shadowOffsetY = depth + 2;
-  ctx.fillText(text, x - i, y - i);
+
+  ctx.fillStyle = '#FFFFFF'
+  ctx.shadowColor = '#222222'
+  ctx.shadowBlur = 10
+  ctx.shadowOffsetX = depth + 2
+  ctx.shadowOffsetY = depth + 2
+  ctx.fillText(text, x - i, y - i)
 }
 
-function insert(text: string, index: number, inserted: string)
-{   
-  return text.substr(0, index) + inserted + text.substr(index);
+function insert(text: string, index: number, inserted: string) {
+  return text.substr(0, index) + inserted + text.substr(index)
 }

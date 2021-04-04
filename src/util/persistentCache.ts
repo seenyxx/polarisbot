@@ -1,9 +1,9 @@
-import db from 'quick.db';
+import db from 'quick.db'
 // Key value storage
 
 export class PersistentCacheConnection {
   private namespace = 'persistentcache'
-  
+
   constructor(namespace?: string) {
     this.namespace = namespace ? namespace : 'persistentcache'
   }

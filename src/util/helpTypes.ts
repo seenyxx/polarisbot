@@ -1,5 +1,5 @@
 export interface Help {
-  categories: HelpCat[],
+  categories: HelpCat[]
   commands: HelpCmds
 }
 

@@ -1,13 +1,23 @@
-import { MessageReaction, PartialUser, User, Role, Message, PartialMessage } from 'discord.js';
-import { Database } from 'quickmongo';
+import {
+  MessageReaction,
+  PartialUser,
+  User,
+  Role,
+  Message,
+  PartialMessage,
+} from 'discord.js'
+import { Database } from 'quickmongo'
 
 const maxRR = 100
 
-const db = new Database(process.env.NODE_ENV === 'production' ? require('../../config.json').db : require('../../config-dev.json').db).createModel('reactionrole');
-
+const db = new Database(
+  process.env.NODE_ENV === 'production'
+    ? require('../../config.json').db
+    : require('../../config-dev.json').db
+).createModel('reactionrole')
 
 export interface ReactionRoleElement {
-  emoji: string,
+  emoji: string
   roleID: string
 }
 
@@ -27,17 +37,17 @@ export class ReactionRoleRoleManager {
   }
 
   public async exist(id: string) {
-    return await db.get(`roles_${id}`) ? true : false
+    return (await db.get(`roles_${id}`)) ? true : false
   }
 }
-
-
 
 export class ReactionRoleCounter {
   constructor() {}
 
   public async addRRCount(guildID: string): Promise<number> {
-    return await this.getRRCount(guildID) ? await db.add(`rrcounter.${guildID}`, 1) : await db.set(`rrcounter.${guildID}`, 1)
+    return (await this.getRRCount(guildID))
+      ? await db.add(`rrcounter.${guildID}`, 1)
+      : await db.set(`rrcounter.${guildID}`, 1)
   }
 
   public reduceRRCount(guildID: string) {
@@ -45,7 +55,9 @@ export class ReactionRoleCounter {
   }
 
   public async getRRCount(guildID: string): Promise<number> {
-    return await db.get(`rrcounter.${guildID}`) ? await db.get(`rrcounter.${guildID}`) : 0
+    return (await db.get(`rrcounter.${guildID}`))
+      ? await db.get(`rrcounter.${guildID}`)
+      : 0
   }
 
   public setRRCount(guildID: string, val: number) {
@@ -55,7 +67,6 @@ export class ReactionRoleCounter {
   public resetRRCount(guildID: string) {
     db.set(`rrcounter.${guildID}`, 0)
   }
-
 
   public async RRStatus(guildID: string) {
     let rrStatus = await db.get(`rrcounter.${guildID}`)
@@ -68,10 +79,8 @@ export class ReactionRoleCounter {
 
 type Manager = ReactionRoleRoleManager | ReactionRoleCounter
 
-
 export const GlobalReactionRoleRemove = (id: string, guildID: string) => {
-  let m: Manager[] = [ new ReactionRoleRoleManager(), new ReactionRoleCounter() ]
-
+  let m: Manager[] = [new ReactionRoleRoleManager(), new ReactionRoleCounter()]
 
   let mr = m.shift() as ReactionRoleRoleManager
   mr.remove(id)
@@ -80,9 +89,10 @@ export const GlobalReactionRoleRemove = (id: string, guildID: string) => {
   mc.reduceRRCount(guildID)
 }
 
-
-
-export async function reactionAddHandler(reaction: MessageReaction, user: PartialUser | User) {
+export async function reactionAddHandler(
+  reaction: MessageReaction,
+  user: PartialUser | User
+) {
   if (reaction.message.partial) await reaction.message.fetch()
   if (reaction.partial) await reaction.fetch()
   if (user.bot) return
@@ -91,7 +101,7 @@ export async function reactionAddHandler(reaction: MessageReaction, user: Partia
   if (!reaction.message.guild) return
 
   const rrRoles = new ReactionRoleRoleManager()
-  
+
   if (await rrRoles.exist(reaction.message.id)) {
     let roles = await rrRoles.get(reaction.message.id)
 
@@ -100,7 +110,7 @@ export async function reactionAddHandler(reaction: MessageReaction, user: Partia
         let role = reaction.message.guild.roles.cache.get(roles[i].roleID)
         let meHighest = reaction.message.guild.me?.roles.highest.position
 
-        if (!role || ! meHighest) return
+        if (!role || !meHighest) return
 
         if (role.position > meHighest) return
 
@@ -116,7 +126,10 @@ export async function reactionAddHandler(reaction: MessageReaction, user: Partia
   return
 }
 
-export async function reactionRemoveHandler(reaction: MessageReaction, user: PartialUser | User) {
+export async function reactionRemoveHandler(
+  reaction: MessageReaction,
+  user: PartialUser | User
+) {
   if (reaction.message.partial) await reaction.message.fetch()
   if (reaction.partial) await reaction.fetch()
   if (user.bot) return
@@ -125,7 +138,7 @@ export async function reactionRemoveHandler(reaction: MessageReaction, user: Par
   if (!reaction.message.guild) return
 
   const rrRoles = new ReactionRoleRoleManager()
-  
+
   if (await rrRoles.exist(reaction.message.id)) {
     let roles = await rrRoles.get(reaction.message.id)
 
@@ -134,7 +147,7 @@ export async function reactionRemoveHandler(reaction: MessageReaction, user: Par
         let role = reaction.message.guild.roles.cache.get(roles[i].roleID)
         let meHighest = reaction.message.guild.me?.roles.highest.position
 
-        if (!role || ! meHighest) return
+        if (!role || !meHighest) return
 
         if (role.position > meHighest) return
 
@@ -142,8 +155,7 @@ export async function reactionRemoveHandler(reaction: MessageReaction, user: Par
 
         if (!member) return
 
-        if (member.roles.cache.has(role.id))
-          member.roles.remove(role)
+        if (member.roles.cache.has(role.id)) member.roles.remove(role)
       }
     }
   }
@@ -151,10 +163,11 @@ export async function reactionRemoveHandler(reaction: MessageReaction, user: Par
   return
 }
 
-
-export async function handleDeletion(msg: Message | PartialMessage, rrRoles: ReactionRoleRoleManager) {
-
-  if (await rrRoles.get(msg.id) && msg.guild) {
+export async function handleDeletion(
+  msg: Message | PartialMessage,
+  rrRoles: ReactionRoleRoleManager
+) {
+  if ((await rrRoles.get(msg.id)) && msg.guild) {
     GlobalReactionRoleRemove(msg.id, msg.guild.id)
   }
 }

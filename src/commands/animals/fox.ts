@@ -1,6 +1,6 @@
-import { Client, Message } from "discord.js";
-import fetch from 'node-fetch';
-import { coolDownSetup, simpleEmbed } from "../../util/lib";
+import { Client, Message } from 'discord.js'
+import fetch from 'node-fetch'
+import { coolDownSetup, simpleEmbed } from '../../util/lib'
 
 let coolDown = 3
 let commandName = 'fox'

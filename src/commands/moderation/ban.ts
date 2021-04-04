@@ -1,5 +1,5 @@
-import { Client, Message } from "discord.js";
-import { coolDownSetup, hardPunish } from "../../util/lib";
+import { Client, Message } from 'discord.js'
+import { coolDownSetup, hardPunish } from '../../util/lib'
 
 let coolDown = 3
 let commandName = 'ban'

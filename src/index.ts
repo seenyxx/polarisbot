@@ -1,9 +1,13 @@
-import { ShardingManager } from 'discord.js';
-import { readFileSync } from 'fs';
-import { Config } from './types';
+import { ShardingManager } from 'discord.js'
+import { readFileSync } from 'fs'
+import { Config } from './types'
 
-function parseConfiguration() : Config {
-  let unparsedJSON = readFileSync(process.env.NODE_ENV === 'production' ? `${__dirname}/../config.json`: `${__dirname}/../config-dev.json`).toString()
+function parseConfiguration(): Config {
+  let unparsedJSON = readFileSync(
+    process.env.NODE_ENV === 'production'
+      ? `${__dirname}/../config.json`
+      : `${__dirname}/../config-dev.json`
+  ).toString()
   return JSON.parse(unparsedJSON)
 }
 
