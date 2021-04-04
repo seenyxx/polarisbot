@@ -77,16 +77,21 @@ async function genCard(
   member: GuildMember,
   status: PresenceStatus
 ) {
-  const canvas = new Canvas(1500, 500)
+  const canvas = new Canvas(1400, 450)
   const ctx = canvas.getContext('2d')
   const size = 256
   const pfpMargin = size + 80
 
-  ctx.fillStyle = '#1d1f24'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  let gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
 
-  ctx.fillStyle = progressColor
-  ctx.fillRect(0, 0, 18, canvas.height)
+  gradient.addColorStop(0, progressColor)
+  gradient.addColorStop(1, adjustColor(progressColor))
+
+  ctx.fillStyle = gradient
+  roundedRect(ctx, 0, 0, canvas.width, canvas.height, 30)
+
+  ctx.fillStyle = '#23272A'
+  roundedRect(ctx, 20, 20, 1360, 412, 30)
 
   progressBar(canvas, ctx, 1000, '#FFFFFF', size)
   progressBar(canvas, ctx, precisePercentage, progressColor, size)
@@ -100,13 +105,17 @@ async function genCard(
   ctx.fillText(`${member.user.tag}`, pfpMargin + 80, canvas.height / 2.5)
   const stats = `LVL: ${
     xplevel + 1
-  } • XP: ${precisePercentage} / 1000 • RANK: ${rankNumber}`
-  ctx.font = stats.length < 36 ? '62px Noto Sans JP' : '56px Noto Sans JP'
+  }\t•\t${precisePercentage} / 1000 xp`
+  ctx.font = stats.length < 36 ? '60px Noto Sans JP' : '56px Noto Sans JP ₓₚ'
   ctx.fillText(stats, pfpMargin + 80, canvas.height / 2.5 + 70)
 
+  ctx.font = 'bold 70px Noto Sans JP'
+  ctx.fillStyle = progressColor
+  const rank = ctx.measureText(`#${rankNumber}`)
+  ctx.fillText(`#${rankNumber}`, canvas.width - 75 - rank.width, 125)
+
   const avatar = await genProfilePic(size, member)
-  ctx.drawImage(avatar, 80, 70, 256, 256)
-  drawStatus(ctx, statusColors[status], size)
+  ctx.drawImage(avatar, 95, 100, 256, 256)
 
   return canvas.toBuffer()
 }
@@ -119,34 +128,16 @@ async function progressBar(
   pfpSize: number
 ) {
   if (size === 0) return
-  const verticalDistance = canvas.height / 1.25
-  const pfpSizeMargin = 140
+  const verticalDistance = 315
+  const pfpSizeMargin = -180
 
-  ctx.strokeStyle = adjustColor(progressColor)
-  ctx.lineWidth = 70
+  ctx.strokeStyle = progressColor
+  ctx.lineWidth = 60
   ctx.lineCap = 'round'
 
   ctx.beginPath()
   ctx.moveTo(pfpSize - pfpSizeMargin, verticalDistance)
-  ctx.lineTo(pfpSize - pfpSizeMargin + size * 1.25, verticalDistance)
-  ctx.stroke()
-}
-
-async function drawStatus(
-  ctx: CanvasRenderingContext2D,
-  color: string,
-  pfpSize: number
-) {
-  const statusSize = 72
-  const offset = pfpSize + 32
-
-  ctx.strokeStyle = color
-  ctx.lineWidth = statusSize
-  ctx.lineCap = 'round'
-
-  ctx.beginPath()
-  ctx.moveTo(offset + 5, offset)
-  ctx.lineTo(offset + 5, offset)
+  ctx.lineTo(pfpSize - pfpSizeMargin + size * 0.85, verticalDistance)
   ctx.stroke()
 }
 
@@ -171,4 +162,24 @@ async function genProfilePic(size: number, member: GuildMember) {
 function adjustColor(hex: string) {
   let color = Color(hex)
   return color.rotate(-80).lighten(0.1).saturate(0.3).hex()
+}
+
+function roundedRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r: number
+) {
+  if (w < 2 * r) r = w / 2
+  if (h < 2 * r) r = h / 2
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.arcTo(x + w, y, x + w, y + h, r)
+  ctx.arcTo(x + w, y + h, x, y + h, r)
+  ctx.arcTo(x, y + h, x, y, r)
+  ctx.arcTo(x, y, x + w, y, r)
+  ctx.closePath()
+  ctx.fill()
 }
