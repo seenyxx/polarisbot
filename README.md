@@ -1,6 +1,6 @@
 # Polaris
 
-This project is no longer **maintained** and might not even work.
+This project is **no longer maintained** and might not even work.
 
 
 A Discord bot which provides mostly moderation commands but also has other commands
