@@ -1,5 +1,8 @@
 # Polaris
 
+This project is no longer **maintained** and might not even work.
+
+
 A Discord bot which provides mostly moderation commands but also has other commands
 
 ![GitHub](https://img.shields.io/github/license/seen-idc/polarisbot?style=flat-square)
